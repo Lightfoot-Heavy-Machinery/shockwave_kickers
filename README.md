@@ -14,7 +14,11 @@ After install prerequisites, follow the following steps for step time users:
 
 1) bundle install
 
-2) npm install
+2) bundle exec rake webpacker:install
+
+3) bundle exec rake webpacker:install:react
+
+4) npm install
 
 To start rails server locally:
 
