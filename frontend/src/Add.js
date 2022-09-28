@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./Header";
-//TO-DO: change the post location to the correct url
 
 function Add() {
     const [file, setFile] = React.useState("");
