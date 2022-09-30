@@ -1,10 +1,15 @@
 import React from "react";
 import Header from "./Header";
+import Table from "./Table";
 
 function View() {
     return (
     <div class = "view">
         <Header />
+        <div class = "view__body">
+            <h1>Student Records</h1>
+            <Table />
+        </div>
     </div>
     );
 }
