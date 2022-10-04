@@ -3,8 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.2"
 
-gem 'webpacker', '~> 5.4.3'
-
 gem 'psych', '< 4'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
