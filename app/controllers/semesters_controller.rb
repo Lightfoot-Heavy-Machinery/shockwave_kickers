@@ -35,4 +35,10 @@ class SemestersController < ApplicationController
       end
     end
   end
+
+  def destroy
+      @semester = Semester.find(params[:id])
+      @semester.destroy
+      redirect_to action: "index"
+  end
 end
