@@ -1,2 +1,11 @@
-<h1>Semesters#show</h1>
-<p>Find me in app/views/semesters/show.html.erb</p>
+<p style="color: green"><%= notice %></p>
+
+<h1>Semester Profile</h1>
+
+<%= render @semester %>
+<div>
+  <%= link_to "Edit this semester", edit_semester_path(@semester) %> |
+  <%= link_to "Back to semesters", semesters_path %>
+
+  <%= button_to "Destroy this semester", @semester, method: :delete %>
+</div>

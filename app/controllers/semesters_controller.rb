@@ -9,7 +9,7 @@ class SemestersController < ApplicationController
 
   def new
       @semesters = Semester.all
-      @semester = Semester.find(params[:id])
+      @semester = Semester.new
   end
 
   def edit
