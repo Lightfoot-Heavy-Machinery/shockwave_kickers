@@ -3,7 +3,7 @@
 one:
   firstname: MyString
   lastname: MyString
-  uni: 1
+  uin: 1
   email: MyString
   classification: MyString
   major: MyString
@@ -12,7 +12,7 @@ one:
 two:
   firstname: MyString
   lastname: MyString
-  uni: 1
+  uin: 1
   email: MyString
   classification: MyString
   major: MyString

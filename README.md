@@ -23,7 +23,7 @@ After install prerequisites, follow the following steps for step time users:
 
 3) `bundle exec rake webpacker:install:react`
 
-4) `npm install`
+4) `yarn install`
 
 * Database initialization
 
