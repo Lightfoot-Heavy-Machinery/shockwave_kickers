@@ -29,6 +29,10 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+group :development, :test do
+    gem 'rspec-rails', ">= 3.9.0"
+    gem 'simplecov'
+end
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
