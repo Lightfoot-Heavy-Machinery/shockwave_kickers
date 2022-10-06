@@ -23,21 +23,18 @@ After install prerequisites, follow the following steps for step time users:
 
 3) `bundle exec rake webpacker:install:react`
 
-4) `npm install`
-
 * Database initialization
 
-5) `rake db:create`
+4) `rake db:create`
 
-6) `rake db:migrate`
+5) `rake db:migrate`
 
 * To start rails server locally:
 
 `rails s`
 
 * How to run the test suite
-TBD
+`rake test`
 
-* Deployment instructions to AWS/Heroku
-TBD
-* ...
+* Deployment instructions to Heroku
+Automatic deployment is done!!
