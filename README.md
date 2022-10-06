@@ -36,5 +36,10 @@ After install prerequisites, follow the following steps for step time users:
 * How to run the test suite
 `rake test`
 
+This command should also store test coverage.
+
+* How to run open coverage
+`open coverage/index.html`
+
 * Deployment instructions to Heroku
 Automatic deployment is done!!
