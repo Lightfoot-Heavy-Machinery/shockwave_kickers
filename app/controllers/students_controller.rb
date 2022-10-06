@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-
+    before_action :set_student, only: %i[ show edit update destroy ]
     # GET /students
     def index
       @students = Student.all
@@ -7,25 +7,28 @@ class StudentsController < ApplicationController
 
     # GET /students/1
     def show
-        @student = Student.find(params[:id])
     end
 
     # GET /students/1/edit
     def edit
-        @student = Student.find(params[:id])
     end
 
     # GET /students/new
     def new
         @student = Student.new
-        @students = Student.all
     end
 
     # POST /students
     def create
-        student = Student.new(params[:student].permit(:firstname,:lastname,:uin, :email, :classification, :major, :notes))
-        if student.save
-            redirect_to new_student_path
+        @student = Student.new(params.require(:student).permit(:firstname,:lastname,:uin, :email, :classification, :major, :notes))
+        respond_to do |format|
+            if @student.save
+                format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
+                format.json { render :show, status: :created, location: @student }
+            else
+                format.html { render :new, status: :unprocessable_entity }
+                format.json { render json: @student.errors, status: :unprocessable_entity }
+            end
         end
     end
 
@@ -49,5 +52,10 @@ class StudentsController < ApplicationController
         redirect_to action: "index"
     end
 
+    private
+        # Use callbacks to share common setup or constraints between actions.
+        def set_student
+            @student = Student.find(params[:id])
+        end
 
 end
