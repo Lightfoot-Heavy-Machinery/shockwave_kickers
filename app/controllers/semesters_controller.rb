@@ -18,7 +18,7 @@ class SemestersController < ApplicationController
   end
 
   def create
-      semester = Semester.new(params.require(:student).permit(:name, :courses))
+      semester = Semester.new(params.require(:semester).permit(:name, :courses))
       if semester.save
           redirect_to new_semester_path
       end
