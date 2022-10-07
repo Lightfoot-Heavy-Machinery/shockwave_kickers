@@ -1,4 +1,5 @@
 class SemestersController < ApplicationController
+
   def index
       @semesters = Semester.all
   end
@@ -17,7 +18,7 @@ class SemestersController < ApplicationController
   end
 
   def create
-      semester = Semester.new(params[:semester].permit(:name, :courses))
+      semester = Semester.new(params.require(:student).permit(:name, :courses))
       if semester.save
           redirect_to new_semester_path
       end
