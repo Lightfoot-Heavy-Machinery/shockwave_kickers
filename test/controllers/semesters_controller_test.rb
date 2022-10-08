@@ -27,7 +27,6 @@ class SemestersControllerTest < ActionDispatch::IntegrationTest
 
     end
 
-
     test "should get edit" do
       get edit_semester_url(@semester)
       assert_response :success
@@ -37,7 +36,6 @@ class SemestersControllerTest < ActionDispatch::IntegrationTest
       patch semester_url(@semester), params: { semester: {name: @semester.name, courses: @semester.courses}}
       assert_redirected_to semester_url(@semester)
     end
-
 
     test "should destroy semester" do
       assert_difference("Semester.count", -1) do
