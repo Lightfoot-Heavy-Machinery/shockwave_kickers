@@ -37,6 +37,7 @@ class SemestersControllerTest < ActionDispatch::IntegrationTest
       assert_redirected_to semester_url(@semester)
     end
 
+
     test "should destroy semester" do
       assert_difference("Semester.count", -1) do
         delete semester_url(@semester)
