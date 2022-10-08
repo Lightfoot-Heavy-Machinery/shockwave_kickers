@@ -27,6 +27,7 @@ class SemestersControllerTest < ActionDispatch::IntegrationTest
 
     end
 
+
     test "should get edit" do
       get edit_semester_url(@semester)
       assert_response :success
