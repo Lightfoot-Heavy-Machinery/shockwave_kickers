@@ -6,8 +6,8 @@ development:
   encoding: unicode
   database: courses
   pool: 5
-  username:
-  password:
+  username: thess
+  password: M00dInd!g0_
 
 test:
   adapter: postgresql
