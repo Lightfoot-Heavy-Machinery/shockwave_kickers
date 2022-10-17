@@ -3,9 +3,8 @@
 Shockwave Kickers
 
 * Ruby version: 3.1.2
-
 * System dependencies
-Install Yarn, Node, Ruby and Rails, Postgres
+  Install Yarn, Node, Ruby and Rails, Postgres
 
 To Install Ruby, Rails and Bundler, followed this: https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-macos
 
@@ -22,7 +21,6 @@ After install prerequisites, follow the following steps for step time users:
 * Database initialization
 
 2) `rake db:create`
-
 3) `rake db:migrate`
 
 * To start rails server locally:
@@ -30,12 +28,15 @@ After install prerequisites, follow the following steps for step time users:
 `rails s`
 
 * How to run the test suite
-`rake test`
+  `rake test`
 
 This command should also store test coverage.
 
 * How to run open coverage
-`open coverage/index.html`
-
+  `open coverage/index.html`
 * Deployment instructions to Heroku
-Automatic deployment is done!!
+  Automatic deployment is done!!
+
+To look at the frontend stuff:
+
+App -> assets -> Views -> Courses
