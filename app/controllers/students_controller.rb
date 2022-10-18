@@ -20,7 +20,7 @@ class StudentsController < ApplicationController
 
     # POST /students
     def create
-        @student = Student.new(params.require(:student).permit(:firstname,:lastname,:uin, :email, :classification, :major, :notes))
+        @student = Student.new(student_params)
         respond_to do |format|
             if @student.save
                 format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
@@ -56,6 +56,11 @@ class StudentsController < ApplicationController
         # Use callbacks to share common setup or constraints between actions.
         def set_student
             @student = Student.find(params[:id])
+        end
+
+            # Only allow a list of trusted parameters through.
+        def student_params
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :class_id, :classification, :major, :notes, :tags, :photo)
         end
 
 end
