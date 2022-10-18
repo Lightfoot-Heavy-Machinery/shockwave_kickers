@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_163704) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_18_172511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,8 +26,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163704) do
   create_table "students", force: :cascade do |t|
     t.string "firstname", null: false
     t.string "lastname", null: false
-    t.integer "uin", null: false
-    t.integer "class_id", null: false
+    t.string "uin", null: false
+    t.integer "course_id", null: false
     t.string "email", null: false
     t.string "classification", null: false
     t.string "major", null: false
@@ -47,5 +47,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163704) do
   end
 
   add_foreign_key "courses", "users", column: "teacher", primary_key: "username"
-  add_foreign_key "students", "courses", column: "class_id"
+  add_foreign_key "students", "courses"
 end
