@@ -45,6 +45,7 @@ class StudentsController < ApplicationController
         end
       end
     end
+
     #DELETE courses/1
     def destroy
         @student = Student.find(params[:id])
@@ -60,7 +61,7 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :class_id, :classification, :major, :notes, :tags, :photo)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :course_id, :classification, :major, :notes, :tags, :photo)
         end
 
 end

@@ -90,4 +90,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  Rails.logger = Logger.new(STDOUT)
+  config.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log")
 end

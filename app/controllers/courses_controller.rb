@@ -8,6 +8,9 @@ class CoursesController < ApplicationController
 
   # GET /courses/1 or /courses/1.json
   def show
+    @student_records = Student.where(course_id: params[:id])
+    Rails.logger.info "Received info #{@student_records.inspect}"
+    Rails.logger.info "Received info #{params.inspect}"
   end
 
   # GET /courses/new

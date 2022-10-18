@@ -8,3 +8,14 @@
 
   <%= button_to "Destroy this course", @course, method: :delete %>
 </div>
+
+<h1>Students in this course:</h1>
+
+<div id="students">
+  <% @student_records.each do |student| %>
+    <%= render student %>
+    <p>
+      <%= link_to "Show this student", student %>
+    </p>
+  <% end %>
+</div>
