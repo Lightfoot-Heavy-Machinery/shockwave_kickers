@@ -10,27 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_154757) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_18_163704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "courses", force: :cascade do |t|
-    t.string "semester"
-    t.string "teacher"
-    t.integer "section"
-    t.string "course_name"
+    t.string "semester", null: false
+    t.string "teacher", null: false
+    t.integer "section", null: false
+    t.string "course_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "firstname"
-    t.string "lastname"
-    t.integer "uin"
-    t.integer "class_id"
-    t.string "email"
-    t.string "classification"
-    t.string "major"
+    t.string "firstname", null: false
+    t.string "lastname", null: false
+    t.integer "uin", null: false
+    t.integer "class_id", null: false
+    t.string "email", null: false
+    t.string "classification", null: false
+    t.string "major", null: false
     t.string "final_grade"
     t.text "notes"
     t.text "tags"
@@ -40,8 +40,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_154757) do
   end
 
   create_table "users", primary_key: "username", id: :string, force: :cascade do |t|
-    t.string "name"
-    t.string "password"
+    t.string "name", null: false
+    t.string "password", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
