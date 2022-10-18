@@ -10,35 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_04_184605) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_18_172511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "courses", force: :cascade do |t|
-    t.string "course_number"
-    t.string "sections"
-    t.integer "number_of_students"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "semesters", force: :cascade do |t|
-    t.string "name"
-    t.string "courses"
+    t.string "semester", null: false
+    t.string "teacher", null: false
+    t.integer "section", null: false
+    t.string "course_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "firstname"
-    t.string "lastname"
-    t.integer "uin"
-    t.string "email"
-    t.string "classification"
-    t.string "major"
+    t.string "firstname", null: false
+    t.string "lastname", null: false
+    t.string "uin", null: false
+    t.integer "course_id", null: false
+    t.string "email", null: false
+    t.string "classification", null: false
+    t.string "major", null: false
+    t.string "final_grade"
     t.text "notes"
+    t.text "tags"
+    t.string "photo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", primary_key: "username", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "password", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "courses", "users", column: "teacher", primary_key: "username"
+  add_foreign_key "students", "courses"
 end

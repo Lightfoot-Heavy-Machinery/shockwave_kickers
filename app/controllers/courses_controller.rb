@@ -8,6 +8,9 @@ class CoursesController < ApplicationController
 
   # GET /courses/1 or /courses/1.json
   def show
+    @student_records = Student.where(course_id: params[:id])
+    Rails.logger.info "Received info #{@student_records.inspect}"
+    Rails.logger.info "Received info #{params.inspect}"
   end
 
   # GET /courses/new
@@ -65,6 +68,6 @@ class CoursesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.require(:course).permit(:course_number, :sections, :number_of_students)
+      params.require(:course).permit(:course_name, :section, :semester).with_defaults(teacher: "testUser")
     end
 end

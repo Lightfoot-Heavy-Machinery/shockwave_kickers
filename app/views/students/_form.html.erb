@@ -23,7 +23,7 @@
 
   <div>
     <%= form.label :uin, style: "display: block" %>
-    <%= form.number_field :uin %>
+    <%= form.text_field :uin %>
   </div>
 
   <div>
@@ -44,6 +44,16 @@
   <div>
     <%= form.label :notes, style: "display: block" %>
     <%= form.text_field :notes %>
+  </div>
+
+  <div>
+    <%= form.label :tags, style: "display: block" %>
+    <%= form.text_field :tags %>
+  </div>
+
+  <div>
+    <%= form.label :course_id, style: "display: block" %>
+    <%= form.number_field :course_id %>
   </div>
 
   <div>
