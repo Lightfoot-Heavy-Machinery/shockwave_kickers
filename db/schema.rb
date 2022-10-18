@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_124955) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_18_154757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "classes", force: :cascade do |t|
+  create_table "courses", force: :cascade do |t|
     t.string "semester"
     t.string "teacher"
     t.integer "section"
@@ -46,6 +46,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_124955) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "classes", "users", column: "teacher", primary_key: "username"
-  add_foreign_key "students", "classes"
+  add_foreign_key "courses", "users", column: "teacher", primary_key: "username"
+  add_foreign_key "students", "courses", column: "class_id"
 end
