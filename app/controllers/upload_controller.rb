@@ -7,9 +7,7 @@ class UploadController < ApplicationController
         require 'csv'
         require 'json'
 
-        data = File.open('/Users/rahulshah/Documents/Fall 2022/CSCE 606/shockwave_kickers/app/views/upload/test_data.csv').read()
-        json = CSV.parse(data).to_a
-        CSV.foreach('/Users/rahulshah/Documents/Fall 2022/CSCE 606/shockwave_kickers/app/views/upload/test_data.csv', :headers => true) do |record|
+        CSV.foreach('./app/views/upload/test_data.csv', :headers => true) do |record|
 
             @course = Course.find_or_create_by(course_name: record["Course"], teacher: "testUser", section: record["Section"], semester: record["Semester"])
             @student = Student.find_or_create_by(
