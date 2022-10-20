@@ -1,17 +1,22 @@
-<div id="<%= dom_id course %>">
-  <p>
-    <strong>Course number:</strong>
-    <%= course.course_number %>
-  </p>
+<tr id="<%= dom_id course %>">
 
-  <p>
-    <strong>Sections:</strong>
-    <%= course.sections %>
-  </p>
+    <td>
+      <%# <strong>Course number:</strong> %>
+      <%= course.course_number %>
+    </td>
 
-  <p>
-    <strong>Number of students:</strong>
-    <%= course.number_of_students %>
-  </p>
+    <td>
+      <%# <strong>Sections:</strong> %>
+      <%= course.sections %>
+    </td>
 
-</div>
+    <td>
+      <%# <strong>Number of students:</strong> %>
+      <%= course.number_of_students %>
+    </td>
+
+    <td>
+      <button class="btn btn-outline-dark"><%= link_to "View Profile", course %></button>
+    </td>
+
+</tr>
