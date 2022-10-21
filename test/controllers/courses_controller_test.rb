@@ -54,7 +54,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
 
   test "should get new sign in page" do
     sign_out users(:userOne)
-    get new_courses_url
+    get new_course_url
     assert_response :redirect
   end
 end
