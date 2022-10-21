@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_20_212627) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_21_060507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,6 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_212627) do
     t.string "photo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "teacher", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -56,5 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_20_212627) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "courses", "users", column: "teacher", primary_key: "email"
   add_foreign_key "students", "courses"
+  add_foreign_key "students", "users", column: "teacher", primary_key: "email"
 end

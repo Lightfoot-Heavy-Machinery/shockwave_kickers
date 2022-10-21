@@ -4,14 +4,12 @@ class CoursesController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @courses = Course.all
+    @courses = Course.where(teacher: current_user.email)
   end
 
   # GET /courses/1 or /courses/1.json
   def show
     @student_records = Student.where(course_id: params[:id])
-    Rails.logger.info "Received info #{@student_records.inspect}"
-    Rails.logger.info "Received info #{params.inspect}"
   end
 
   # GET /courses/new
@@ -64,11 +62,21 @@ class CoursesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
-      @course = Course.find(params[:id])
+      @course = Course.find_by(teacher: current_user.email, id: params[:id])
+        if !@course.nil?
+            Rails.logger.info "Received info #{@student_records.inspect}"
+            Rails.logger.info "Received info #{params.inspect}"
+            Rails.logger.info "Received info #{current_user.inspect}"
+        else
+            respond_to do |format|
+                format.html { redirect_to courses_url, notice: "Given course not found." }
+                format.json { head :no_content }
+            end
+        end
     end
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.require(:course).permit(:course_name, :section, :semester).with_defaults(teacher: "testUser")
+      params.require(:course).permit(:course_name, :section, :semester).with_defaults(teacher: current_user.email)
     end
 end
