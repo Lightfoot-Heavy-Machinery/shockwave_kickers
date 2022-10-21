@@ -45,4 +45,16 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to courses_url
   end
+
+  test "should get course index sign in page" do
+    sign_out users(:userOne)
+    get courses_url
+    assert_response :redirect
+  end
+
+  test "should get new sign in page" do
+    sign_out users(:userOne)
+    get new_courses_url
+    assert_response :redirect
+  end
 end

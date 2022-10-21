@@ -7,7 +7,6 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    
     get students_url
     assert_response :success
   end
@@ -19,14 +18,14 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create student" do
     assert_difference("Student.count") do
-      post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
+      post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, course_id: @student.course_id} }
     end
 
     assert_redirected_to student_url(Student.last)
   end
 
   test "should show student" do
-    get_student_url(@student)
+    get student_url(@student)
     assert_response :success
   end
 
@@ -46,5 +45,17 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to students_url
+  end
+
+  test "should get student index sign in page" do
+    sign_out users(:userOne)
+    get students_url
+    assert_response :redirect
+  end
+
+  test "should get new sign in page" do
+    sign_out users(:userOne)
+    get new_student_url
+    assert_response :redirect
   end
 end

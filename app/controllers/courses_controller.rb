@@ -51,6 +51,8 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/1 or /courses/1.json
   def destroy
+    @student_records = Student.where(course_id: params[:id])
+    @student_records.destroy_all
     @course.destroy
 
     respond_to do |format|
