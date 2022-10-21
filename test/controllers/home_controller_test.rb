@@ -11,6 +11,6 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     test "should redirect home index" do
         sign_out users(:userOne)
         get '/home/index'
-        assert_response :success
+        assert_redirected_to '/users/sign_in'
     end
 end

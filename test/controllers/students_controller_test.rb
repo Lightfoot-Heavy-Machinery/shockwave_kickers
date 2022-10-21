@@ -34,6 +34,20 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "student page: should say student not found if student doesn't belong to user" do
+    sign_out users(:userOne)
+    sign_in users(:userTwo)
+    get edit_student_url(@student)
+    assert_redirected_to students_url
+  end
+
+  test "edit page: should say student not found if student doesn't belong to user" do
+    sign_out users(:userOne)
+    sign_in users(:userTwo)
+    get student_url(@student)
+    assert_redirected_to students_url
+  end
+
   test "should update student" do
     patch student_url(@student), params: { student: {firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
     assert_redirected_to student_url(@student)
@@ -50,12 +64,12 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   test "should get student index sign in page" do
     sign_out users(:userOne)
     get students_url
-    assert_response :redirect
+    assert_redirected_to '/users/sign_in'
   end
 
   test "should get new sign in page" do
     sign_out users(:userOne)
     get new_student_url
-    assert_response :redirect
+    assert_redirected_to '/users/sign_in'
   end
 end
