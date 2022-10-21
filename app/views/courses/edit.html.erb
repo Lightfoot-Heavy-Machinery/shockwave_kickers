@@ -1,10 +1,16 @@
-<h1>Editing course</h1>
+<div class="container text-center">
 
-<%= render "form", course: @course %>
+  <h1>Edit Course</h1>
 
-<br>
+  <%= render "form", course: @course %>
 
-<div>
-  <%= link_to "Show this course", @course %> |
-  <%= link_to "Back to courses", courses_path %>
+  <br>
+
+  <div class="flex-container" style="justify-content:space-evenly;">
+    <button class="btn btn-outline-dark m-2"><%= link_to "Show this course", @course %></button>
+    <button class="btn btn-outline-dark m-2"><%= link_to "Back to courses", courses_path %></button>
+  </div>
+
+  TODO - Add upload functionality and interface
+
 </div>

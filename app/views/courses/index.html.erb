@@ -1,14 +1,41 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Courses</h1>
+<!--Import the applications.css stylesheet-->
+<%= stylesheet_link_tag "application" %>
 
 <div id="courses">
-  <% @courses.each do |course| %>
-    <%= render course %>
-    <p>
-      <%= link_to "Show this course", course %>
-    </p>
-  <% end %>
+  <table class="table table-striped table-hover text-center">
+    <thead>
+      <tr>
+        <td colspan="4">
+          <h1>Courses</h1>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Course number:</strong>
+        </td>
+        <td>
+          <strong>Sections:</strong>
+        </td>
+        <td>
+          <strong>Number of students:</strong>
+        </td>
+        <td>
+          <strong>View Course Profile:</strong>
+        </td>
+      </tr>
+    </thead>
+
+    <tbody>
+    
+      <% @courses.each do |course| %>
+          <%= render course %>
+      <% end %>
+    </tbody>
+  </table>
 </div>
 
-<%= link_to "New course", new_course_path %>
+<footer class="hd p-2 mt-2 border-bottom sticky-bottom text-center">
+  <button class="btn btn-light"><%= link_to "New course", new_course_path %></button>
+</footer>
