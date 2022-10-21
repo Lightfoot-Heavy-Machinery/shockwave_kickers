@@ -1,12 +1,13 @@
 require "test_helper"
 
 class StudentsControllerTest < ActionDispatch::IntegrationTest
-
   setup do
-    @student = students(:one)
+    sign_in users(:userOne)
+    @student = students(:studentOne)
   end
 
   test "should get index" do
+    
     get students_url
     assert_response :success
   end
@@ -25,7 +26,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show student" do
-    get student_url(@student)
+    get_student_url(@student)
     assert_response :success
   end
 
