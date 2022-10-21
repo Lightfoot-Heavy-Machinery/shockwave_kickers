@@ -2,7 +2,7 @@
 
 Shockwave Kickers
 
-### First User setup
+### First Time User guide to install dependencies
 
 * Ruby version: 3.1.2
 * System dependencies
