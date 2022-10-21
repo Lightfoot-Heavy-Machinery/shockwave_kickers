@@ -15,7 +15,8 @@ class UploadController < ApplicationController
                         classification: record["Classification"],
                         major: record["Major"],
                         notes: record["Notes"],
-                        course_id: @course.id)
+                        course_id: @course.id,
+                        teacher: current_user.email)
 
             if !@student.save
                 puts("failed to save student")
