@@ -1,22 +1,30 @@
-<div id="<%= dom_id course %>">
-  <p>
-    <strong>Course Name:</strong>
-    <%= course.course_name %>
-  </p>
+<tr id="<%= dom_id course %>">
 
-  <p>
-    <strong>Section:</strong>
-    <%= course.section %>
-  </p>
+    <td>
+      <%# <strong>Course name:</strong> %>
+      <%= course.course_name %>
+    </td>
 
-  <p>
-  <strong>Teacher:</strong>
-  <%= course.teacher %>
-  </p>
+    <td>
+      <%# <strong>Section:</strong> %>
+      <%= course.section %>
+    </td>
 
-  <p>
-    <strong>Semester:</strong>
-    <%= course.semester %>
-  </p>
+    <td>
+      <%# <strong>Teacher:</strong> %>
+      <%= course.teacher %>
+    </td>
 
-</div>
+
+    <td>
+      <%# <strong>Semester:</strong> %>
+      <%= course.semester %>
+    </td>
+    
+
+
+    <td>
+      <button class="btn btn-outline-dark"><%= link_to "View Profile", course %></button>
+    </td>
+
+</tr>

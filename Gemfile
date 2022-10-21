@@ -9,7 +9,7 @@ gem 'psych', '< 4'
 gem "rails", "~> 7.0.4"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+gem "sprockets-rails", ">= 2.3.2"
 
 # Use postgres as the database for Active Record
 gem "pg"
@@ -81,3 +81,6 @@ group :test do
 end
 
 gem "ffi", "~> 1.15"
+gem 'bootstrap', '~> 5.2.2'
+gem 'jquery-rails'
+

@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   get 'home/index'
   get 'upload/index'
+  get 'upload', to: 'upload#index'
   devise_for :users
+
   resources :courses, :students
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

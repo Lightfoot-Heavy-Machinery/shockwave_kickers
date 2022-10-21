@@ -1,16 +1,66 @@
-<p style="color: green"><%= notice %></p>
-<%= button_to(
-        "Log Out",
-        destroy_user_session_path,
-        method: :delete
-      ) %>
+<div class="text-center container">
+  <p style="color: green"><%= notice %></p>
 
-<h1>Student Profile</h1>
+  <h1><%= @student.firstname%> <%= @student.lastname%>'s Profile</h1>
+  <div class="row gx-5 h-100 ">
+    <div class="col">
+      <div class="row">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+        </svg>
+      </div>
+      <div class="row my-auto" id="<%= dom_id @student %>">
+        <h3>Student Information</h3>
+        <%# Removed render because info format isn't ideal %>
+          <p>
+            <strong>UIN:</strong>
+            <%= @student.uin %>
+          </p>
 
-<%= render @student %>
-<div>
-  <%= link_to "Edit this student", edit_student_path(@student) %> |
-  <%= link_to "Back to students", students_path %>
+          <p>
+            <strong>Email:</strong>
+            <%= @student.email %>
+          </p>
 
-  <%= button_to "Destroy this student", @student, method: :delete %>
+          <p>
+            <strong>Classification:</strong>
+            <%= @student.classification %>
+          </p>
+
+          <p>
+            <strong>Major:</strong>
+            <%= @student.major %>
+          </p>
+      </div>
+    </div>
+
+    <div class="col my-auto">
+      <div class="row">
+        <h3>Course History:</h3>
+        <p>TODO - List all courses taken with signed in prof?</p>
+      </div>
+      <div class="row">
+        <h3>Tags:</h3>
+        <p><%= @student.tags %></p>
+      </div>
+    </div>
+
+    <div class="col my-auto">
+      <div class="row">
+        <h3>Notes:</h3>
+        <p><%= @student.notes %></p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<footer class="hd footer mt-auto py-3 text-center">
+  <div class="container">
+    <span>
+      <button class="btn btn-light p-2"><%= link_to "Edit this student", edit_student_path(@student) %></button>
+      <button class="btn btn-light p-2"><%= link_to "Back to students", students_path %></button>
+      <%= button_to "Destroy this student", @student, method: :delete %>
+    </span>
+  </div>
+</footer>
+
