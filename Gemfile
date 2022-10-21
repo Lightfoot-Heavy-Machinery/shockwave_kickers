@@ -14,6 +14,8 @@ gem "sprockets-rails", ">= 2.3.2"
 # Use postgres as the database for Active Record
 gem "pg"
 
+gem 'devise'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 

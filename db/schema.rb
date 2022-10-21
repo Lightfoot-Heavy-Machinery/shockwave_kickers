@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_172511) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_21_060507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,15 +37,27 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_172511) do
     t.string "photo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "teacher", null: false
   end
 
-  create_table "users", primary_key: "username", id: :string, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "password", null: false
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "courses", "users", column: "teacher", primary_key: "username"
+  add_foreign_key "courses", "users", column: "teacher", primary_key: "email"
   add_foreign_key "students", "courses"
+  add_foreign_key "students", "users", column: "teacher", primary_key: "email"
 end

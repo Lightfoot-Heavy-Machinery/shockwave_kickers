@@ -1,11 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  course_number: MyString
-  sections: MyString
-  number_of_students: 1
+courseOne:
+  id: 1
+  course_name: testName
+  section: 100
+  semester: MyString
+  teacher: test@gmail.com
 
-two:
-  course_number: MyString
-  sections: MyString
-  number_of_students: 1
+courseTwo:
+  id: 2
+  course_name: testName
+  section: 100
+  semester: MyString
+  teacher: test@gmail.com
