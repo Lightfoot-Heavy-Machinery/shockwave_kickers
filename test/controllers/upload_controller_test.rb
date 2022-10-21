@@ -14,6 +14,12 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
         assert_response :success
     end
 
+  test "should redirect upload" do
+        sign_out users(:userOne)
+        get "/upload/index#"
+        assert_redirected_to '/users/sign_in'
+  end
+
   test "should get students" do
     CSV.foreach('./app/views/upload/test_data.csv', :headers => true) do |record|
         assert Student.find_by(firstname:record["FirstName"],
