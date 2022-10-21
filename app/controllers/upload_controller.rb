@@ -1,8 +1,5 @@
 class UploadController < ApplicationController
-    def new
-
-    end
-
+    before_action :authenticate_user!
     def index
         require 'csv'
         require 'json'
