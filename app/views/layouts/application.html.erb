@@ -41,7 +41,13 @@
                 <li><a class="dropdown-item" href="#">Settings</a></li>
                 <li><a class="dropdown-item" href="#">Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                <li>
+                  <%= button_to(
+                    "Log Out",
+                    destroy_user_session_path,
+                    method: :delete
+                  ) %>
+                </li>
               </ul>
             </div>
           </div>
