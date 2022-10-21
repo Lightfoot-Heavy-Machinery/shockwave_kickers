@@ -2,6 +2,8 @@
 
 Shockwave Kickers
 
+### First User setup
+
 * Ruby version: 3.1.2
 * System dependencies
   Install Yarn, Node, Ruby and Rails, Postgres
@@ -23,9 +25,17 @@ After install prerequisites, follow the following steps for step time users:
 2) `rake db:create`
 3) `rake db:migrate`
 
+### Local Deployment
+
 * To start rails server locally:
 
-`rails s`
+1) export ENV variables:
+    ```
+        export SENDMAIL_PASSWORD=LOOK_AT_SLACK_CHANNEL
+        export SENDMAIL_USERNAME=shockwavekickers@gmail.com
+        export MAIL_HOST=gmail.com
+    ```
+2) `rails s`
 
 * How to run the test suite
   `rake test`
@@ -34,9 +44,21 @@ This command should also store test coverage.
 
 * How to run open coverage
   `open coverage/index.html`
+
 * Deployment instructions to Heroku
   Automatic deployment is done!!
 
-To look at the frontend stuff:
 
-App -> assets -> Views -> Courses
+### FrontEnd
+
+To look at the frontend components:
+
+App -> assets -> Views
+
+Debugging Tips:
+
+* If bootstrap is not loading, call the following command:
+ `bundle exec rake assets:precompile`
+
+* If db:migrate doesn't work, call the following command before db:migrate again:
+ `rake db:reset`
