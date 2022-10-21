@@ -1,0 +1,4 @@
+userOne:
+  email: test@gmail.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %> 
+  confirmed_at: <%= Time.now %>

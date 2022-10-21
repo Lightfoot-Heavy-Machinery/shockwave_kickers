@@ -2,7 +2,8 @@ require "test_helper"
 
 class CoursesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @course = courses(:one)
+    sign_in users(:userOne)
+    @course = courses(:courseOne)
   end
 
   test "should get index" do
@@ -17,9 +18,8 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create course" do
     assert_difference("Course.count") do
-      post courses_url, params: { course: { course_number: @course.course_number, number_of_students: @course.number_of_students, sections: @course.sections } }
+      post courses_url, params: { course: { course_name: @course.course_name, section: @course.section, semester: @course.semester} }
     end
-
     assert_redirected_to course_url(Course.last)
   end
 
@@ -34,7 +34,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update course" do
-    patch course_url(@course), params: { course: { course_number: @course.course_number, number_of_students: @course.number_of_students, sections: @course.sections } }
+    patch course_url(@course), params: { course: { course_name: @course.course_name, section: @course.section, semester: @course.semester } }
     assert_redirected_to course_url(@course)
   end
 
@@ -44,5 +44,17 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to courses_url
+  end
+
+  test "should get course index sign in page" do
+    sign_out users(:userOne)
+    get courses_url
+    assert_response :redirect
+  end
+
+  test "should get new sign in page" do
+    sign_out users(:userOne)
+    get new_course_url
+    assert_response :redirect
   end
 end

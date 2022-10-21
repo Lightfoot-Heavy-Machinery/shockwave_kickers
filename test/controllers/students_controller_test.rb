@@ -1,9 +1,9 @@
 require "test_helper"
 
 class StudentsControllerTest < ActionDispatch::IntegrationTest
-
   setup do
-    @student = students(:one)
+    sign_in users(:userOne)
+    @student = students(:studentOne)
   end
 
   test "should get index" do
@@ -18,7 +18,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create student" do
     assert_difference("Student.count") do
-      post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
+      post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, course_id: @student.course_id} }
     end
 
     assert_redirected_to student_url(Student.last)
@@ -45,5 +45,17 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to students_url
+  end
+
+  test "should get student index sign in page" do
+    sign_out users(:userOne)
+    get students_url
+    assert_response :redirect
+  end
+
+  test "should get new sign in page" do
+    sign_out users(:userOne)
+    get new_student_url
+    assert_response :redirect
   end
 end
