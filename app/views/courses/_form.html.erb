@@ -11,12 +11,6 @@
     </div>
   <% end %>
 
-  <%= button_to(
-        "Log Out",
-        destroy_user_session_path,
-        method: :delete
-      ) %>
-
   <div>
     <%= form.label :course_name, style: "display: block" %>
     <%= form.text_field :course_name %>
