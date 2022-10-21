@@ -1,15 +1,12 @@
 class UploadController < ApplicationController
-    def new
-
-    end
-
+    before_action :authenticate_user!
     def index
         require 'csv'
         require 'json'
 
         CSV.foreach('./app/views/upload/test_data.csv', :headers => true) do |record|
 
-            @course = Course.find_or_create_by(course_name: record["Course"], teacher: "testUser", section: record["Section"], semester: record["Semester"])
+            @course = Course.find_or_create_by(course_name: record["Course"], teacher: current_user.email, section: record["Section"], semester: record["Semester"])
             @student = Student.find_or_create_by(
                         firstname:record["FirstName"],
                         lastname:record["LastName"],
