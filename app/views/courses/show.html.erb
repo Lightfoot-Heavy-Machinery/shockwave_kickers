@@ -11,7 +11,7 @@
     <div class="col">
       <div class="row p-5">
         <div class="px-5 py-2 bg-light border rounded-3">
-          <h2>**GET COURSE NAME**</h2>
+          <h1> <%= @course.course_name %></h1>
         </div>
       </div>
       <div class="row ">
@@ -30,16 +30,17 @@
                   </select>
                 </div>
                 <div class="col">
-                  Semester:
-                  <%= select("post", "semester", @semesters, include_blank: true) %>
+                    Semester:
+                    <%= select("post", "semester", @semesters, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
                 </div>
                 <div class="col">
-                  Section:
-                  <%= select("post", "section", @sections, include_blank: true) %>
+                    Section:
+                    <%= select("post", "section", @sections, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
                 </div>
                 <div class="col">
-                  Tags:
-                  <%= select("post", "tags", @tags, include_blank: true) %>
+                    Tags:
+                    <%= select("post", "tags", @tags, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
+
                 </div>
               </div>
             </div>
