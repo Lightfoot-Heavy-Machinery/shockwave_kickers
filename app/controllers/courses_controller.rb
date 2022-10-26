@@ -10,6 +10,18 @@ class CoursesController < ApplicationController
   # GET /courses/1 or /courses/1.json
   def show
     @student_records = Student.where(course_id: params[:id])
+    @tags = Set[]
+    for student in @student_records do
+        @tags.add(student.tags)
+    end
+    @semesters = Set[]
+    @sections = Set[]
+    for record in Course.all do
+        if record.course_name == @course.course_name
+            @semesters.add(record.semester)
+            @sections.add(record.section)
+        end
+    end
   end
 
   # GET /courses/new
