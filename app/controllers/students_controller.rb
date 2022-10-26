@@ -37,7 +37,7 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
       respond_to do |format|
-        if @student.update(params.require(:student).permit(:firstname,:lastname,:uin, :email, :classification, :major, :notes))
+        if @student.update(params.require(:student).permit(:firstname,:lastname,:uin, :email, :classification, :major, :notes, :tags))
           format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
           format.json { render :show, status: :ok, location: @student }
         else
