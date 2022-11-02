@@ -50,6 +50,7 @@ class StudentsController < ApplicationController
     #DELETE courses/1
     def destroy
         @student = Student.find(params[:id])
+        @student.image.purge_later
         @student.destroy
         redirect_to action: "index"
     end

@@ -68,5 +68,6 @@ Debugging Tips:
 
 1) Go to development.rb and update:
     `config.active_storage.service = :local`
-2) Export RAILS_MASTER_KEY=LOOK_AT_SLACK_CHANNEL
-3) Run rails server start command
+2) Go to storage.yml, change amazon bucket name to `shockwavekickers-dev`
+3) Export RAILS_MASTER_KEY=LOOK_AT_SLACK_CHANNEL
+4) Run rails server start command
