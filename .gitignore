@@ -10,6 +10,9 @@ node_modules/*
 /public/packs
 /public/packs-test
 /node_modules
+/storage
+/public
+/coverage
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity

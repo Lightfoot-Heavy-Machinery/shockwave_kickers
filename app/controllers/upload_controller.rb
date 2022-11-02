@@ -5,14 +5,13 @@ class UploadController < ApplicationController
         require 'json'
         require 'securerandom'
 
-        path = "./storage/pictures/test.jpeg"
-        file = File.open(path, 'rb') {|file| file.read }
+        image_path = "./app/resources/pictures/test.jpeg"
 
-        CSV.foreach('./storage/test_data.csv', :headers => true) do |record|
+        CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
             uuid = SecureRandom.uuid
 
             @course = Course.find_or_create_by(course_name: record["Course"], teacher: current_user.email, section: record["Section"], semester: record["Semester"])
-            @student = Student.create!(
+            @student = Student.find_or_create_by(
                         firstname:record["FirstName"],
                         lastname:record["LastName"],
                         uin: record["UIN"],
@@ -23,6 +22,7 @@ class UploadController < ApplicationController
                         course_id: @course.id,
                         teacher: current_user.email
                         )
+            @student.image.attach(io: File.open(image_path, 'rb'), filename: uuid)
 
             if !@student.save
                 puts("failed to save student")
