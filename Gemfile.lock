@@ -314,6 +314,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   jquery-rails
+  mini_magick
   pg
   psych (< 4)
   puma (~> 5.0)
