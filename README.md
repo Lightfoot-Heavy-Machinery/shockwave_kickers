@@ -62,3 +62,11 @@ Debugging Tips:
 
 * If db:migrate doesn't work, call the following command before db:migrate again:
  `rake db:reset`
+
+
+ #### Store images in S3 instead of locally while developing
+
+1) Go to development.rb and update:
+    `config.active_storage.service = :local`
+2) Export RAILS_MASTER_KEY=LOOK_AT_SLACK_CHANNEL
+3) Run rails server start command
