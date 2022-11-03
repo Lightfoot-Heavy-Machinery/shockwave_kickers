@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :quizzes
   get 'home/index'
   get 'upload/index'
   get 'upload', to: 'upload#index'
