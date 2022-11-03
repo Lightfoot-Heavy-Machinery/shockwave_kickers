@@ -1,7 +1,33 @@
                                   Prefix Verb   URI Pattern                                                                                       Controller#Action
-                              upload_new GET    /upload/new(.:format)                                                                             upload#new
+                                 quizzes GET    /quizzes(.:format)                                                                                quizzes#index
+                                         POST   /quizzes(.:format)                                                                                quizzes#create
+                                new_quiz GET    /quizzes/new(.:format)                                                                            quizzes#new
+                               edit_quiz GET    /quizzes/:id/edit(.:format)                                                                       quizzes#edit
+                                    quiz GET    /quizzes/:id(.:format)                                                                            quizzes#show
+                                         PATCH  /quizzes/:id(.:format)                                                                            quizzes#update
+                                         PUT    /quizzes/:id(.:format)                                                                            quizzes#update
+                                         DELETE /quizzes/:id(.:format)                                                                            quizzes#destroy
+                              home_index GET    /home/index(.:format)                                                                             home#index
                             upload_index GET    /upload/index(.:format)                                                                           upload#index
                                   upload GET    /upload(.:format)                                                                                 upload#index
+                        new_user_session GET    /users/sign_in(.:format)                                                                          devise/sessions#new
+                            user_session POST   /users/sign_in(.:format)                                                                          devise/sessions#create
+                    destroy_user_session DELETE /users/sign_out(.:format)                                                                         devise/sessions#destroy
+                       new_user_password GET    /users/password/new(.:format)                                                                     devise/passwords#new
+                      edit_user_password GET    /users/password/edit(.:format)                                                                    devise/passwords#edit
+                           user_password PATCH  /users/password(.:format)                                                                         devise/passwords#update
+                                         PUT    /users/password(.:format)                                                                         devise/passwords#update
+                                         POST   /users/password(.:format)                                                                         devise/passwords#create
+                cancel_user_registration GET    /users/cancel(.:format)                                                                           devise/registrations#cancel
+                   new_user_registration GET    /users/sign_up(.:format)                                                                          devise/registrations#new
+                  edit_user_registration GET    /users/edit(.:format)                                                                             devise/registrations#edit
+                       user_registration PATCH  /users(.:format)                                                                                  devise/registrations#update
+                                         PUT    /users(.:format)                                                                                  devise/registrations#update
+                                         DELETE /users(.:format)                                                                                  devise/registrations#destroy
+                                         POST   /users(.:format)                                                                                  devise/registrations#create
+                   new_user_confirmation GET    /users/confirmation/new(.:format)                                                                 devise/confirmations#new
+                       user_confirmation GET    /users/confirmation(.:format)                                                                     devise/confirmations#show
+                                         POST   /users/confirmation(.:format)                                                                     devise/confirmations#create
                                  courses GET    /courses(.:format)                                                                                courses#index
                                          POST   /courses(.:format)                                                                                courses#create
                               new_course GET    /courses/new(.:format)                                                                            courses#new
@@ -18,7 +44,8 @@
                                          PATCH  /students/:id(.:format)                                                                           students#update
                                          PUT    /students/:id(.:format)                                                                           students#update
                                          DELETE /students/:id(.:format)                                                                           students#destroy
-                                    root GET    /                                                                                                 courses#index
+                      authenticated_root GET    /                                                                                                 home#index
+                    unauthenticated_root GET    /                                                                                                 devise/sessions#new
         turbo_recede_historical_location GET    /recede_historical_location(.:format)                                                             turbo/native/navigation#recede
         turbo_resume_historical_location GET    /resume_historical_location(.:format)                                                             turbo/native/navigation#resume
        turbo_refresh_historical_location GET    /refresh_historical_location(.:format)                                                            turbo/native/navigation#refresh

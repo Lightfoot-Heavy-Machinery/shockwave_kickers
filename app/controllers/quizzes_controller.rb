@@ -1,13 +1,18 @@
 class QuizzesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_quiz, only: %i[ show edit update destroy ]
 
   # GET /quizzes or /quizzes.json
   def index
-    @quizzes = Quiz.all
+    @quizzes = Quiz.where(teacher: current_user.email)
   end
 
   # GET /quizzes/1 or /quizzes/1.json
   def show
+    if params["button_action"] == "refresh"
+      @quiz.longest_streak = @quiz.longest_streak + 1
+      @quiz.save
+    end
   end
 
   # GET /quizzes/new
@@ -65,6 +70,6 @@ class QuizzesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def quiz_params
-      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed)
+      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed).with_defaults(teacher: current_user.email)
     end
 end
