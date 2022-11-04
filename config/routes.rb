@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
+  resources :quizzes
   get 'home/index'
   get 'upload/index'
   get 'upload', to: 'upload#index'
+
+  post 'quizzes/:id', to:'quizzes#show'
+
   devise_for :users
 
   resources :courses, :students

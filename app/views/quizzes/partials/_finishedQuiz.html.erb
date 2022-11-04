@@ -1,0 +1,35 @@
+<div class="container text-center">
+  <h1>Quiz Results</h1>
+  <div class="row gx-5">
+    <div class="col">
+      <div class="bg-light border rounded-3">
+        <div class="row">
+          <p><b><%=@course.course_name%> - <%=@course.section%> - <%=@course.semester%></b></p>
+        </div>
+        <div class="row">
+          <p><b>Score:</b> <%=@quiz.score.round(2)%>%</p>
+        </div>      
+        <div class="row">
+          <p><b>Longest Streak:</b> <%=@quiz.longest_streak%></p>
+        </div>  
+        <div class="row">
+          <p><b>Date Started:</b> <%=@quiz.created_at%></p>
+        </div>   
+      </div>
+    </div>
+    <div class="col">
+      <div class="bg-light border rounded-3">
+        <p>Display Correct/Incorrect per student</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <footer class="hd footer mt-auto py-3 text-center">
+  <div class="container">
+    <span>
+      <button class="btn btn-light p-2"><%= link_to "Back to quizzes", quizzes_path %></button>
+    </span>
+  </div>
+</footer>

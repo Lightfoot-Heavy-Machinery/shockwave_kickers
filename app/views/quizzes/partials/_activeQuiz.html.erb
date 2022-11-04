@@ -1,0 +1,48 @@
+<div class="row gx-5">
+      <div class="col">
+        <div class="row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="col">
+        <div class="bg-light border rounded-3">
+            <form action = <%="/quizzes/"+@quiz.id.to_s %>>
+            <% @choices.each do |choice| %>
+                <% name = Student.where(id:choice,teacher: current_user.email, course_id:@quiz.course_id).pick(:firstname, :lastname) %>
+                <% name = name[0] + " " + name[1] %>
+                <br>
+                <input type="radio" name="answer" value=<%= choice %>><%= name%>
+                <br>
+            <% end %>
+                <input type="submit"/>
+                </form>
+        </div>
+      </div>
+      <div class="col">
+        <div class="bg-light border rounded-3">
+          <div class="row">
+            <p><b><%=@course.course_name%> - <%=@course.section%> - <%=@course.semester%></b></p>
+          </div>
+          <div class="row">
+            <% if (@quiz.correct + @quiz.incorrect)==0 %>
+                <% @quiz.score = 0 %>
+            <% else %>
+                <% @quiz.score = @quiz.correct.to_f / (@quiz.correct + @quiz.incorrect) * 100%>
+            <% end %>
+            <% @quiz.save %>
+            <p><b>Score:</b> <%=@quiz.score.round(2)%>%</p>
+          </div> 
+          <div class="row">
+            <p><b>Current Streak:</b> <%=@quiz.current_streak%></p>
+          </div>       
+          <div class="row">
+            <p><b>Longest Streak:</b> <%=@quiz.longest_streak%></p>
+          </div>  
+          <div class="row">
+            <p><b>Date Started:</b> <%=@quiz.created_at%></p>
+          </div>   
+        </div>
+      </div>
+    </div>
