@@ -1,7 +1,6 @@
 <div class="row gx-5">
       <div class="col">
         <div class="row">
-            <%= @stud_obj.firstname + " " + @stud_obj.lastname %>
           <% if @stud_obj.image.attached? %>
               <%= image_tag @stud_obj.image.variant(:thumb) %>
           <% else %>
