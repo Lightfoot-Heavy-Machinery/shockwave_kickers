@@ -4,7 +4,18 @@
 
 <br>
 
-<div>
-  <%= link_to "Show this quiz", @quiz %> |
-  <%= link_to "Back to quizzes", quizzes_path %>
+
+<div class="container">
+  <div class="row gx-2">
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Show this quiz", @quiz, :method => :get %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Back to quizzes", quizzes_path, :method=>:get  %>
+      </div>
+    </div>       
+  </div>
 </div>

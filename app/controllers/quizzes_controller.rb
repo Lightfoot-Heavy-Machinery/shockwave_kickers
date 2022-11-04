@@ -10,8 +10,24 @@ class QuizzesController < ApplicationController
   # GET /quizzes/1 or /quizzes/1.json
   def show
     resp = params[:answer]
-    if @quiz.validate_id.nil? || resp.nil?
-      
+    if (@quiz.correct.to_i + @quiz.incorrect.to_i) == 0.to_i
+      @quiz.score = 0
+    else
+      @quiz.score = @quiz.correct.to_f / (@quiz.correct + @quiz.incorrect) * 100
+    end
+    @quiz.save
+
+    if @quiz.validate_id.nil? || resp.nil? || resp.to_i == 0
+      if @quiz.longest_streak.nil?
+        @quiz.longest_streak = 0
+      end
+      if @quiz.completed.nil?
+        @quiz.completed = false
+      end
+      if @quiz.current_streak.nil?
+        @quiz.current_streak = 0
+      end
+      @quiz.save
     elsif resp.to_i == @quiz.validate_id
       roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
       roster.correct_resp = true
@@ -33,11 +49,6 @@ class QuizzesController < ApplicationController
     
     @quiz.validate_id = nil
     @quiz.save
-
-
-    logger.info("WE GOT:")
-    logger.info(params)
-    logger.info(params[:answer].to_i)
     
     disp_quiz()
   end
@@ -54,7 +65,6 @@ class QuizzesController < ApplicationController
   # POST /quizzes or /quizzes.json
   def create
     @quiz = Quiz.new(quiz_params)
-
     respond_to do |format|
       if @quiz.save
         format.html { redirect_to quiz_url(@quiz), notice: "Quiz was successfully created." }
@@ -100,7 +110,7 @@ class QuizzesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def quiz_params
-      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed).with_defaults(teacher: current_user.email)
+      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed, :current_streak, :validate_id, :teacher).with_defaults(teacher: current_user.email)
     end
 
     def disp_quiz

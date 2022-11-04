@@ -6,10 +6,20 @@
 
   <br>
 
-  <div class="flex-container" style="justify-content:space-evenly;">
-    <button class="btn btn-outline-dark m-2"><%= link_to "Show this course", @course %></button>
-    <button class="btn btn-outline-dark m-2"><%= link_to "Back to courses", courses_path %></button>
+<div class="container">
+  <div class="row gx-2">
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Show this course", @course, :method => :get %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Back to courses", courses_path, :method=>:get  %>
+      </div>
+    </div>       
   </div>
+</div>
 
   TODO - Add upload functionality and interface
 

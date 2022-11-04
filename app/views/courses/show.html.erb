@@ -2,10 +2,22 @@
   <p style="color: green"><%= notice %></p>
 
 
-  <div class="flex-container" style="justify-content:space-evenly;">
-    <button class="btn btn-outline-dark m-5"><%= link_to "Edit this course", edit_course_path(@course) %></button>
-    <button class="btn btn-outline-dark m-5"><%= link_to "Back to courses", courses_path %></button>
-    <%= button_to "Destroy this course", @course, method: :delete %>
+  <div class="row gx-2">
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Edit this course", edit_course_path(@course), :method => :get %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to 'Create a quiz', {:controller => "quizzes", :action => "create", :quiz => {:course_id => @course.id, :correct => 0, :incorrect => 0, :score => 0, :longest_streak => 0, :teacher => current_user.email, :completed => false, :current_streak => 0, :validate_id => nil}, :commit => "Create Quiz"}, :method=>:post  %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Back to courses", courses_path, :method => :get %>
+      </div>
+    </div>        
   </div>
   <div class="row gx-5">
     <div class="col">
@@ -121,7 +133,7 @@
                   <%=student.tags %>
                 </td>
                 <td>
-                  <button class="btn btn-outline-dark"><%= link_to "View profile", student %></button>
+                  <%= button_to "View profile", student, :method=>:get  %>
                 </td>
               </tr>
               

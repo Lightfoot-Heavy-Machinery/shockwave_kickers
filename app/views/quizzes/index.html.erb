@@ -51,7 +51,7 @@
           </td>
           <td>
             <% if quiz.completed %>
-            <%= quiz.score %>
+            <%= quiz.score.round(2) %>
             <% else %>
             Incomplete
             <% end %>
@@ -64,7 +64,7 @@
             <% end %>
           </td>
           <td>
-            <button class="btn btn-light"><%= link_to "Show this quiz", quiz %></button>
+            <%= button_to "Show this quiz", quiz, :method => :get %>
           </td>
         </tr>
       <% end %>
@@ -74,6 +74,7 @@
 
 <footer class="hd footer mt-auto py-3 mt-2 text-center">
   <div class="container">
-    <span><button class="btn btn-light"><%= link_to "New quiz", new_quiz_path %></button></span>
+    <span><%= button_to "New quiz", new_quiz_path, :method => :get %></span>
+    
   </div>
 </footer>

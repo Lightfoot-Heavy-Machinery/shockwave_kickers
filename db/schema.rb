@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_04_030258) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_11_04_043952) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -68,10 +67,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_030258) do
     t.integer "longest_streak"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "completed"
-    t.string "teacher"
-    t.boolean "active_streak"
-    t.integer "current_streak"
+    t.boolean "completed", default: false
+    t.integer "current_streak", default: 0
     t.integer "validate_id"
   end
 

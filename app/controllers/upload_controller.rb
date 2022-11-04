@@ -27,6 +27,7 @@ class UploadController < ApplicationController
             if !@student.save
                 puts("failed to save student")
             end
+
         end
     end
 end

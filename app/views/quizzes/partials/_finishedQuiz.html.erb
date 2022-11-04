@@ -28,8 +28,6 @@
 
   <footer class="hd footer mt-auto py-3 text-center">
   <div class="container">
-    <span>
-      <button class="btn btn-light p-2"><%= link_to "Back to quizzes", quizzes_path %></button>
-    </span>
+     <%= button_to "Back to quizzes", quizzes_path, :method=>:get  %>
   </div>
 </footer>

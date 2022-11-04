@@ -60,11 +60,23 @@
 
 <footer class="hd footer mt-auto py-3 text-center">
   <div class="container">
-    <span>
-      <button class="btn btn-light p-2"><%= link_to "Edit this student", edit_student_path(@student) %></button>
-      <button class="btn btn-light p-2"><%= link_to "Back to students", students_path %></button>
-      <%= button_to "Destroy this student", @student, method: :delete %>
-    </span>
+    <div class="row gx-2">
+      <div class="col">
+        <div class="row p-2 pt-0">
+          <%= button_to "Edit this student", edit_student_path(@student), :method => :get %>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row p-2 pt-0">
+          <%= button_to "Back to students", students_path, :method=>:get  %>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row p-2 pt-0">
+            <%= button_to "Destroy this student", @student, method: :delete %>
+        </div>
+      </div>        
+    </div>
   </div>
 </footer>
 

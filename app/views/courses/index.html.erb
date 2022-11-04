@@ -38,6 +38,6 @@
 
 <footer class="hd footer mt-auto py-3 mt-2 text-center">
   <div class="container">
-    <span><button class="btn btn-light"><%= link_to "New course", new_course_path %></button></span>
+    <%= button_to "New course", new_course_path, :method=>:get  %>
   </div>
 </footer>

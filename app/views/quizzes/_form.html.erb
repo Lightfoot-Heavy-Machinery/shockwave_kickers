@@ -13,29 +13,45 @@
 
   <div>
     <%= form.label :course_id, style: "display: block" %>
-    <%= form.number_field :course_id %>
+    <% courseIDS = Course.where(teacher: current_user.email).pluck(:course_name, :section, :semester, :id)%>
+    <%
+      courseOptions = []
+      courseIDS.each do |vals|
+        tempStr = vals[0].to_s + " - " + vals[1].to_s + " - " + vals[2].to_s
+        courseOptions.append([tempStr,vals[3]])
+      end
+    %>
+    <%= form.select :course_id, courseOptions%>
   </div>
 
   <div>
-    <%= form.label :correct, style: "display: block" %>
-    <%= form.number_field :correct %>
+    <%= form.hidden_field :correct,value: 0%>
   </div>
-
   <div>
-    <%= form.label :incorrect, style: "display: block" %>
-    <%= form.number_field :incorrect %>
+    <%= form.hidden_field :incorrect,value: 0%>
   </div>
-
   <div>
-    <%= form.label :score, style: "display: block" %>
-    <%= form.text_field :score %>
+    <%= form.hidden_field :score,value: 0%>
   </div>
-
-  <div>
-    <%= form.label :longest_streak, style: "display: block" %>
-    <%= form.number_field :longest_streak %>
+  <div>    
+    <%= form.hidden_field :longest_streak,value: 0%>
   </div>
-
+  <div>    
+    <%= form.hidden_field :longest_streak,value: 0%>
+  </div>
+  <div>    
+    <%= form.hidden_field :teacher,value: current_user.email%>
+  </div>
+  <div>    
+    <%= form.hidden_field :completed,value: false%>
+  </div>
+  <div>    
+    <%= form.hidden_field :current_streak,value: 0%>
+  </div>
+  <div>    
+    <%= form.hidden_field :validate_id,value: nil%>
+  </div>
+  <br>
   <div>
     <%= form.submit %>
   </div>
