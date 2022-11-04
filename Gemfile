@@ -86,3 +86,5 @@ gem "ffi", "~> 1.15"
 gem 'bootstrap', '~> 5.2.2'
 gem 'jquery-rails'
 
+gem 'bootstrap-icons'
+gem 'bootstrap-icons-helper'
