@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :quizzes
+  resources :quizzes, only: [:index, :show, :new, :create]
   get 'home/index'
   get 'upload/index'
   get 'upload', to: 'upload#index'
