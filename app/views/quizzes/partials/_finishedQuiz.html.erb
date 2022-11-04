@@ -7,7 +7,7 @@
           <p><b><%=@course.course_name%> - <%=@course.section%> - <%=@course.semester%></b></p>
         </div>
         <div class="row">
-          <p><b>Score:</b> <%=@quiz.score%></p>
+          <p><b>Score:</b> <%=@quiz.score.round(2)%>%</p>
         </div>      
         <div class="row">
           <p><b>Longest Streak:</b> <%=@quiz.longest_streak%></p>
