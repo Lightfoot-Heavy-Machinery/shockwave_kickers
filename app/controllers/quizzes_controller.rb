@@ -9,10 +9,37 @@ class QuizzesController < ApplicationController
 
   # GET /quizzes/1 or /quizzes/1.json
   def show
-    if params["button_action"] == "refresh"
-      @quiz.longest_streak = @quiz.longest_streak + 1
-      @quiz.save
+    resp = params[:answer]
+    if @quiz.validate_id.nil? || resp.nil?
+      
+    elsif resp.to_i == @quiz.validate_id
+      roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
+      roster.correct_resp = true
+      roster.save
+
+      @quiz.correct = @quiz.correct + 1
+      @quiz.current_streak = @quiz.current_streak + 1
+      if @quiz.current_streak > @quiz.longest_streak
+        @quiz.longest_streak = @quiz.current_streak
+      end
+    else
+      roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
+      roster.correct_resp = false
+      roster.save
+      
+      @quiz.incorrect = @quiz.incorrect + 1
+      @quiz.current_streak = 0
     end
+    
+    @quiz.validate_id = nil
+    @quiz.save
+
+
+    logger.info("WE GOT:")
+    logger.info(params)
+    logger.info(params[:answer].to_i)
+    
+    disp_quiz()
   end
 
   # GET /quizzes/new
@@ -32,6 +59,9 @@ class QuizzesController < ApplicationController
       if @quiz.save
         format.html { redirect_to quiz_url(@quiz), notice: "Quiz was successfully created." }
         format.json { render :show, status: :created, location: @quiz }
+        Student.where(teacher: current_user.email, course_id:@quiz.course_id).each do |stud|
+          Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @quiz.errors, status: :unprocessable_entity }
@@ -71,5 +101,28 @@ class QuizzesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def quiz_params
       params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed).with_defaults(teacher: current_user.email)
+    end
+
+    def disp_quiz
+      if Qroster.where(quiz_id:@quiz.id,correct_resp:nil).count <= 0
+        @quiz.completed = true
+        @quiz.save
+        return
+      end
+
+      loop do
+        untested = Qroster.where(quiz_id:@quiz.id,correct_resp:nil)
+        untested = untested.shuffle
+        @random_stud = Qroster.where(id:untested[0]).first
+        break if @random_stud.correct_resp.nil?
+      end
+      
+      @quiz.validate_id = @random_stud.student_id
+      @quiz.save
+
+      @stud_obj = Student.where(id:@random_stud.student_id,teacher: current_user.email, course_id:@quiz.course_id).first
+      @choices = Qroster.where(quiz_id:@quiz.id).where.not(student_id:@random_stud.student_id).limit(3).pluck(:student_id)
+      @choices.append(@random_stud.student_id)
+      @choices = @choices.shuffle
     end
 end
