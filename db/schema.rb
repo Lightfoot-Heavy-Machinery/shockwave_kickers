@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_04_043952) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_04_165839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -70,6 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_043952) do
     t.boolean "completed", default: false
     t.integer "current_streak", default: 0
     t.integer "validate_id"
+    t.string "teacher"
   end
 
   create_table "students", force: :cascade do |t|

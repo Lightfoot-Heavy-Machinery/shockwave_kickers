@@ -5,7 +5,19 @@ class UploadController < ApplicationController
         require 'json'
         require 'securerandom'
 
-        image_path = "./app/resources/pictures/test.jpeg"
+        image_paths = []
+        # image_path = "./app/resources/pictures/test.jpeg"
+        image_path = "./app/resources/pictures/test"
+        image_ext = ".jpeg"
+        (0..20).each do |v|
+            if v == 0
+                image_paths.append(image_path+""+image_ext)
+            else
+                image_paths.append(image_path+v.to_s+image_ext)
+            end
+        end
+
+        count = 0
 
         CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
             uuid = SecureRandom.uuid
@@ -22,7 +34,14 @@ class UploadController < ApplicationController
                         course_id: @course.id,
                         teacher: current_user.email
                         )
-            @student.image.attach(io: File.open(image_path, 'rb'), filename: uuid)
+            
+            # @student.image.attach(io: File.open(image_path, 'rb'), filename: uuid)
+            if count < image_paths.length()
+                @student.image.attach(io: File.open(image_paths[count], 'rb'), filename: uuid)
+            else
+                @student.image.attach(io: File.open(image_paths[0], 'rb'), filename: uuid)
+            end
+            count = count + 1
 
             if !@student.save
                 puts("failed to save student")

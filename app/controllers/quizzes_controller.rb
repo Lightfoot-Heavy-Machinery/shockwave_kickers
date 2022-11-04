@@ -10,13 +10,7 @@ class QuizzesController < ApplicationController
   # GET /quizzes/1 or /quizzes/1.json
   def show
     resp = params[:answer]
-    if (@quiz.correct.to_i + @quiz.incorrect.to_i) == 0.to_i
-      @quiz.score = 0
-    else
-      @quiz.score = @quiz.correct.to_f / (@quiz.correct + @quiz.incorrect) * 100
-    end
-    @quiz.save
-
+    
     if @quiz.validate_id.nil? || resp.nil? || resp.to_i == 0
       if @quiz.longest_streak.nil?
         @quiz.longest_streak = 0
@@ -32,7 +26,7 @@ class QuizzesController < ApplicationController
       roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
       roster.correct_resp = true
       roster.save
-
+      
       @quiz.correct = @quiz.correct + 1
       @quiz.current_streak = @quiz.current_streak + 1
       if @quiz.current_streak > @quiz.longest_streak
@@ -45,6 +39,12 @@ class QuizzesController < ApplicationController
       
       @quiz.incorrect = @quiz.incorrect + 1
       @quiz.current_streak = 0
+    end
+    
+    if (@quiz.correct.to_i + @quiz.incorrect.to_i) == 0.to_i
+      @quiz.score = 0
+    else
+      @quiz.score = @quiz.correct.to_f / (@quiz.correct + @quiz.incorrect) * 100
     end
     
     @quiz.validate_id = nil
