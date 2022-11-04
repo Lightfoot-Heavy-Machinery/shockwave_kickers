@@ -12,6 +12,7 @@ node_modules/*
 /node_modules
 /storage
 /public
+/public/assets/*
 /coverage
 /yarn-error.log
 yarn-debug.log*
