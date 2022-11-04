@@ -1,6 +1,8 @@
 class CoursesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_course, only: %i[ show edit update destroy ]
+  include Filterable
+
 
   # GET /courses or /courses.json
   def index
@@ -21,6 +23,11 @@ class CoursesController < ApplicationController
             @semesters.add(record.semester)
             @sections.add(record.section)
         end
+    end
+    #look into partials
+    #on change redirect to course/1?semester=spring_2021&section=100&tags=smart, but only show students in selected semesters
+    if params[:semester] != nil
+        #redirect_to "course", id: 2, semester: params[:semester]
     end
   end
 
@@ -71,6 +78,14 @@ class CoursesController < ApplicationController
       format.html { redirect_to courses_url, notice: "Course was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def list
+      @student_records = Student.all
+
+      course_ids = Course.where(course_name: " CSCE 420")
+      students = filter!(Student)
+      render(partial: 'students', locals: { course_ids: course_ids, students: students})
   end
 
   private

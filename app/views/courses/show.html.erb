@@ -31,16 +31,18 @@
                 </div>
                 <div class="col">
                     Semester:
-                    <%= select("post", "semester", @semesters, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
+                    <% selected_semester = nil%>
+                    <%= select("post", "semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
                 </div>
                 <div class="col">
                     Section:
-                    <%= select("post", "section", @sections, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
+                    <% selected_section = nil%>
+                    <%= select("post", "section", @sections, {:include_blank => true}, {:onchange => "selected_section=this.value; render_students"}) %>
                 </div>
                 <div class="col">
                     Tags:
-                    <%= select("post", "tags", @tags, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
-
+                    <% selected_tags = nil%>
+                    <%= select("post", "tags", @tags, {:include_blank => true}, {:onchange => "selected_tags=this.value; render \"students\", selected_semester: selected_semester, selected_section: selected_section, selected_tags: selected_tags"}) %>
                 </div>
               </div>
             </div>
@@ -55,62 +57,7 @@
         </div>
       </div>
     </div>
+    <%#render "students", selected_semester: " Sprint 2021", selected_section: 100, selected_tags: "smart" %>
 
-    <div class= "col">
-      <div class="row">
-        <table id="students" class="table table-striped table-hover text-center">
-          <thead>
-            <tr>
-              <th colspan="5">
-                <h3>Students in Current View:</h3>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                Pic
-              </th>
-              <th>
-                Name
-              </th>
-              <th>
-                Section - Semester
-              </th>
-              <th>
-                Tags
-              </th>
-              <th>
-                View Student Profile
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @student_records.each do |student| %>
-              <tr>
-                <td>
-                  <%# TODO %>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                  </svg>
-                </td>
-                <td>
-                  <%=student.lastname %>, <%=student.firstname %>
-                </td>
-                <td>
-                  (TODO) Section - Semester
-                </td>
-                <td>
-                  <%=student.tags %>
-                </td>
-                <td>
-                  <button class="btn btn-outline-dark"><%= link_to "View profile", student %></button>
-                </td>
-              </tr>
-
-
-            <% end %>
-          </tbody>
-      </div>
-    </div>
   </div>
 </div>
