@@ -25,30 +25,15 @@
         </th>
         <th>
           Course(s)/Semester(s):
+		  <%= select("post", "course_name", @course_names, {:include_blank => true}, {:onchange => "alert(this.value)"})%>
+		  <%= select("post", "semester", @semesters, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
         </th>
         <th>
           Tags:
+		  <%= select("post", "tags", @tags, {:include_blank => false}, {:onchange => "alert(this.value)"}) %>
         </th>
         <th>
           View Student Profile:
-        </th>
-      </tr>
-
-      <tr>
-        <th>
-          Place 1:
-        </th>
-        <th>
-          Place 2:
-        </th>
-        <th>
-          Place 3:
-        </th>
-        <th>
-          Place 4:
-        </th>
-        <th>
-          Place 5:
         </th>
       </tr>
     </thead>
@@ -68,7 +53,7 @@
             <%= student.email %>
           </td>
           <td>
-            TODO - All courses/semesters taken?
+            <%= @courses_taken[student.id] %> <%= @semesters_taken[student.id] %>
           </td>
           <td>
             <%= student.tags %>
