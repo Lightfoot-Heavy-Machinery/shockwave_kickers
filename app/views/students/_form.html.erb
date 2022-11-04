@@ -11,53 +11,76 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :firstname, style: "display: block" %>
-    <%= form.text_field :firstname %>
+  <div class="text-center container">
+    <div class="row gx-5 h-100 ">
+      <div class="col">
+        <div>
+          <%= form.label :firstname, style: "display: block" %>
+          <%= form.text_field :firstname %>
+        </div>
+
+        <div>
+          <%= form.label :lastname, style: "display: block" %>
+          <%= form.text_field :lastname %>
+        </div>
+
+        <div>
+          <%= form.label :uin, style: "display: block" %>
+          <%= form.text_field :uin %>
+        </div>
+      </div>
+
+      <div class="col">
+        <div>
+          <%= form.label :email, style: "display: block" %>
+          <%= form.text_field :email %>
+        </div>
+
+        <div>
+          <%= form.label :classification, style: "display: block" %>
+          <%= form.text_field :classification %>
+        </div>
+
+        <div>
+          <%= form.label :major, style: "display: block" %>
+          <%= form.text_field :major %>
+        </div>
+      </div>
+
+      <div class="col">
+        <div>
+          <%= form.label :notes, style: "display: block" %>
+          <%= form.text_field :notes %>
+        </div>
+
+        <div>
+          <%= form.label :tags, style: "display: block" %>
+          <%= form.text_field :tags %>
+        </div>
+
+        <div>
+          <%= form.label :course_id, style: "display: block" %>
+          <%= form.number_field :course_id %>
+        </div>
+
+        <div>
+            <%= form.label :image, style: "display: block" %>
+            <%= form.file_field :image %>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <%= form.submit %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :lastname, style: "display: block" %>
-    <%= form.text_field :lastname %>
-  </div>
 
-  <div>
-    <%= form.label :uin, style: "display: block" %>
-    <%= form.text_field :uin %>
-  </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
-  </div>
 
-  <div>
-    <%= form.label :classification, style: "display: block" %>
-    <%= form.text_field :classification %>
-  </div>
 
-  <div>
-    <%= form.label :major, style: "display: block" %>
-    <%= form.text_field :major %>
-  </div>
+  
 
-  <div>
-    <%= form.label :notes, style: "display: block" %>
-    <%= form.text_field :notes %>
-  </div>
 
-  <div>
-    <%= form.label :tags, style: "display: block" %>
-    <%= form.text_field :tags %>
-  </div>
-
-  <div>
-    <%= form.label :course_id, style: "display: block" %>
-    <%= form.number_field :course_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
 
 <% end %>

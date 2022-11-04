@@ -1,8 +1,7 @@
                                   Prefix Verb   URI Pattern                                                                                       Controller#Action
-                         semesters_index GET    /semesters/index(.:format)                                                                        semesters#index
-                          semesters_show GET    /semesters/show(.:format)                                                                         semesters#show
-                           semesters_new GET    /semesters/new(.:format)                                                                          semesters#new
-                          semesters_edit GET    /semesters/edit(.:format)                                                                         semesters#edit
+                              upload_new GET    /upload/new(.:format)                                                                             upload#new
+                            upload_index GET    /upload/index(.:format)                                                                           upload#index
+                                  upload GET    /upload(.:format)                                                                                 upload#index
                                  courses GET    /courses(.:format)                                                                                courses#index
                                          POST   /courses(.:format)                                                                                courses#create
                               new_course GET    /courses/new(.:format)                                                                            courses#new
@@ -19,14 +18,6 @@
                                          PATCH  /students/:id(.:format)                                                                           students#update
                                          PUT    /students/:id(.:format)                                                                           students#update
                                          DELETE /students/:id(.:format)                                                                           students#destroy
-                               semesters GET    /semesters(.:format)                                                                              semesters#index
-                                         POST   /semesters(.:format)                                                                              semesters#create
-                            new_semester GET    /semesters/new(.:format)                                                                          semesters#new
-                           edit_semester GET    /semesters/:id/edit(.:format)                                                                     semesters#edit
-                                semester GET    /semesters/:id(.:format)                                                                          semesters#show
-                                         PATCH  /semesters/:id(.:format)                                                                          semesters#update
-                                         PUT    /semesters/:id(.:format)                                                                          semesters#update
-                                         DELETE /semesters/:id(.:format)                                                                          semesters#destroy
                                     root GET    /                                                                                                 courses#index
         turbo_recede_historical_location GET    /recede_historical_location(.:format)                                                             turbo/native/navigation#recede
         turbo_resume_historical_location GET    /resume_historical_location(.:format)                                                             turbo/native/navigation#resume

@@ -1,8 +1,9 @@
 class StudentsController < ApplicationController
+    before_action :authenticate_user!
     before_action :set_student, only: %i[ show edit update destroy ]
     # GET /students
     def index
-      @students = Student.all
+      @students = Student.where(teacher: current_user.email)
     end
 
     # GET /students/1
@@ -36,7 +37,7 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
       respond_to do |format|
-        if @student.update(params.require(:student).permit(:firstname,:lastname,:uin, :email, :classification, :major, :notes))
+        if @student.update(student_params)
           format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
           format.json { render :show, status: :ok, location: @student }
         else
@@ -49,6 +50,7 @@ class StudentsController < ApplicationController
     #DELETE courses/1
     def destroy
         @student = Student.find(params[:id])
+        @student.image.purge_later
         @student.destroy
         redirect_to action: "index"
     end
@@ -56,12 +58,21 @@ class StudentsController < ApplicationController
     private
         # Use callbacks to share common setup or constraints between actions.
         def set_student
-            @student = Student.find(params[:id])
+            @student = Student.find_by(teacher: current_user.email, id: params[:id])
+            Rails.logger.info "Received info #{@student.inspect}"
+            if !@student.nil?
+                Rails.logger.info "Received info #{@student.inspect}"
+            else
+                respond_to do |format|
+                    format.html { redirect_to students_url, notice: "Given student not found." }
+                    format.json { head :no_content }
+                end
+            end
         end
 
             # Only allow a list of trusted parameters through.
         def student_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :course_id, :classification, :major, :notes, :tags, :photo)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :course_id, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
         end
 
 end

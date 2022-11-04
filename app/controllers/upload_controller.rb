@@ -1,15 +1,16 @@
 class UploadController < ApplicationController
-    def new
-
-    end
-
+    before_action :authenticate_user!
     def index
         require 'csv'
         require 'json'
+        require 'securerandom'
 
-        CSV.foreach('./app/views/upload/test_data.csv', :headers => true) do |record|
+        image_path = "./app/resources/pictures/test.jpeg"
 
-            @course = Course.find_or_create_by(course_name: record["Course"], teacher: "testUser", section: record["Section"], semester: record["Semester"])
+        CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
+            uuid = SecureRandom.uuid
+
+            @course = Course.find_or_create_by(course_name: record["Course"], teacher: current_user.email, section: record["Section"], semester: record["Semester"])
             @student = Student.find_or_create_by(
                         firstname:record["FirstName"],
                         lastname:record["LastName"],
@@ -18,7 +19,10 @@ class UploadController < ApplicationController
                         classification: record["Classification"],
                         major: record["Major"],
                         notes: record["Notes"],
-                        course_id: @course.id)
+                        course_id: @course.id,
+                        teacher: current_user.email
+                        )
+            @student.image.attach(io: File.open(image_path, 'rb'), filename: uuid)
 
             if !@student.save
                 puts("failed to save student")

@@ -1,9 +1,15 @@
-<h1>New course</h1>
+<div class="container text-center">
+
+  <h1>New course</h1>
 
 <%= render "form", course: @course %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Back to courses", courses_path %>
+  <div class="flex-container" style="justify-content:space-evenly;">
+    <button class="btn btn-outline-dark m-2"><%= link_to "Back to courses", courses_path %></button>
+  </div>
+
+  TODO - Add upload functionality and interface
+
 </div>
