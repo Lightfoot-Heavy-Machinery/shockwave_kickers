@@ -104,7 +104,8 @@ class QuizzesController < ApplicationController
       @quiz.save
 
       @stud_obj = Student.where(id:@random_stud.student_id,teacher: current_user.email, course_id:@quiz.course_id).first
-      @choices = Qroster.where(quiz_id:@quiz.id).where.not(student_id:@random_stud.student_id).limit(3).pluck(:student_id)
+      @choices = Qroster.where(quiz_id:@quiz.id).where.not(student_id:@random_stud.student_id).pluck(:student_id)
+      @choices = @choices.shuffle.slice(0,3)
       @choices.append(@random_stud.student_id)
       @choices = @choices.shuffle
     end
