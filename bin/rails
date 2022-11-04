@@ -4,6 +4,11 @@ require_relative "../config/boot"
 require "rails/commands"
 if ENV['RAILS_ENV'] == 'test'
     require 'simplecov'
-    SimpleCov.start 'rails'
+    SimpleCov.start do
+        add_filter %r{application}
+        # add_filter do |source_file|
+        #     source_file.lines.count < 4
+        # end
+    end
     puts "required simplecov"
 end

@@ -21,7 +21,7 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get students" do
-    CSV.foreach('./app/views/upload/test_data.csv', :headers => true) do |record|
+    CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
         assert Student.find_by(firstname:record["FirstName"],
         lastname:record["LastName"],
         uin: record["UIN"],
@@ -34,7 +34,7 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
     end
 
   test "should get courses" do
-      CSV.foreach('./app/views/upload/test_data.csv', :headers => true) do |record|
+      CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
         assert Course.find_by(course_name: record["Course"], teacher: @current_user.email, section: record["Section"], semester: record["Semester"]).nil?
         end
     end

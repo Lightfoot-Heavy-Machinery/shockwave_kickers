@@ -1,4 +1,9 @@
                                   Prefix Verb   URI Pattern                                                                                       Controller#Action
+
+                              upload_new GET    /upload/new(.:format)                                                                             upload#new
+                            upload_index GET    /upload/index(.:format)                                                                           upload#index
+                                  upload GET    /upload(.:format)                                                                                 upload#index
+
                                  quizzes GET    /quizzes(.:format)                                                                                quizzes#index
                                          POST   /quizzes(.:format)                                                                                quizzes#create
                                 new_quiz GET    /quizzes/new(.:format)                                                                            quizzes#new
@@ -28,6 +33,7 @@
                    new_user_confirmation GET    /users/confirmation/new(.:format)                                                                 devise/confirmations#new
                        user_confirmation GET    /users/confirmation(.:format)                                                                     devise/confirmations#show
                                          POST   /users/confirmation(.:format)                                                                     devise/confirmations#create
+
                                  courses GET    /courses(.:format)                                                                                courses#index
                                          POST   /courses(.:format)                                                                                courses#create
                               new_course GET    /courses/new(.:format)                                                                            courses#new
@@ -44,8 +50,10 @@
                                          PATCH  /students/:id(.:format)                                                                           students#update
                                          PUT    /students/:id(.:format)                                                                           students#update
                                          DELETE /students/:id(.:format)                                                                           students#destroy
+
                       authenticated_root GET    /                                                                                                 home#index
                     unauthenticated_root GET    /                                                                                                 devise/sessions#new
+
         turbo_recede_historical_location GET    /recede_historical_location(.:format)                                                             turbo/native/navigation#recede
         turbo_resume_historical_location GET    /resume_historical_location(.:format)                                                             turbo/native/navigation#resume
        turbo_refresh_historical_location GET    /refresh_historical_location(.:format)                                                            turbo/native/navigation#refresh
