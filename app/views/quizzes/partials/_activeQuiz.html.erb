@@ -1,3 +1,11 @@
+<div class="container text-center">
+<% if @correctAnswer.nil?%>
+<% elsif @correctAnswer == true%>
+<p style="color: green">Correct Answer!</p>
+<% else %>
+<p style="color: red">Incorrect Answer!</p>
+<% end %>
+</div>
 <div class="row gx-5">
       <div class="col">
         <div class="row">
@@ -31,7 +39,8 @@
             <p><b><%=@course.course_name%> - <%=@course.section%> - <%=@course.semester%></b></p>
           </div>
           <div class="row">
-            <p><b>Score:</b> <%=@quiz.score.round(2)%>%</p>
+            <p><b>Current Score:</b> <%=@quiz.score.round(2)%>%</p>
+            <p>(Note: Only your first guess per student is scored)</p>
           </div> 
           <div class="row">
             <p><b>Current Streak:</b> <%=@quiz.current_streak%></p>
