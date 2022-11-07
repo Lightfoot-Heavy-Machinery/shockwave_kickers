@@ -48,6 +48,7 @@ This command should also store test coverage.
 * How to run open coverage
   `open coverage/index.html`
 
+
 * Deployment instructions to Heroku
   Automatic deployment is done!!
 
@@ -74,3 +75,4 @@ Debugging Tips:
 2) Go to storage.yml, change amazon bucket name to `shockwavekickers-dev`
 3) Export RAILS_MASTER_KEY=LOOK_AT_SLACK_CHANNEL
 4) Run rails server start command
+
