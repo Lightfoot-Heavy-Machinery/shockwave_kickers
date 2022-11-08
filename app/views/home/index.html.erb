@@ -1,7 +1,55 @@
-<%= button_to(
-        "Log Out",
-        destroy_user_session_path,
-        method: :delete
-      ) %>
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="container text-center">
+  <div class="row gx-2 my-3">
+      <div class="col">
+        <h1>Howdy Professor!</h1>
+      </div>
+  </div>
+  <div class="row gx-2 mb-5">
+    <div class="bg-light border rounded-3">
+      <div class="row p-2 pt-0">
+        <div class="col">
+          <p><b>Teaching Summary:</b></p>
+          <p>Years: <%= getYears() %></p>
+          <p>Semesters: <%= Course.where(teacher:@id).distinct.count(:semester)%></p>
+          <p>Courses: <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
+          <p>Students: <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
+        </div>
+        <div class="col">
+          <p><b>Quiz Averages:</b></p>
+          <% recentSem = getAvgScoreRecent() %>
+          <p><%= recentSem[0] %>: <%= recentSem[1] %>%</p>
+          <p>All Time: <%= getAvgScoreTotal() %>%</p>
+        </div>
+        <div class="col">
+          <p><b>Key Students:</b></p>
+          <% studentBW = studentBestWorst() %>
+          <p>Most Remembered: <%= button_to "#{studentBW[1]}", Student.where(id:studentBW[0]).first, :method=>:get  %></p>
+          <p>Least Remembered: <%= button_to "#{studentBW[3]}", Student.where(id:studentBW[2]).first, :method=>:get  %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gx-2 my-5">
+    <div class="col">
+      <div class="bg-light border rounded-3">
+        <div class="row p-2 pt-0">
+            <p>Some Course 1</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="bg-light border rounded-3">
+        <div class="row p-2 pt-0">
+            <p>Some Course 2</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="bg-light border rounded-3">
+        <div class="row p-2 pt-0">
+            <p>Some Course 3</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
