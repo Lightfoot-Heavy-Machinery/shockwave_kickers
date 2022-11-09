@@ -4,52 +4,59 @@
         <h1>Howdy Professor!</h1>
       </div>
   </div>
-  <div class="row gx-2 mb-5">
+  <div class="row gx-2 mb-3">
     <div class="bg-light border rounded-3">
       <div class="row p-2 pt-0">
         <div class="col">
-          <p><b>Teaching Summary:</b></p>
-          <p>Years: <%= getYears() %></p>
-          <p>Semesters: <%= Course.where(teacher:@id).distinct.count(:semester)%></p>
-          <p>Courses: <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
-          <p>Students: <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
+          <p><h4>Teaching Summary:</h4></p>
+          <p><b>Years:</b> <%= getYears() %></p>
+          <p><b>Semesters:</b> <%= Course.where(teacher:@id).distinct.count(:semester)%></p>
+          <p><b>Courses:</b> <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
+          <p><b>Students:</b> <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
         </div>
         <div class="col">
-          <p><b>Quiz Averages:</b></p>
-          <% recentSem = getAvgScoreRecent() %>
-          <p><%= recentSem[0] %>: <%= recentSem[1] %>%</p>
-          <p>All Time: <%= getAvgScoreTotal() %>%</p>
+          <p><h4>Quiz Averages:</h4></p>
+          <% recentSem = getAvgRecent() %>
+          <p><b><%= recentSem[0] %> Scores:</b> <%= recentSem[1] %>%</p>
+          <p><b><%= recentSem[0] %> Best Streaks:</b> <%= recentSem[2] %></p>
+          <% tot =  getAvgTotal() %>
+          <p><b>All Time Scores:</b> <%= tot[0] %>%</p>
+          <p><b>All Time Best Streaks:</b> <%= tot[1] %></p>
         </div>
         <div class="col">
-          <p><b>Key Students:</b></p>
+          <p><h4>Key Students:</h4></p>
           <% studentBW = studentBestWorst() %>
-          <p>Most Remembered: <%= button_to "#{studentBW[1]}", Student.where(id:studentBW[0]).first, :method=>:get  %></p>
-          <p>Least Remembered: <%= button_to "#{studentBW[3]}", Student.where(id:studentBW[2]).first, :method=>:get  %></p>
+          <p><b>Most Remembered:</b></p>
+          <p><%= link_to "#{studentBW[1]}", Student.where(id:studentBW[0]).first, :method=>:get  %></p>
+          <p><b>Least Remembered:</b></p>
+          <p><%= link_to "#{studentBW[3]}", Student.where(id:studentBW[2]).first, :method=>:get  %></p>
         </div>
       </div>
     </div>
   </div>
-  <div class="row gx-2 my-5">
-    <div class="col">
-      <div class="bg-light border rounded-3">
-        <div class="row p-2 pt-0">
-            <p>Some Course 1</p>
+  <div class="row gx-2 mb-2">
+    <% recentCourses = Course.where(teacher:@id).order(updated_at: :desc).limit(3)%>
+    <% recentCourses.each do |course| %>
+      <div class="col">
+        <div class="bg-light border rounded-3">
+          <div class="row p-2 pt-0">
+            <% if course.nil?%>
+            <% else %>
+              <p><h4><%= link_to "#{course.course_name + "-" + course.section.to_s + "-" + course.semester}", course, :method => :get %></h4></p>
+              <p><b> # of Students:</b> <%= Student.where(course_id:course.id, teacher:@id).count %> </p>
+              <% qCnt = Quiz.where(teacher:@id, course_id:course.id).count %>
+              <p><b> # of Quizzes Taken:</b> <%= qCnt %> </p>
+              <% if qCnt <= 0 %>
+                <p><b> Average Quiz Score: </b>No quizzes taken!</p>
+                <p><b> Highest Quiz Score: </b>No quizzes taken!</p>
+              <% else %>
+                <p><b> Average Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).average(:score) %>%</p>
+                <p><b> Highest Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).maximum(:score) %>%</p>
+              <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="bg-light border rounded-3">
-        <div class="row p-2 pt-0">
-            <p>Some Course 2</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="bg-light border rounded-3">
-        <div class="row p-2 pt-0">
-            <p>Some Course 3</p>
-        </div>
-      </div>
-    </div>
+    <% end %>
   </div>
 </div>
