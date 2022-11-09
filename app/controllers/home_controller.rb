@@ -15,13 +15,24 @@ class HomeController < ApplicationController
   helper_method :getYears
 
 
-  def getAvgScoreTotal
-    avg = Quiz.where(teacher:@id).average(:score).round(2)
-    return avg
-  end
-  helper_method :getAvgScoreTotal
+  def getAvgTotal
+    avg = Quiz.where(teacher:@id).average(:score)
+    if avg.nil?
+      avg = "No quizzes taken!"
+    else 
+      avg = avg.round(2)
+    end
 
-  def getAvgScoreRecent
+    strk = Quiz.where(teacher:@id).average(:longest_streak)
+    if strk.nil?
+      strk = "No quizzes taken!"
+    end
+
+    return [avg, strk]
+  end
+  helper_method :getAvgTotal
+
+  def getAvgRecent
     recentFall = Course.where(teacher:@id).where("semester like ?", "%#{"Fall"}%").order(semester: :desc).first
     fallYear = (recentFall.semester[-4..-1] || "0").to_i
     recentSpring = Course.where(teacher:@id).where("semester like ?", "%#{"Spring"}%").order(semester: :desc).first
@@ -38,21 +49,25 @@ class HomeController < ApplicationController
     
     avg = Quiz.where(teacher:@id,id:courses).average(:score)
     if avg.nil?
-      avg = 0.00
+      avg = "No quizzes taken!"
     else 
       avg = avg.round(2)
     end
+
+    strk = Quiz.where(teacher:@id,id:courses).average(:longest_streak)
+    if strk.nil?
+      strk = "No quizzes taken!"
+    end
     
-    return [semester, avg]
+    return [semester, avg, strk]
   end
-  helper_method :getAvgScoreRecent
+  helper_method :getAvgRecent
 
   def studentBestWorst
     qID = Quiz.where(teacher:@id).pluck(:id)
     best = Qroster.where(quiz_id:qID,correct_resp:true,attempts:1).order(updated_at: :desc).pluck(:student_id).first
     name = Student.where(id:best,teacher: @id).pick(:firstname, :lastname)
     bestName = name[0] + " " + name[1]
-    # bestScore = (1 / Qroster.where(quiz_id:qID,student_id:best,correct_resp:true).average(:attempts).to_f * 100).round(2)
     bestScore = 0
     bestAttempts = Qroster.where(quiz_id:qID,student_id:best,correct_resp:true).pluck(:attempts)
     bestAttempts.each do |val|
@@ -64,7 +79,6 @@ class HomeController < ApplicationController
     worst = Qroster.where(quiz_id:qID).order(attempts: :desc).order(updated_at: :desc).pluck(:student_id).first
     name = Student.where(id:worst,teacher: @id).pick(:firstname, :lastname)
     worstName = name[0] + " " + name[1]
-    # worstScore = (1 / Qroster.where(quiz_id:qID,student_id:worst,correct_resp:true).average(:attempts).to_f * 100).round(2)
     worstScore = 0
     worstAttempts = Qroster.where(quiz_id:qID,student_id:worst,correct_resp:true).pluck(:attempts)
     worstAttempts.each do |val|
