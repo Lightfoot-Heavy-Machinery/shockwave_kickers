@@ -81,8 +81,33 @@ class QuizzesController < ApplicationController
       if @quiz.save
         format.html { redirect_to quiz_url(@quiz), notice: "Quiz was successfully created." }
         format.json { render :show, status: :created, location: @quiz }
-        Student.where(teacher: current_user.email, course_id:@quiz.course_id).each do |stud|
-          Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+        if @quiz.targeted
+          recentQ = Quiz.select(:id).where(teacher:current_user.email, course_id:@quiz.course_id, completed:true).order(updated_at: :desc).limit(2).pluck(:id)
+
+          topMissed = Qroster.from(Qroster.where(quiz_id:recentQ).order(attempts: :desc)).select(:student_id).distinct.limit(10).pluck(:student_id)
+          cnt = 0
+          topMissed.each do |stud|
+            cnt = cnt + 1
+            Qroster.create(quiz_id:@quiz.id,student_id:stud)
+          end
+
+          xCnt = 0
+          if cnt == 10
+            xCnt = 5
+          elsif cnt <= 15
+            xCnt = 15 - cnt
+          else
+            xCnt = 0
+          end
+          
+          extra = Student.where(teacher: current_user.email, course_id:@quiz.course_id).where.not(id:topMissed).shuffle.slice(0,xCnt)
+          extra.each do |stud|
+            Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+          end
+        else
+          Student.where(teacher: current_user.email, course_id:@quiz.course_id).each do |stud|
+            Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+          end
         end
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -99,7 +124,7 @@ class QuizzesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def quiz_params
-      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed, :current_streak, :validate_id, :teacher).with_defaults(teacher: current_user.email)
+      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed, :current_streak, :validate_id, :teacher, :targeted).with_defaults(teacher: current_user.email)
     end
 
     def disp_quiz
