@@ -26,6 +26,8 @@ class HomeController < ApplicationController
     strk = Quiz.where(teacher:@id).average(:longest_streak)
     if strk.nil?
       strk = "No quizzes taken!"
+    else
+      strk = strk.round(2)
     end
 
     return [avg, strk]
@@ -57,37 +59,67 @@ class HomeController < ApplicationController
     strk = Quiz.where(teacher:@id,id:courses).average(:longest_streak)
     if strk.nil?
       strk = "No quizzes taken!"
+    else
+      strk = strk.round(2)
     end
     
     return [semester, avg, strk]
   end
   helper_method :getAvgRecent
 
-  def studentBestWorst
+  def studentInfo
     qID = Quiz.where(teacher:@id).pluck(:id)
-    best = Qroster.where(quiz_id:qID,correct_resp:true,attempts:1).order(updated_at: :desc).pluck(:student_id).first
-    name = Student.where(id:best,teacher: @id).pick(:firstname, :lastname)
-    bestName = name[0] + " " + name[1]
-    bestScore = 0
-    bestAttempts = Qroster.where(quiz_id:qID,student_id:best,correct_resp:true).pluck(:attempts)
-    bestAttempts.each do |val|
-      bestScore = bestScore + 1.00 / val * 100 
-    end
-    bestScore = bestScore / bestAttempts.length()
-    bestInfo = "#{bestName} (#{bestScore})%"
+    atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
 
-    worst = Qroster.where(quiz_id:qID).order(attempts: :desc).order(updated_at: :desc).pluck(:student_id).first
-    name = Student.where(id:worst,teacher: @id).pick(:firstname, :lastname)
+    best = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore DESC").first
+    name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
+    bestName = name[0] + " " + name[1]
+    bestInfo = "#{bestName} (#{best.score.round(2)}%)"
+
+
+    worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC").first
+    name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
     worstName = name[0] + " " + name[1]
-    worstScore = 0
-    worstAttempts = Qroster.where(quiz_id:qID,student_id:worst,correct_resp:true).pluck(:attempts)
-    worstAttempts.each do |val|
-      worstScore = worstScore + 1.00 / val * 100 
-    end
-    worstScore = worstScore / worstAttempts.length()
-    worstInfo = "#{worstName} (#{worstScore})%"
+    worstInfo = "#{worstName} (#{worst.score.round(2)}%)"
     
-    return [best,bestInfo,worst,worstInfo]
+    ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
+    logger.info("IDS: #{ids}")
+    maxCnt = 0
+    maxID = 0
+    minCnt = Float::INFINITY
+    minID = 0
+    ids.each do |i|
+      tmpCnt = 0
+      qr = Qroster.where(quiz_id:qID,student_id:i,correct_resp:true).order(updated_at: :desc).pluck(:attempts)
+      logger.info("HIGHEST: #{qr}")
+      qr.each do |att|
+        if att == 1
+          tmpCnt = tmpCnt + 1
+          if tmpCnt > maxCnt
+            maxCnt = tmpCnt
+            maxID = i
+          end
+          if tmpCnt < minCnt
+            minCnt = tmpCnt
+            minID = i
+          end
+        else
+          break
+        end
+      end
+    end
+
+    name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
+    highestName = name[0] + " " + name[1]
+    highestInfo = "#{highestName} (#{maxCnt})"
+    logger.info("HIGH: #{highestInfo}")
+    name = Student.where(id:minID,teacher: @id).pick(:firstname, :lastname)
+    lowestName = name[0] + " " + name[1]
+    lowestInfo = "#{lowestName} (#{minCnt})"
+    logger.info("LOW: #{lowestInfo}")
+
+
+    return [best.student_id, bestInfo, worst.student_id, worstInfo, maxID, highestInfo, minID, lowestInfo]
   end
-  helper_method :studentBestWorst
+  helper_method :studentInfo
 end

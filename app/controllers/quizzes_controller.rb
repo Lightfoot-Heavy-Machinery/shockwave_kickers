@@ -50,7 +50,6 @@ class QuizzesController < ApplicationController
 
       @quiz.current_streak = 0
 
-
       roster.attempts = roster.attempts + 1
       roster.save
       
