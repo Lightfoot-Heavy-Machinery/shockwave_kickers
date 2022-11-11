@@ -1,17 +1,15 @@
 FirstName,LastName,UIN,Email,Course,Section,Classification,Major,Semester,Notes
-John, Doe, 326001234, johndoe@gmail.com, CSCE 606, 100, G2, CS, Fall 2021, This student was stupid
+Kunal, Vudathu, 326001234, kunalvudathu@gmail.com, CSCE 606, 100, G2, CS, Fall 2021, This student was stupid
+Rahul, Shah, 01234567, jdon@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Jacob, Kelly, 2374628743, abcd@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Stuart, Nelson, 9877382648, bcde@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Colton, Simpson, 8712638712, cdef@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+John, Cena, 8973475263, defg@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Mark, Cuban, 3456739876, efgh@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Jk, Simmons, 7836583874, fghi@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Robert, Downey Jr, 0193775658, ghij@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Tom, Holland, 9274298473, hijk@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Reveille, X, 0101010101, ijkl@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
 Alice, Doe, 326001234, alicedoe@tamu.edu, CSCE 420, 100, U4, CS, Spring 2021, This student was smart
 Sheldon, Cooper, 326001234, scooper@tamu.edu, ECEN 999, 100, U4, CE, Spring 2021, This student was cool
 Bob, Odenkirk, 326001234, bodenkirk@tamu.edu, MATH 470, 100, U4, CE, Spring 2021, This student was cool
-Don, Juan, 01234567, jdon@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-AB, CD, 2374628743, abcd@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-BC, DE, 9877382648, bcde@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-CD, EF, 8712638712, cdef@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-DE, FG, 8973475263, defg@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-EF, GH, 3456739876, efgh@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-FG, HI, 7836583874, fghi@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-GH, IJ, 0193775658, ghij@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-HI, JK, 9274298473, hijk@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-IJ, KL, 0101010101, ijkl@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-JK, LM, 8482747826, jklm@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
-KL, MN, 6565658474, klmn@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
