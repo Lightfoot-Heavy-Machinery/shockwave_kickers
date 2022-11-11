@@ -8,7 +8,14 @@ class HomeController < ApplicationController
     sems = Course.where(teacher:@id)
     uniqSems = Set.new
     sems.each do |s|
-      uniqSems << s.semester[-4..-1]
+      tmp = s.semester.strip
+      idx = tmp.rindex(" ")
+      if idx.nil?
+        uniqSems << tmp
+      else
+        idx = idx + 1
+        uniqSems << tmp[idx..-1].strip
+      end
     end
     return uniqSems.length()
   end
@@ -36,9 +43,26 @@ class HomeController < ApplicationController
 
   def getAvgRecent
     recentFall = Course.where(teacher:@id).where("semester like ?", "%#{"Fall"}%").order(semester: :desc).first
-    fallYear = (recentFall.semester[-4..-1] || "0").to_i
+    tmp = recentFall.semester.strip
+    idx = tmp.rindex(" ")
+    fallYear = 0000
+    if idx.nil?
+      fallYear = (tmp || "0").to_i
+    else
+      idx = idx + 1
+      fallYear = (tmp[idx..-1].strip || "0").to_i
+    end
+
     recentSpring = Course.where(teacher:@id).where("semester like ?", "%#{"Spring"}%").order(semester: :desc).first
-    springYear = (recentSpring.semester[-4..-1] || "0").to_i
+    tmp = recentSpring.semester.strip
+    idx = tmp.rindex(" ")
+    springYear = 0000
+    if idx.nil?
+      springYear = (tmp || "0").to_i
+    else
+      idx = idx + 1
+      springYear = (tmp[idx..-1].strip || "0").to_i
+    end
    
     semester = ""
     if fallYear > springYear
@@ -83,7 +107,6 @@ class HomeController < ApplicationController
     worstInfo = "#{worstName} (#{worst.score.round(2)}%)"
     
     ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
-    logger.info("IDS: #{ids}")
     maxCnt = 0
     maxID = 0
     minCnt = Float::INFINITY
@@ -91,32 +114,29 @@ class HomeController < ApplicationController
     ids.each do |i|
       tmpCnt = 0
       qr = Qroster.where(quiz_id:qID,student_id:i,correct_resp:true).order(updated_at: :desc).pluck(:attempts)
-      logger.info("HIGHEST: #{qr}")
       qr.each do |att|
         if att == 1
           tmpCnt = tmpCnt + 1
-          if tmpCnt > maxCnt
-            maxCnt = tmpCnt
-            maxID = i
-          end
-          if tmpCnt < minCnt
-            minCnt = tmpCnt
-            minID = i
-          end
         else
           break
         end
+      end
+      if tmpCnt > maxCnt
+        maxCnt = tmpCnt
+        maxID = i
+      end
+      if tmpCnt < minCnt
+        minCnt = tmpCnt
+        minID = i
       end
     end
 
     name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
     highestName = name[0] + " " + name[1]
     highestInfo = "#{highestName} (#{maxCnt})"
-    logger.info("HIGH: #{highestInfo}")
     name = Student.where(id:minID,teacher: @id).pick(:firstname, :lastname)
     lowestName = name[0] + " " + name[1]
     lowestInfo = "#{lowestName} (#{minCnt})"
-    logger.info("LOW: #{lowestInfo}")
 
 
     return [best.student_id, bestInfo, worst.student_id, worstInfo, maxID, highestInfo, minID, lowestInfo]
