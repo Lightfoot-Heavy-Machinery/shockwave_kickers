@@ -17,28 +17,43 @@
         <div class="col">
           <p><h4>Quiz Averages:</h4></p>
           <% recentSem = getAvgRecent() %>
-          <p><b><%= recentSem[0] %> Scores:</b> <%= recentSem[1] %>%</p>
+          <p><b><%= recentSem[0] %> Scores:</b> <%= recentSem[1] %></p>
           <p><b><%= recentSem[0] %> Best Streak:</b> <%= recentSem[2] %></p>
           <% tot =  getAvgTotal() %>
-          <p><b>All Time Scores:</b> <%= tot[0] %>%</p>
+          <p><b>All Time Scores:</b> <%= tot[0] %></p>
           <p><b>All Time Best Streak:</b> <%= tot[1] %></p>
         </div>
         <div class="col">
           <p><h4>Key Students:</h4></p>
           <% studentBWHL = studentInfo() %>
           <div class="row">
-            <div class="col">
-              <p><b>Most Remembered:</b></p>
-              <p><%= link_to "#{studentBWHL[1]}", Student.where(id:studentBWHL[0]).first, :method=>:get  %></p>
-              <p><b>Least Remembered:</b></p>
-              <p><%= link_to "#{studentBWHL[3]}", Student.where(id:studentBWHL[2]).first, :method=>:get  %></p>
-            </div>
-            <div class="col">
-              <p><b>Highest Recent Streak:</b></p>
-              <p><%= link_to "#{studentBWHL[5]}", Student.where(id:studentBWHL[4]).first, :method=>:get  %></p>
-              <p><b>Lowest Recent Streak:</b></p>
-              <p><%= link_to "#{studentBWHL[7]}", Student.where(id:studentBWHL[6]).first, :method=>:get  %></p>
-            </div>
+            <% if studentBWHL.nil? %>
+              <div class="col">
+                <p><b>Most Remembered:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+                <p><b>Least Remembered:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+              </div>
+              <div class="col">
+                <p><b>Highest Recent Streak:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+                <p><b>Lowest Recent Streak:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+              </div>
+            <% else %>
+              <div class="col">
+                <p><b>Most Remembered:</b></p>
+                <p><%= link_to "#{studentBWHL[1]}", Student.where(id:studentBWHL[0]).first, :method=>:get  %></p>
+                <p><b>Least Remembered:</b></p>
+                <p><%= link_to "#{studentBWHL[3]}", Student.where(id:studentBWHL[2]).first, :method=>:get  %></p>
+              </div>
+              <div class="col">
+                <p><b>Highest Recent Streak:</b></p>
+                <p><%= link_to "#{studentBWHL[5]}", Student.where(id:studentBWHL[4]).first, :method=>:get  %></p>
+                <p><b>Lowest Recent Streak:</b></p>
+                <p><%= link_to "#{studentBWHL[7]}", Student.where(id:studentBWHL[6]).first, :method=>:get  %></p>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>

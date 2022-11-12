@@ -90,15 +90,8 @@ class QuizzesController < ApplicationController
             Qroster.create(quiz_id:@quiz.id,student_id:stud)
           end
 
-          xCnt = 0
-          if cnt == 10
-            xCnt = 5
-          elsif cnt <= 15
-            xCnt = 15 - cnt
-          else
-            xCnt = 0
-          end
-          
+          xCnt = 15 - cnt
+
           extra = Student.where(teacher: current_user.email, course_id:@quiz.course_id).where.not(id:topMissed).shuffle.slice(0,xCnt)
           extra.each do |stud|
             Qroster.create(quiz_id:@quiz.id,student_id:stud.id)

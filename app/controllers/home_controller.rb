@@ -4,18 +4,23 @@ class HomeController < ApplicationController
     @id = current_user.email
   end
 
+  def stripYear(var)
+    tmp = var.strip
+    idx = tmp.rindex(" ")
+    if idx.nil?
+    else
+      idx = idx + 1
+      tmp = tmp[idx..-1].strip
+    end
+    return tmp
+  end
+
   def getYears
     sems = Course.where(teacher:@id)
     uniqSems = Set.new
     sems.each do |s|
-      tmp = s.semester.strip
-      idx = tmp.rindex(" ")
-      if idx.nil?
-        uniqSems << tmp
-      else
-        idx = idx + 1
-        uniqSems << tmp[idx..-1].strip
-      end
+      year = stripYear(s.semester)
+      uniqSems << year
     end
     return uniqSems.length()
   end
@@ -27,7 +32,7 @@ class HomeController < ApplicationController
     if avg.nil?
       avg = "No quizzes taken!"
     else 
-      avg = avg.round(2)
+      avg = avg.round(2).to_s + "%"
     end
 
     strk = Quiz.where(teacher:@id).average(:longest_streak)
@@ -41,29 +46,26 @@ class HomeController < ApplicationController
   end
   helper_method :getAvgTotal
 
+  # TODO - ADD SUMMER/WINTER SEMESTERS
   def getAvgRecent
     recentFall = Course.where(teacher:@id).where("semester like ?", "%#{"Fall"}%").order(semester: :desc).first
-    tmp = recentFall.semester.strip
-    idx = tmp.rindex(" ")
     fallYear = 0000
-    if idx.nil?
-      fallYear = (tmp || "0").to_i
+    if recentFall.nil?
     else
-      idx = idx + 1
-      fallYear = (tmp[idx..-1].strip || "0").to_i
+      fallYear = stripYear(recentFall.semester)
     end
 
     recentSpring = Course.where(teacher:@id).where("semester like ?", "%#{"Spring"}%").order(semester: :desc).first
-    tmp = recentSpring.semester.strip
-    idx = tmp.rindex(" ")
     springYear = 0000
-    if idx.nil?
-      springYear = (tmp || "0").to_i
+    if recentSpring.nil?
     else
-      idx = idx + 1
-      springYear = (tmp[idx..-1].strip || "0").to_i
+      springYear = stripYear(recentSpring.semester)
     end
    
+    if recentFall.nil? && recentSpring.nil?
+      return ["Semester", "No quizzes taken!", "No quizzes taken!"]
+    end
+    
     semester = ""
     if fallYear > springYear
       semester = recentFall.semester
@@ -87,12 +89,18 @@ class HomeController < ApplicationController
       strk = strk.round(2)
     end
     
-    return [semester, avg, strk]
+    return [semester, avg.to_s + "%", strk]
   end
   helper_method :getAvgRecent
 
   def studentInfo
     qID = Quiz.where(teacher:@id).pluck(:id)
+    if qID.nil?
+      return nil
+    elsif qID.length == 0
+      return nil
+    end
+
     atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
 
     best = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore DESC").first
