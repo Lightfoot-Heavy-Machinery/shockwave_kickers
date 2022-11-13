@@ -43,18 +43,23 @@
                 </div>
                 <div class="col">
                     Semester:
+                    <%= form_with do |f| %>
                     <% selected_semester = nil%>
-                    <%= select("post", "semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
+                    <%= f.select("selected_semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
                 </div>
                 <div class="col">
                     Section:
                     <% selected_section = nil%>
-                    <%= select("post", "section", @sections, {:include_blank => true}, {:onchange => "selected_section=this.value; render_students"}) %>
+                    <%= f.select("selected_section", @sections, {:include_blank => true}, {:onchange => "selected_section=this.value;"}) %>
                 </div>
                 <div class="col">
                     Tags:
-                    <% selected_tags = nil%>
-                    <%= select("post", "tags", @tags, {:include_blank => true}, {:onchange => "selected_tags=this.value; render \"students\", selected_semester: selected_semester, selected_section: selected_section, selected_tags: selected_tags"}) %>
+                    <% selected_tag = nil%>
+                    <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
+                </div>
+                <div>
+                <%= f.submit "Filter Students List"%>
+                <% end %>
                 </div>
               </div>
             </div>

@@ -8,11 +8,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :courses, :students do
-      collection do
-          get 'list'
-      end
+  resources :courses do
+      post 'show', on: :member
+      get 'show', on: :member
   end
+
+  resources :students
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
