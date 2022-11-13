@@ -1,63 +1,37 @@
-
-<%= form_with url: list_courses_path, method: :get, data: { controller: "search-form", search_form_target: "form", turbo_frame: "students" } do |form| %>
-  <%= form.select :course_id,
-    options_for_select(
-      Course.all.pluck(:course_name)),
-    { include_blank: ' ' },
-    class: "border-blue-500 rounded",
-    data: {
-      action: "change->search-form#search"
-    }
-  %>
-<!-- Snip the search input -->
-<% end %>
-
 <div class= "col">
     <div class = "row">
-  <%= turbo_frame_tag "student_table" do %>
-    <table id="students" class="table table-striped table-hover text-center">
-      <thead>
-        <tr>
-          <th colspan="5">
-            <h3>Students in Current View:</h3>
-          </th>
-        </tr>
-        <tr>
-          <th>
-            Pic
-          </th>
-          <th>
-            Name
-            <%# sort_link(column: "Name", label: "Name") %>
-          </th>
-          <th>
-            Section
-            <%= sort_link(column: "Section", label: "Section") %>
-            <%= sort_indicator if session.dig('student_filters', 'column') == "Section" %>
-            <%= build_order_link(column: "Section", label: "Section") %>
-          </th>
-          <th>
-            Semester
-            <%= sort_link(column: "Semester", label: "Semester") %>
-            <%= sort_indicator if session.dig('student_filters', 'column') == "Semester" %>
-            <%= build_order_link(column: "Semester", label: "Semester") %>
-          </th>
-          <th>
-            Tags
-            <%= sort_link(column: "Tags", label: "Tags") %>
-          </th>
-          <th>
-            View Student Profile
-          </th>
-        </tr>
-      </thead>
-    <tbody>
-      <% target_course_id = 2%>
-      <%# if target_course_id.nil? == false%>
-          <% @student_records.select { |student| student.course_id == target_course_id }.each do |student| %>
+        <table id="students" class="table table-striped table-hover text-center">
+          <thead>
+            <tr>
+              <th colspan="5">
+                <h3>Students in Current View:</h3>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                Pic
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Section
+              </th>
+              <th>
+                Semester
+              </th>
+              <th>
+                Tags
+              </th>
+              <th>
+                View Student Profile
+              </th>
+            </tr>
+          </thead>
+        <tbody>
+          <% @student_records.each do |student| %>
                 <tr>
                   <td>
-                    <%# TODO: FILTER IN RUBY USING EVENT LISTENER OUTPUT %>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
                       <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                     </svg>
@@ -66,7 +40,10 @@
                     <%=student.lastname %>, <%=student.firstname %>
                   </td>
                   <td>
-                    <%=Course.where(id: target_course_id)[0].section.to_s %>, <%=Course.where(id: target_course_id)[0].semester %>
+                    <%=Course.where(id: student.course_id)[0].section.to_s %>
+                  </td>
+                  <td>
+                    <%=Course.where(id: student.course_id)[0].semester %>
                   </td>
                   <td>
                     <%=student.tags %>
@@ -76,8 +53,6 @@
                   </td>
                 </tr>
           <% end %>
-
-    </tbody>
-<%end%>
-</div>
+        </tbody>
+    </div>
 </div>
