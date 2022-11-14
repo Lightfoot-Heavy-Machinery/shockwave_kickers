@@ -10,6 +10,7 @@ class QuizzesController < ApplicationController
   # GET /quizzes/1 or /quizzes/1.json
   def show
     resp = params[:answer]
+    @correctAnswer = nil
     
     if @quiz.validate_id.nil? || resp.nil? || resp.to_i == 0
       if @quiz.longest_streak.nil?
@@ -24,21 +25,35 @@ class QuizzesController < ApplicationController
       @quiz.save
     elsif resp.to_i == @quiz.validate_id
       roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
+      
+      if (roster.correct_resp.nil?)
+        @quiz.correct = @quiz.correct + 1
+      end
+      
       roster.correct_resp = true
       roster.save
       
-      @quiz.correct = @quiz.correct + 1
+
       @quiz.current_streak = @quiz.current_streak + 1
       if @quiz.current_streak > @quiz.longest_streak
         @quiz.longest_streak = @quiz.current_streak
       end
+
+      @correctAnswer = true
     else
       roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
-      roster.correct_resp = false
+      
+      if (roster.correct_resp.nil?)
+        @quiz.incorrect = @quiz.incorrect + 1
+        roster.correct_resp = false
+      end
+
+      @quiz.current_streak = 0
+
+      roster.attempts = roster.attempts + 1
       roster.save
       
-      @quiz.incorrect = @quiz.incorrect + 1
-      @quiz.current_streak = 0
+      @correctAnswer = false
     end
     
     if (@quiz.correct.to_i + @quiz.incorrect.to_i) == 0.to_i
@@ -65,8 +80,26 @@ class QuizzesController < ApplicationController
       if @quiz.save
         format.html { redirect_to quiz_url(@quiz), notice: "Quiz was successfully created." }
         format.json { render :show, status: :created, location: @quiz }
-        Student.where(teacher: current_user.email, course_id:@quiz.course_id).each do |stud|
-          Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+        if @quiz.targeted
+          recentQ = Quiz.select(:id).where(teacher:current_user.email, course_id:@quiz.course_id, completed:true).order(updated_at: :desc).limit(2).pluck(:id)
+
+          topMissed = Qroster.from(Qroster.where(quiz_id:recentQ).order(attempts: :desc)).select(:student_id).distinct.limit(10).pluck(:student_id)
+          cnt = 0
+          topMissed.each do |stud|
+            cnt = cnt + 1
+            Qroster.create(quiz_id:@quiz.id,student_id:stud)
+          end
+
+          xCnt = 15 - cnt
+
+          extra = Student.where(teacher: current_user.email, course_id:@quiz.course_id).where.not(id:topMissed).shuffle.slice(0,xCnt)
+          extra.each do |stud|
+            Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+          end
+        else
+          Student.where(teacher: current_user.email, course_id:@quiz.course_id).each do |stud|
+            Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+          end
         end
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -83,21 +116,21 @@ class QuizzesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def quiz_params
-      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed, :current_streak, :validate_id, :teacher).with_defaults(teacher: current_user.email)
+      params.require(:quiz).permit(:course_id, :correct, :incorrect, :score, :longest_streak, :completed, :current_streak, :validate_id, :teacher, :targeted).with_defaults(teacher: current_user.email)
     end
 
     def disp_quiz
-      if Qroster.where(quiz_id:@quiz.id,correct_resp:nil).count <= 0
+      if Qroster.where(quiz_id:@quiz.id, correct_resp:[false,nil]).count <= 0
         @quiz.completed = true
         @quiz.save
         return
       end
 
       loop do
-        untested = Qroster.where(quiz_id:@quiz.id,correct_resp:nil)
-        untested = untested.shuffle
-        @random_stud = Qroster.where(id:untested[0]).first
-        break if @random_stud.correct_resp.nil?
+        studentSet = Qroster.where(quiz_id:@quiz.id, correct_resp:[false,nil])
+        studentSet = studentSet.shuffle
+        @random_stud = Qroster.where(id:studentSet[0]).first
+        break if (@random_stud.correct_resp.nil? || @random_stud.correct_resp == false)
       end
       
       @quiz.validate_id = @random_stud.student_id

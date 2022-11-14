@@ -24,6 +24,14 @@
     <%= form.select :course_id, courseOptions%>
   </div>
 
+  <br>
+  
+  <div>
+    <%= form.check_box :targeted %>
+    <%= form.label :pet_dog, "Targeted" %>
+    <p> (This will quiz you on your most frequently missed students from this course) </p>
+  </div>
+
   <div>
     <%= form.hidden_field :correct,value: 0%>
   </div>

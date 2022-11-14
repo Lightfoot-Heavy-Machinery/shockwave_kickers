@@ -1,7 +1,87 @@
-<%= button_to(
-        "Log Out",
-        destroy_user_session_path,
-        method: :delete
-      ) %>
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="container text-center">
+  <div class="row gx-2 my-3">
+      <div class="col">
+        <h1>Howdy Professor!</h1>
+      </div>
+  </div>
+  <div class="row gx-2 mb-3">
+    <div class="bg-light border rounded-3">
+      <div class="row p-2 pt-0">
+        <div class="col">
+          <p><h4>Teaching Summary:</h4></p>
+          <p><b>Years:</b> <%= getYears() %></p>
+          <p><b>Semesters:</b> <%= Course.where(teacher:@id).distinct.count(:semester)%></p>
+          <p><b>Courses:</b> <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
+          <p><b>Students:</b> <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
+        </div>
+        <div class="col">
+          <p><h4>Quiz Averages:</h4></p>
+          <% recentSem = getAvgRecent() %>
+          <p><b><%= recentSem[0] %> Scores:</b> <%= recentSem[1] %></p>
+          <p><b><%= recentSem[0] %> Best Streak:</b> <%= recentSem[2] %></p>
+          <% tot =  getAvgTotal() %>
+          <p><b>All Time Scores:</b> <%= tot[0] %></p>
+          <p><b>All Time Best Streak:</b> <%= tot[1] %></p>
+        </div>
+        <div class="col">
+          <p><h4>Key Students:</h4></p>
+          <% studentBWHL = studentInfo() %>
+          <div class="row">
+            <% if studentBWHL.nil? %>
+              <div class="col">
+                <p><b>Most Remembered:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+                <p><b>Least Remembered:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+              </div>
+              <div class="col">
+                <p><b>Highest Recent Streak:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+                <p><b>Lowest Recent Streak:</b></p>
+                <p><%= link_to "No data available", "/", :method=>:get  %></p>
+              </div>
+            <% else %>
+              <div class="col">
+                <p><b>Most Remembered:</b></p>
+                <p><%= link_to "#{studentBWHL[1]}", Student.where(id:studentBWHL[0]).first, :method=>:get  %></p>
+                <p><b>Least Remembered:</b></p>
+                <p><%= link_to "#{studentBWHL[3]}", Student.where(id:studentBWHL[2]).first, :method=>:get  %></p>
+              </div>
+              <div class="col">
+                <p><b>Highest Recent Streak:</b></p>
+                <p><%= link_to "#{studentBWHL[5]}", Student.where(id:studentBWHL[4]).first, :method=>:get  %></p>
+                <p><b>Lowest Recent Streak:</b></p>
+                <p><%= link_to "#{studentBWHL[7]}", Student.where(id:studentBWHL[6]).first, :method=>:get  %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gx-2 mb-2">
+    <% recentCourses = Course.where(teacher:@id).order(updated_at: :desc).limit(3)%>
+    <% recentCourses.each do |course| %>
+      <div class="col">
+        <div class="bg-light border rounded-3">
+          <div class="row p-2 pt-0">
+            <% if course.nil?%>
+            <% else %>
+              <p><h4><%= link_to "#{course.course_name + "-" + course.section.to_s + "-" + course.semester}", course, :method => :get %></h4></p>
+              <p><b> # of Students:</b> <%= Student.where(course_id:course.id, teacher:@id).count %> </p>
+              <% qCnt = Quiz.where(teacher:@id, course_id:course.id).count %>
+              <p><b> # of Quizzes Taken:</b> <%= qCnt %> </p>
+              <% if qCnt <= 0 %>
+                <p><b> Average Quiz Score: </b>No quizzes taken!</p>
+                <p><b> Highest Quiz Score: </b>No quizzes taken!</p>
+              <% else %>
+                <p><b> Average Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).average(:score) %>%</p>
+                <p><b> Highest Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).maximum(:score) %>%</p>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
