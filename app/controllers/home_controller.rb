@@ -79,7 +79,7 @@ class HomeController < ApplicationController
     if avg.nil?
       avg = "No quizzes taken!"
     else 
-      avg = avg.round(2)
+      avg = avg.round(2).to_s + "%"
     end
 
     strk = Quiz.where(teacher:@id,id:courses).average(:longest_streak)
@@ -89,7 +89,7 @@ class HomeController < ApplicationController
       strk = strk.round(2)
     end
     
-    return [semester, avg.to_s + "%", strk]
+    return [semester, avg, strk]
   end
   helper_method :getAvgRecent
 
