@@ -1,0 +1,25 @@
+quiz (id?)
+course_id:integer
+correct:integer
+incorrect:integer
+score:float
+longest_streak:integer
+
+add to courses?
+attempts:integer
+avg_score:float
+best_student_id:integer
+worst_student_id:integer
+
+add to students?
+timesRight:integer
+timesWrong:integer
+
+general:
+
+
+misc:
+generate migration AddQuizToCourses streak:integer avg_score:float attempts:integer best_student_id:integer worst_student_id:integer
+generate migration AddQuizToStudents timesRight:integer timesWrong:integer
+rails generate migration RemoveColFromQuizzes attempts
+rails generate migration FixColNameFromQuizzes avg_score

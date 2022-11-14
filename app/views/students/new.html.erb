@@ -1,14 +1,15 @@
-<h1>New student</h1>
-<%= button_to(
-        "Log Out",
-        destroy_user_session_path,
-        method: :delete
-      ) %>
+<div class="text-center container">
+  <h1>New student</h1>
 
-<%= render "form", student: @student %>
+  <%= render "form", student: @student %>
 
-<br>
-
-<div>
-  <%= link_to "Back to students", students_path %>
+  <br>
 </div>
+
+<footer class="hd footer mt-auto py-3 text-center">
+  <div class="container">
+    <span>
+      <%= button_to "Back to students", students_path, :method => :get %>
+    </span>
+  </div>
+</footer>

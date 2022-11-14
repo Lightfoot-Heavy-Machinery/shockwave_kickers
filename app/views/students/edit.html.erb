@@ -6,9 +6,17 @@
 
 <footer class="hd footer mt-auto py-3 text-center">
   <div class="container">
-    <span>
-      <button class="btn btn-light p-2"><%= link_to "Back to Student Profile", @student %></button>
-      <button class="btn btn-light p-2"><%= link_to "Back to Student List", students_path %></button>
-    </span>
+    <div class="row gx-2">
+      <div class="col">
+        <div class="row p-2 pt-0">
+          <%= button_to "Back to Student Profile", @student, :method=>:get  %>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row p-2 pt-0">
+            <%= button_to "Back to Student List", students_path, :method => :get %>
+        </div>
+      </div>        
+    </div>
   </div>
 </footer>

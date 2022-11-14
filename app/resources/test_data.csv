@@ -1,0 +1,15 @@
+FirstName,LastName,UIN,Email,Course,Section,Classification,Major,Semester,Notes
+Kunal, Vudathu, 326001234, kunalvudathu@gmail.com, CSCE 606, 100, G2, CS, Fall 2021, This student was stupid
+Rahul, Shah, 01234567, jdon@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Jacob, Kelly, 2374628743, abcd@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Stuart, Nelson, 9877382648, bcde@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Colton, Simpson, 8712638712, cdef@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+John, Cena, 8973475263, defg@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Mark, Cuban, 3456739876, efgh@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Jk, Simmons, 7836583874, fghi@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Robert, Downey Jr, 0193775658, ghij@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Tom, Holland, 9274298473, hijk@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Reveille, X, 0101010101, ijkl@tamu.edu, CSCE 606, 100, G1, ECEN, Fall 2021, nothing
+Alice, Doe, 326001234, alicedoe@tamu.edu, CSCE 420, 100, U4, CS, Spring 2021, This student was smart
+Sheldon, Cooper, 326001234, scooper@tamu.edu, ECEN 999, 100, U4, CE, Spring 2021, This student was cool
+Bob, Odenkirk, 326001234, bodenkirk@tamu.edu, MATH 470, 100, U4, CE, Spring 2021, This student was cool

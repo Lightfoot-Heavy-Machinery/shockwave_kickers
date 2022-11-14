@@ -1,11 +1,4 @@
-<p style="color: green"><%= notice %></p>
-
-<!--Import the applications.css stylesheet-->
-<%= stylesheet_link_tag "application" %>
-
-<h1>Courses</h1>
-
-<div id="courses">
+<div id="coursesDiv">
   <table class="table table-striped table-hover text-center">
     <thead>
       <tr>
@@ -43,6 +36,6 @@
 
 <footer class="hd footer mt-auto py-3 mt-2 text-center">
   <div class="container">
-    <span><button class="btn btn-light"><%= link_to "New course", new_course_path %></button></span>
+    <%= button_to "New course", new_course_path, :method=>:get  %>
   </div>
 </footer>

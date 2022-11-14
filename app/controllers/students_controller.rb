@@ -86,7 +86,7 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
       respond_to do |format|
-        if @student.update(params.require(:student).permit(:firstname,:lastname,:uin, :email, :classification, :major, :tags, :notes))
+        if @student.update(student_params)
           format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
           format.json { render :show, status: :ok, location: @student }
         else
@@ -99,6 +99,7 @@ class StudentsController < ApplicationController
     #DELETE courses/1
     def destroy
         @student = Student.find(params[:id])
+        @student.image.purge_later
         @student.destroy
         redirect_to action: "index"
     end
@@ -120,7 +121,7 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :course_id, :classification, :major, :notes, :tags, :photo).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :course_id, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
         end
 
 end

@@ -1,0 +1,2 @@
+class Qroster < ApplicationRecord
+end

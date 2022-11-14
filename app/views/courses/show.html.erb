@@ -1,11 +1,20 @@
 <div class="container text-center">
-  <p style="color: green"><%= notice %></p>
-
-
-  <div class="flex-container" style="justify-content:space-evenly;">
-    <button class="btn btn-outline-dark m-5"><%= link_to "Edit this course", edit_course_path(@course) %></button>
-    <button class="btn btn-outline-dark m-5"><%= link_to "Back to courses", courses_path %></button>
-    <%= button_to "Destroy this course", @course, method: :delete %>
+  <div class="row gx-2">
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Edit this course", edit_course_path(@course), :method => :get %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to 'Create a quiz', {:controller => "quizzes", :action => "create", :quiz => {:course_id => @course.id, :correct => 0, :incorrect => 0, :score => 0, :longest_streak => 0, :teacher => current_user.email, :completed => false, :current_streak => 0, :validate_id => nil, :targeted => false}, :commit => "Create Quiz"}, :method=>:post  %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Back to courses", courses_path, :method => :get %>
+      </div>
+    </div>        
   </div>
   <div class="row gx-5">
     <div class="col">
@@ -81,7 +90,7 @@
             </tr>
             <tr>
               <th>
-                Pic
+                Picture
               </th>
               <th>
                 Name
@@ -102,10 +111,14 @@
             <% @student_records.each do |student| %>
               <tr>
                 <td>
-                  <%# TODO %>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                  </svg>
+                <% if student.image.attached? %>
+                    <%= image_tag student.image.variant(:thumb), class: 'bi bi-person rounded-circle d-block mx-auto', style: 'max-width: 4rem;' %>
+                <% else %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                    </svg>
+                <% end %>
+
                 </td>
                 <td>
                   <%=student.lastname %>, <%=student.firstname %>
@@ -117,7 +130,7 @@
                   <%=student.tags %>
                 </td>
                 <td>
-                  <button class="btn btn-outline-dark"><%= link_to "View profile", student %></button>
+                  <%= button_to "View profile", student, :method=>:get  %>
                 </td>
               </tr>
               
