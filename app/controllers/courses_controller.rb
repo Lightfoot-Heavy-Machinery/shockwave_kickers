@@ -17,7 +17,7 @@ class CoursesController < ApplicationController
           @all_course_ids.append(c.id)
         end
         #get all students currently and previously enrolled in this course
-        @student_records = Student.where(course_id: @all_course_ids)
+        @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
         #get all students tags for those currently and previously enrolled in this course
         @tags = Set[]
         for student in @student_records do
@@ -49,13 +49,13 @@ class CoursesController < ApplicationController
         end
         #create the filtered list of students to display
         if @selected_semester == '' and @selected_tag == ''
-            @student_records = Student.where(course_id: @all_course_ids)
+            @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
         elsif @selected_semester != '' and @selected_tag == ''
-            @student_records = Student.where(course_id: @target_course_id)
+            @student_records = Student.where(course_id: @target_course_id, teacher: current_user.email)
         elsif @selected_semester == '' and @selected_tag != ''
-            @student_records = Student.where(course_id: @all_course_ids, tags: @selected_tag)
+            @student_records = Student.where(course_id: @all_course_ids, tags: @selected_tag, teacher: current_user.email)
         else
-            @student_records = Student.where(course_id: @target_course_id, tags: @selected_tag)
+            @student_records = Student.where(course_id: @target_course_id, tags: @selected_tag, teacher: current_user.email)
         end
     #in case of get request, display every current and previous student in this course
     else
