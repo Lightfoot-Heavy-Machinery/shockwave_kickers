@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :courses do
-      post 'show', on: :member
-      get 'show', on: :member
+      post 'courses/:id', to:'courses#show', on: :member
+      get 'courses/:id', to:'courses#show', on: :member
   end
 
   resources :students
