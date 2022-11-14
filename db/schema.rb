@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_04_165839) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_09_013040) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_165839) do
     t.boolean "correct_resp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "attempts", default: 1
   end
 
   create_table "quizzes", force: :cascade do |t|
@@ -71,6 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_04_165839) do
     t.integer "current_streak", default: 0
     t.integer "validate_id"
     t.string "teacher"
+    t.boolean "targeted", default: false
   end
 
   create_table "students", force: :cascade do |t|

@@ -7,7 +7,8 @@
           <p><b><%=@course.course_name%> - <%=@course.section%> - <%=@course.semester%></b></p>
         </div>
         <div class="row">
-          <p><b>Score:</b> <%=@quiz.score.round(2)%>%</p>
+          <p><b>Final Score:</b> <%=@quiz.score.round(2)%>%</p>
+          <p>(Note: Only your first guess per student is scored)</p>
         </div>      
         <div class="row">
           <p><b>Longest Streak:</b> <%=@quiz.longest_streak%></p>
@@ -22,7 +23,7 @@
         <table id="students" class="table table-striped table-hover text-center">
           <thead>
             <tr>
-              <th colspan="4">
+              <th colspan="5">
                 <h3>Results by Student:</h3>
               </th>
             </tr>
@@ -35,6 +36,9 @@
               </th>
               <th>
                 Correct?
+              </th>
+              <th>
+                Attempts till Correct
               </th>
               <th>
                 View Student Profile
@@ -59,11 +63,14 @@
                     <%=student.firstname + " " + student.lastname%>
                 </td>
                 <td>
-                  <% if stud.correct_resp%>
+                  <% if stud.attempts <= 1%>
                     <%= bootstrap_icon "check-square-fill", fill: "green" %>
                   <% else %>
                     <%= bootstrap_icon "x-square-fill", fill: "red" %>
                   <% end %>
+                </td>
+                <td>
+                  <%= stud.attempts %>
                 </td>
                 <td>
                   <%= button_to "View profile", student, :method=>:get  %>

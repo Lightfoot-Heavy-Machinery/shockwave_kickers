@@ -1,7 +1,4 @@
 <div class="container text-center">
-  <p style="color: green"><%= notice %></p>
-
-
   <div class="row gx-2">
     <div class="col">
       <div class="row p-2 pt-0">
@@ -10,7 +7,7 @@
     </div>
     <div class="col">
       <div class="row p-2 pt-0">
-        <%= button_to 'Create a quiz', {:controller => "quizzes", :action => "create", :quiz => {:course_id => @course.id, :correct => 0, :incorrect => 0, :score => 0, :longest_streak => 0, :teacher => current_user.email, :completed => false, :current_streak => 0, :validate_id => nil}, :commit => "Create Quiz"}, :method=>:post  %>
+        <%= button_to 'Create a quiz', {:controller => "quizzes", :action => "create", :quiz => {:course_id => @course.id, :correct => 0, :incorrect => 0, :score => 0, :longest_streak => 0, :teacher => current_user.email, :completed => false, :current_streak => 0, :validate_id => nil, :targeted => false}, :commit => "Create Quiz"}, :method=>:post  %>
       </div>
     </div>
     <div class="col">
