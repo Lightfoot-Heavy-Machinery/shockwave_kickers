@@ -39,9 +39,9 @@ class CoursesController < ApplicationController
         @selected_section = params[:selected_section]
         #get all course id's for the selected semester+section combo
         if @selected_section == ''
-            @target_course_id = Course.where(semester: @selected_semester)
+            @target_course_id = Course.where(course_name: Course.where(id: params[:id])[0].course_name,semester: @selected_semester)
         else
-            @target_course_id = Course.where(semester: @selected_semester, section: @selected_section)
+            @target_course_id = Course.where(course_name: Course.where(id: params[:id])[0].course_name,semester: @selected_semester, section: @selected_section)
             #nil check in case the selected semester doesn't have the selected section
             if @target_course_id.length > 0
                 @target_course_id = @target_course_id[0].id
