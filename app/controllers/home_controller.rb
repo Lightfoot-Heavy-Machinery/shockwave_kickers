@@ -102,52 +102,181 @@ class HomeController < ApplicationController
     end
 
     atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
+    if atm == 0
+      return nil
+    end
 
     best = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore DESC").first
-    name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
-    bestName = name[0] + " " + name[1]
-    bestInfo = "#{bestName} (#{best.score.round(2)}%)"
+    bStud = ""
+    bestInfo = ""
+    if best.nil?
+      bStud = "/"
+      bestInfo = "No data available"
+    elsif best.student_id.nil? || best.score.nil?
+      bStud = "/"
+      bestInfo = "No data available"
+    else
+      name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
+      if name.nil?
+        bestName = "No data available"
+      elsif name[0].nil? && name[1].nil?
+        bestName = "No data available"
+      else
+        if name[0].nil?
+          tmp0 = ""
+        else
+          tmp0 = name[0]
+        end
+        if name[1].nil?
+          tmp1 = ""
+        else
+          tmp1 = name[1]
+        end
+        bestName = tmp0 + " " + tmp1
+      end
+      bStud = Student.where(id:best.student_id).first
+      if bStud.nil?
+        bStud = "/"
+      end
+      bestInfo = "#{bestName} (#{best.score.round(2)}%)"
+    end
 
 
     worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC").first
-    name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
-    worstName = name[0] + " " + name[1]
-    worstInfo = "#{worstName} (#{worst.score.round(2)}%)"
+    wStud = ""
+    worstInfo = ""
+    if worst.nil?
+      wStud = "/"
+      worstInfo = "No data available"
+    elsif worst.student_id.nil? || worst.score.nil?
+      wStud = "/"
+      worstInfo = "No data available"
+    else
+      name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
+      if name.nil?
+        worstName = "No data available"
+      elsif name[0].nil? && name[1].nil?
+        worstName = "No data available"
+      else
+        if name[0].nil?
+          tmp0 = ""
+        else
+          tmp0 = name[0]
+        end
+        if name[1].nil?
+          tmp1 = ""
+        else
+          tmp1 = name[1]
+        end
+        worstName = tmp0 + " " + tmp1
+      end
+      wStud = Student.where(id:worst.student_id).first
+      if wStud.nil?
+        wStud = "/"
+      end
+      worstInfo = "#{worstName} (#{worst.score.round(2)}%)"
+    end
+
     
     ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
-    maxCnt = 0
-    maxID = 0
-    minCnt = Float::INFINITY
-    minID = 0
-    ids.each do |i|
-      tmpCnt = 0
-      qr = Qroster.where(quiz_id:qID,student_id:i,correct_resp:true).order(updated_at: :desc).pluck(:attempts)
-      qr.each do |att|
-        if att == 1
-          tmpCnt = tmpCnt + 1
-        else
-          break
+    if ids.nil?
+      hStud = "/"
+      lStud = "/"
+      highestInfo = "No data available"
+      lowestInfo = "No data available"
+    else
+      maxCnt = 0
+      maxID = 0
+      minCnt = Float::INFINITY
+      minID = 0
+      ids.each do |i|
+        next if i.nil?
+        tmpCnt = 0
+        qr = Qroster.where(quiz_id:qID,student_id:i,correct_resp:true).order(updated_at: :desc).pluck(:attempts)
+        next if qr.nil?
+        qr.each do |att|
+          break if att.nil?
+          if att == 1
+            tmpCnt = tmpCnt + 1
+          else
+            break
+          end
+        end
+        if tmpCnt > 0
+          if tmpCnt > maxCnt
+            maxCnt = tmpCnt
+            maxID = i
+          end
+          if tmpCnt < minCnt
+            minCnt = tmpCnt
+            minID = i
+          end
         end
       end
-      if tmpCnt > maxCnt
-        maxCnt = tmpCnt
-        maxID = i
+      if maxID == 0 || maxCnt == 0
+        highestInfo = "No data available"
+        hStud = "/"
+      else
+        hStud = Student.where(id:maxID).first
+        if hStud.nil?
+          highestInfo = "No data available"
+          hStud = "/"
+        else
+          name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
+          if name.nil?
+            highestName = "No name available"
+          elsif name[0].nil? && name[1].nil?
+            highestName = "No name available"
+          else
+            if name[0].nil?
+              tmp0 = ""
+            else
+              tmp0 = name[0]
+            end
+            if name[1].nil?
+              tmp1 = ""
+            else
+              tmp1 = name[1]
+            end
+            highestName = tmp0 + " " + tmp1
+          end
+          highestInfo = "#{highestName} (#{maxCnt})"
+        end
       end
-      if tmpCnt < minCnt
-        minCnt = tmpCnt
-        minID = i
+
+      if minID == 0 || minCnt == 0
+        lowestInfo = "No data available"
+        lStud = "/"
+      else
+        lStud = Student.where(id:minID).first
+        if lStud.nil?
+          lStud = "/"
+          lowestInfo = "No data available"
+        else
+          name = Student.where(id:minID,teacher: @id).pick(:firstname, :lastname)
+          if name.nil?
+            lowestName = "No name available"
+          elsif name[0].nil? && name[1].nil?
+            lowestName = "No name available"
+          else
+            if name[0].nil?
+              tmp0 = ""
+            else
+              tmp0 = name[0]
+            end
+            if name[1].nil?
+              tmp1 = ""
+            else
+              tmp1 = name[1]
+            end
+            lowestName = tmp0 + " " + tmp1
+          end    
+          lowestInfo = "#{lowestName} (#{minCnt})"
+        end
       end
     end
 
-    name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
-    highestName = name[0] + " " + name[1]
-    highestInfo = "#{highestName} (#{maxCnt})"
-    name = Student.where(id:minID,teacher: @id).pick(:firstname, :lastname)
-    lowestName = name[0] + " " + name[1]
-    lowestInfo = "#{lowestName} (#{minCnt})"
-
-
-    return [best.student_id, bestInfo, worst.student_id, worstInfo, maxID, highestInfo, minID, lowestInfo]
+    return [bStud, bestInfo, wStud, worstInfo, hStud, highestInfo, lStud, lowestInfo]
   end
   helper_method :studentInfo
 end
