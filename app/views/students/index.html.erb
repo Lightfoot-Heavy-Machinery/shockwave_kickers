@@ -25,13 +25,22 @@
         </th>
         <th>
           Course(s)/Semester(s):
-		  <%= select("post", "course_name", @course_names, {:include_blank => true}, {:onchange => "alert(this.value)"})%>
-		  <%= select("post", "semester", @semesters, {:include_blank => true}, {:onchange => "alert(this.value)"}) %>
+          <%= form_with do |f| %>
+          <% selected_course = nil%>
+          <%= f.select("selected_course", @course_names, {:include_blank => true}, {:onchange => "selected_course=this.value;"}) %>
+
+          <% selected_semester = nil%>
+          <%= f.select("selected_semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
         </th>
         <th>
           Tags:
-		  <%= select("post", "tags", @tags, {:include_blank => false}, {:onchange => "alert(this.value)"}) %>
+          <% selected_tag = nil%>
+          <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
         </th>
+        <div>
+        <%= f.submit "Filter Students List"%>
+        <% end %>
+        </div>
         <th>
           View Student Profile:
         </th>
@@ -53,7 +62,7 @@
             <%= student.email %>
           </td>
           <td>
-            <%= @courses_taken[student.id] %> <%= @semesters_taken[student.id] %>
+            <%= @courses_taken[student.course_id] %> <%= @semesters_taken[student.course_id] %>
           </td>
           <td>
             <%= student.tags %>

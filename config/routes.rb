@@ -1,10 +1,22 @@
 Rails.application.routes.draw do
+  resources :quizzes, only: [:index, :show, :new, :create]
   get 'home/index'
   get 'upload/index'
   get 'upload', to: 'upload#index'
+
+  post 'quizzes/:id', to:'quizzes#show'
+
   devise_for :users
 
-  resources :courses, :students
+  resources :courses do
+      post 'courses/:id', to:'courses#show', on: :member
+      get 'courses/:id', to:'courses#show', on: :member
+  end
+
+  resources :students do
+      post '/filter', to:'students#index', on: :collection
+      get 'students', to:'students#index', on: :collection
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
