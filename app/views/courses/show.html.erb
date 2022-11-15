@@ -40,7 +40,7 @@
                 </div>
                 <div class="col">
                     Semester:
-                    <%= form_with do |f| %>
+                    <%= form_with(method: "get") do |f| %>
                     <% selected_semester = nil%>
                     <%= f.select("selected_semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
                 </div>

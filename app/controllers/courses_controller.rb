@@ -8,31 +8,31 @@ class CoursesController < ApplicationController
     @courses = Course.where(teacher: current_user.email)
   end
 
-  # GET /courses/1 or POST/courses/1 or /courses/1.json
+  # GET /courses/1 or /courses/1.json
   def show
-    if request.post?
-        #get the course id's for every past and present section of this course
-        @all_course_ids = Array[]
-        Course.where(course_name: Course.where(id: params[:id])[0].course_name).each do |c|
-          @all_course_ids.append(c.id)
+    #get the course id's for every past and present section of this course
+    @all_course_ids = Array[]
+    Course.where(course_name: Course.where(id: params[:id])[0].course_name).each do |c|
+      @all_course_ids.append(c.id)
+    end
+    #get all students currently and previously enrolled in this course
+    @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
+    #get all students tags for those currently and previously enrolled in this course
+    @tags = Set[]
+    for student in @student_records do
+        @tags.add(student.tags)
+    end
+    #get all the current and previous semesters and sections of this course
+    @semesters = Set[]
+    @sections = Set[]
+    for record in Course.all do
+        if record.course_name == @course.course_name
+            @semesters.add(record.semester)
+            @sections.add(record.section)
         end
-        #get all students currently and previously enrolled in this course
-        @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
-        #get all students tags for those currently and previously enrolled in this course
-        @tags = Set[]
-        for student in @student_records do
-            @tags.add(student.tags)
-        end
-        #get all the current and previous semesters and sections of this course
-        @semesters = Set[]
-        @sections = Set[]
-        for record in Course.all do
-            if record.course_name == @course.course_name
-                @semesters.add(record.semester)
-                @sections.add(record.section)
-            end
-        end
-
+    end
+    #if the user selects any dropdown menu filters
+    if params[:selected_semester].nil? == false or params[:selected_section].nil? == false or params[:selected_tag].nil? == false
         #dropdown menu selections
         @selected_tag = params[:selected_tag]
         @selected_semester = params[:selected_semester]
@@ -57,20 +57,8 @@ class CoursesController < ApplicationController
         else
             @student_records = Student.where(course_id: @target_course_id, tags: @selected_tag, teacher: current_user.email)
         end
-    #in case of get request, display every current and previous student in this course
+    #if the user doesnt select any dropdown menu filters, display all students
     else
-        #get the course id's for every past and present section of this course
-        @all_course_ids = Array[]
-        Course.where(course_name: Course.where(id: params[:id])[0].course_name).each do |c|
-          @all_course_ids.append(c.id)
-        end
-        #get all previously and currently enrolled students
-        @student_records = Student.where(course_id: @all_course_ids)
-        #get all students tags for those currently and previously enrolled in this course
-        @tags = Set[]
-        for student in @student_records do
-            @tags.add(student.tags)
-        end
         #get all the current and previous semesters and sections of this course
         @semesters = Set[]
         @sections = Set[]
