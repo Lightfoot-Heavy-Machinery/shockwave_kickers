@@ -9,12 +9,10 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :courses do
-      post 'courses/:id', to:'courses#show', on: :member
       get 'courses/:id', to:'courses#show', on: :member
   end
 
   resources :students do
-      post '/filter', to:'students#index', on: :collection
       get 'students', to:'students#index', on: :collection
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

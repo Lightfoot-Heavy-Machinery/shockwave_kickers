@@ -28,7 +28,7 @@ class StudentsController < ApplicationController
             @course_ids.append(record.id)
 		end
 
-        if request.post?
+        if params[:selected_course].nil? == false or params[:selected_semester].nil? == false or params[:selected_tag].nil? == false 
             #dropdown menu selections
             @selected_tag = params[:selected_tag]
             @selected_semester = params[:selected_semester]

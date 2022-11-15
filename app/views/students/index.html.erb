@@ -18,7 +18,7 @@
         </th>
         <th>
           Course(s)/Semester(s):
-          <%= form_with do |f| %>
+          <%= form_with(method: "get") do |f| %>
           <% selected_course = nil%>
           <%= f.select("selected_course", @course_names, {:include_blank => true}, {:onchange => "selected_course=this.value;"}) %>
 
