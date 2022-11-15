@@ -12,9 +12,7 @@ Rails.application.routes.draw do
       get 'courses/:id', to:'courses#show', on: :member
   end
 
-  resources :students do
-      get 'students', to:'students#index', on: :collection
-  end
+  resources :students
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
