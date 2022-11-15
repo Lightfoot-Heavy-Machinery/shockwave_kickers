@@ -67,7 +67,7 @@ class HomeController < ApplicationController
     end
     
     semester = ""
-    if fallYear > springYear
+    if fallYear.to_i > springYear.to_i
       semester = recentFall.semester
     else
       semester = recentSpring.semester
