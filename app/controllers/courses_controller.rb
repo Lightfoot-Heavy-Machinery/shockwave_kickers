@@ -42,10 +42,6 @@ class CoursesController < ApplicationController
             @target_course_id = @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester)
         else
             @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester, section: @selected_section)
-            #nil check in case the selected semester doesn't have the selected section
-            if @target_course_id.length > 0
-                @target_course_id = @target_course_id[0].id
-            end
         end
         #create the filtered list of students to display
         if @selected_semester == '' and @selected_tag == ''
