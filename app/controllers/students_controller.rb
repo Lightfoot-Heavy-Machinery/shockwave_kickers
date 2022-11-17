@@ -1,9 +1,54 @@
 class StudentsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_student, only: %i[ show edit update destroy ]
-    # GET /students
+    # GET /student
     def index
-      @students = Student.where(teacher: current_user.email)
+	@students = Student.where(teacher: current_user.email)
+	@tags = Set[]
+	@emails = Set[]
+
+	@courses_taken = Hash[]
+	@semesters_taken = Hash[]
+	for student in @students do
+		@tags.add(student.tags)
+
+		# Figure out each student's course/semester they have taken
+		@courses_taken[student.course_id] = Course.find(student.course_id).course_name
+		@semesters_taken[student.course_id] = Course.find(student.course_id).semester
+
+	end
+	@semesters = Set[]
+	@sections = Set[]
+	@course_names = Set[]
+        @course_ids = Array[]
+		for record in Course.all do
+			@semesters.add(record.semester)
+			@sections.add(record.section)
+			@course_names.add(record.course_name)
+            @course_ids.append(record.id)
+		end
+
+        if params[:selected_course].nil? == false or params[:selected_semester].nil? == false or params[:selected_tag].nil? == false
+            #dropdown menu selections
+            @selected_tag = params[:selected_tag]
+            @selected_semester = params[:selected_semester]
+            @selected_course = params[:selected_course]
+            #get all course id's for the selected semester + course combo
+            if @selected_semester == '' and @selected_course != ''
+                @target_course_id = Course.where(course_name: @selected_course)
+            elsif @selected_semester != '' and @selected_course == ''
+                @target_course_id = Course.where(semester: @selected_semester)
+            elsif @selected_semester != '' and @selected_course != ''
+                @target_course_id = Course.where(course_name: @selected_course, semester: @selected_semester)
+            else
+                @target_course_id = @course_ids
+            end
+            #create the filtered list of students to display
+            @students = Student.where(course_id: @target_course_id)
+            if @selected_tag != ''
+                @students = @students.select {|s| s.tags == @selected_tag}
+            end
+        end
     end
 
     # GET /students/1
@@ -19,7 +64,7 @@ class StudentsController < ApplicationController
         @student = Student.new
     end
 
-    # POST /students
+    # POST /students/
     def create
         @student = Student.new(student_params)
         respond_to do |format|

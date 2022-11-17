@@ -7,7 +7,7 @@ development:
   database: courses
   pool: 5
   username: postgres
-  password: postgres
+  password: password
 
 test:
   adapter: postgresql
@@ -15,4 +15,4 @@ test:
   database: courses
   pool: 5
   username: postgres
-  password: postgres
+  password: password
