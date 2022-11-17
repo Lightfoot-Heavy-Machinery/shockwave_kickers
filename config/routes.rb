@@ -8,9 +8,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :courses do
-      get 'courses/:id', to:'courses#show', on: :member
-  end
+  resources :courses
 
   resources :students
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
