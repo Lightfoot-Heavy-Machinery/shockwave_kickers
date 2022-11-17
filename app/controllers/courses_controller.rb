@@ -39,7 +39,7 @@ class CoursesController < ApplicationController
         @selected_section = params[:selected_section]
         #get all course id's for the selected semester+section combo
         if @selected_section == ''
-            @target_course_id = @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester)
+            @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester)
         else
             @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester, section: @selected_section)
         end
