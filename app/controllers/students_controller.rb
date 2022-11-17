@@ -28,7 +28,7 @@ class StudentsController < ApplicationController
             @course_ids.append(record.id)
 		end
 
-        if params[:selected_course].nil? == false or params[:selected_semester].nil? == false or params[:selected_tag].nil? == false 
+        if params[:selected_course].nil? == false or params[:selected_semester].nil? == false or params[:selected_tag].nil? == false
             #dropdown menu selections
             @selected_tag = params[:selected_tag]
             @selected_semester = params[:selected_semester]
@@ -40,10 +40,6 @@ class StudentsController < ApplicationController
                 @target_course_id = Course.where(semester: @selected_semester)
             elsif @selected_semester != '' and @selected_course != ''
                 @target_course_id = Course.where(course_name: @selected_course, semester: @selected_semester)
-                #nil check in case the selected semester doesn't have the selected course
-                if @target_course_id.length > 0
-                    @target_course_id = @target_course_id[0].id
-                end
             else
                 @target_course_id = @course_ids
             end
