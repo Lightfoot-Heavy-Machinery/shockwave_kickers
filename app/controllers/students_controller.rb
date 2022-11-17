@@ -33,7 +33,7 @@ class StudentsController < ApplicationController
         end
     end
 
-    # PATCH/PUT /students/1 or /studen ts/1.json
+    # PATCH/PUT /students/1 or /students/1.json
     def update
       @student = Student.find(params[:id])
       respond_to do |format|
