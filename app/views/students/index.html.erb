@@ -18,22 +18,10 @@
         </th>
         <th>
           Course(s)/Semester(s):
-          <%= form_with(method: "get") do |f| %>
-          <% selected_course = nil%>
-          <%= f.select("selected_course", @course_names, {:include_blank => true}, {:onchange => "selected_course=this.value;"}) %>
-
-          <% selected_semester = nil%>
-          <%= f.select("selected_semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
         </th>
         <th>
           Tags:
-          <% selected_tag = nil%>
-          <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
         </th>
-        <div>
-        <%= f.submit "Filter Students List"%>
-        <% end %>
-        </div>
         <th>
           View Student Profile:
         </th>
@@ -59,7 +47,7 @@
             <%= student.email %>
           </td>
           <td>
-            <%= @courses_taken[student.course_id] %> <%= @semesters_taken[student.course_id] %>
+            TODO - All courses/semesters taken?
           </td>
           <td>
             <%= student.tags %>

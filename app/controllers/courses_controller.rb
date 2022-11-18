@@ -5,7 +5,23 @@ class CoursesController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @courses = Course.where(teacher: current_user.email)
+    @courses_db_result = Course.where(teacher: current_user.email)
+    @courses_comb_hash = Hash[]
+    Rails.logger.info "here"
+    @courses_db_result.each do |c|
+        if !@courses_comb_hash[c.course_name]
+            courseAllSections = CourseEntries.new
+            courseAllSections.initializeUsingCourseModel(c)
+            @courses_comb_hash[c.course_name] = courseAllSections 
+        else
+            course = @courses_comb_hash[c.course_name]
+            course.sections.add(c.section)
+            course.semesters.add(c.semester)
+            course.records.add(c)
+        end
+    end
+    @courses = @courses_comb_hash.values
+    Rails.logger.info "Received info #{@courses.inspect}"
   end
 
   # GET /courses/1 or /courses/1.json
@@ -19,9 +35,9 @@ class CoursesController < ApplicationController
     @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
     #get all students tags for those currently and previously enrolled in this course
     @tags = Set[]
-    for student in @student_records do
+    for student in @student_records do 
         @tags.add(student.tags)
-    end
+    end unless @student_records.nil?
     #get all the current and previous semesters and sections of this course
     @semesters = Set[]
     @sections = Set[]
@@ -69,6 +85,15 @@ class CoursesController < ApplicationController
             end
         end
     end
+
+    # @student_records = @student_db_result
+    # if !@student_records_hash[student.uin]
+    #     student_entry = StudentEntries.new
+    #     student_entry.initializeUsingStudentModel(student)
+    # else
+    #     student_entry = @student_records_hash[student.uin]
+    #     student_entry.records.add(student)
+    # end
   end
 
   # GET /courses/new
