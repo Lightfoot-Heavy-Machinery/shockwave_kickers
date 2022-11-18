@@ -57,6 +57,9 @@ class StudentsController < ApplicationController
 
     # GET /students/1/edit
     def edit
+        @all_student_course_ids = Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin).pluck(:course_id)
+        @courses_record = Course.where(id: @all_student_course_ids)
+        Rails.logger.info "Collected all student courses #{@courses_record.inspect}"
     end
 
     # GET /students/new

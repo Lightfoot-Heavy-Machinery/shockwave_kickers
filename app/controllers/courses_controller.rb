@@ -81,14 +81,21 @@ class CoursesController < ApplicationController
         end
     end
 
-    # @student_records = @student_db_result
-    # if !@student_records_hash[student.uin]
-    #     student_entry = StudentEntries.new
-    #     student_entry.initializeUsingStudentModel(student)
-    # else
-    #     student_entry = @student_records_hash[student.uin]
-    #     student_entry.records.add(student)
-    # end
+    @student_records_hash = Hash[]
+    for student in @student_records do
+        course = Course.where(id: student.course_id)
+        if !@student_records_hash[student.uin]
+            student_entry = StudentEntries.new
+            student_entry.initializeUsingStudentModel(student, course[0])
+            @student_records_hash[student.uin] = student_entry
+        else
+            student_entry = @student_records_hash[student.uin]
+            student_entry.records.append(student)
+            student_entry.semesterSection.add(course.semester[0] + " - " + course.section[0].to_s)
+        end
+    end unless @student_records.nil?
+    @student_records = @student_records_hash.values
+    Rails.logger.info "Collected info for filter #{@student_records.inspect}"
   end
 
   # GET /courses/new
