@@ -21,32 +21,42 @@
             Section:
         </th>
         <th>
+            Grade:
+        </th>
+        <th>
         </th>
         <th>
         </th>
         </tr>
     </thead>
     <tbody>
-        <% @courses_record.each do |course| %>
+        <% @student_course_records.each do |student_course_record| %>
             <tr>
                 <td>
                     <%# <strong>Course:</strong> %>
-                    <%= course.course_name %>
+                    <%= student_course_record.course_record.course_name %>
                 </td>
                 <td>
                     <%# <strong>Section:</strong> %>
-                    <%= course.section %>
+                    <%= student_course_record.course_record.section %>
                 </td>
 
                 <td>
                     <%# <strong>Semester:</strong> %>
-                    <%= course.semester %>
+                    <%= student_course_record.course_record.semester %>
                 </td>
+                <%= form_with(model: student_course_record.student_record) do |form| %>
                 <td>
-                    <%= button_to "Edit this course of student", edit_course_path(course), :method => :get %>
+                    <%# <strong>Grade:</strong> %>
+                    <%= form.text_field :final_grade %>
                 </td>
+
                 <td>
-                    <%= button_to "Delete this course of student", @course, method: :delete %>
+                    <%= form.submit "Update Grade" %>
+                </td>
+                <% end %>
+                <td>
+                    <%= button_to "Delete this course of student", student_course_record.student_record, method: :delete %>
                 </td>
             </tr>
         <% end %>

@@ -57,9 +57,24 @@ class StudentsController < ApplicationController
 
     # GET /students/1/edit
     def edit
-        @all_student_course_ids = Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin).pluck(:course_id)
-        @courses_record = Course.where(id: @all_student_course_ids)
-        Rails.logger.info "Collected all student courses #{@courses_record.inspect}"
+        @all_student_course_enrties= Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
+        @student_course_records_hash = Hash[]
+        for student_db_entry in @all_student_course_enrties do
+            student_course_entry = StudentCourseEntry.new
+            student_course_entry.student_record = student_db_entry
+            @student_course_records_hash[student_db_entry.course_id] = student_course_entry
+        end
+
+        @all_student_course_ids = @all_student_course_enrties.pluck(:course_id)
+        @courses = Course.where(id: @all_student_course_ids)
+        for course_db_entry in @courses do
+            # TODO check for nil
+            student_course_entry = @student_course_records_hash[course_db_entry.id]
+            student_course_entry.course_record = course_db_entry
+        end
+
+        @student_course_records = @student_course_records_hash.values
+        Rails.logger.info "Collected all student courses #{@student_course_records.inspect}"
     end
 
     # GET /students/new
@@ -85,7 +100,15 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
       respond_to do |format|
-        if @student.update(student_params)
+        if !params[:student][:final_grade].nil?
+            if @student.update(final_grade: params[:student][:final_grade])
+                format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
+                format.json { render :show, status: :ok, location: @student }
+            else
+                format.html { render :edit, status: :unprocessable_entity }
+                format.json { render json: @student.errors, status: :unprocessable_entity }
+            end
+        elsif @student.update(student_params)
           format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
           format.json { render :show, status: :ok, location: @student }
         else
