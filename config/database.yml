@@ -6,9 +6,13 @@ development:
   encoding: unicode
   database: courses
   pool: 5
+  username: postgres
+  password: password
 
 test:
   adapter: postgresql
   encoding: unicode
   database: courses
   pool: 5
+  username: postgres
+  password: password
