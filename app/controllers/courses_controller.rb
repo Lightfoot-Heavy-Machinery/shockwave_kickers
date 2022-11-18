@@ -54,22 +54,18 @@ class CoursesController < ApplicationController
         @selected_semester = params[:selected_semester]
         @selected_section = params[:selected_section]
         #get all course id's for the selected semester+section combo
-        if @selected_section == ''
-            @target_course_id = Course.where(course_name: Course.where(id: params[:id])[0].course_name,semester: @selected_semester)
+        if @selected_section == '' and @selected_semester == ''
+            @target_course_id = Course.where(id: @all_course_ids)
+        elsif @selected_section != '' and @selected_semester == ''
+            @target_course_id = Course.where(id: @all_course_ids,section: @selected_section)
+        elsif @selected_section == '' and @selected_semester != ''
+            @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester)
         else
-            @target_course_id = Course.where(course_name: Course.where(id: params[:id])[0].course_name,semester: @selected_semester, section: @selected_section)
-            #nil check in case the selected semester doesn't have the selected section
-            if @target_course_id.length > 0
-                @target_course_id = @target_course_id[0].id
-            end
+            @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester, section: @selected_section)
         end
         #create the filtered list of students to display
-        if @selected_semester == '' and @selected_tag == ''
-            @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
-        elsif @selected_semester != '' and @selected_tag == ''
+        if @selected_tag == ''
             @student_records = Student.where(course_id: @target_course_id, teacher: current_user.email)
-        elsif @selected_semester == '' and @selected_tag != ''
-            @student_records = Student.where(course_id: @all_course_ids, tags: @selected_tag, teacher: current_user.email)
         else
             @student_records = Student.where(course_id: @target_course_id, tags: @selected_tag, teacher: current_user.email)
         end
