@@ -15,13 +15,7 @@
                 Name
               </th>
               <th>
-                Section
-              </th>
-              <th>
-                Semester
-              </th>
-              <th>
-                Tags
+              Semester - Section
               </th>
               <th>
                 View Student Profile
@@ -45,13 +39,7 @@
                     <%=student.lastname %>, <%=student.firstname %>
                   </td>
                   <td>
-                    <%=Course.where(id: student.course_id)[0].section.to_s %>
-                  </td>
-                  <td>
-                    <%=Course.where(id: student.course_id)[0].semester %>
-                  </td>
-                  <td>
-                    <%=student.tags %>
+                    <%=Course.where(id: student.course_id)[0].semester + " - " + Course.where(id: student.course_id)[0].section.to_s %>
                   </td>
                   <td>
                     <%= button_to "View profile", student, :method=>:get  %>
