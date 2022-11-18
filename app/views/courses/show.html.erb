@@ -14,13 +14,13 @@
       <div class="row p-2 pt-0">
         <%= button_to "Back to courses", courses_path, :method => :get %>
       </div>
-    </div>        
+    </div>
   </div>
   <div class="row gx-5">
     <div class="col">
       <div class="row p-5">
         <div class="px-5 py-2 bg-light border rounded-3">
-          <h2>**GET COURSE NAME**</h2>
+          <h1> <%= @course.course_name %></h1>
         </div>
       </div>
       <div class="row ">
@@ -39,31 +39,24 @@
                   </select>
                 </div>
                 <div class="col">
-                  Semester:
-                  <select class="form-select" aria-label="sortOrder">
-                    <option selected value="0">TODO - All Semesters</option>
-                    <option value="1">Fall 2019</option>
-                    <option value="2">Spring 2020</option>
-                    <option value="3">...</option>
-                  </select>
+                    Semester:
+                    <%= form_with(method: "get") do |f| %>
+                    <% selected_semester = nil%>
+                    <%= f.select("selected_semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
                 </div>
                 <div class="col">
-                  Section:
-                  <select class="form-select" aria-label="sortOrder">
-                    <option selected value="0">TODO - All Sections</option>
-                    <option value="1">000</option>
-                    <option value="2">001</option>
-                    <option value="3">...</option>
-                  </select>
+                    Section:
+                    <% selected_section = nil%>
+                    <%= f.select("selected_section", @sections, {:include_blank => true}, {:onchange => "selected_section=this.value;"}) %>
                 </div>
                 <div class="col">
-                  Tags:
-                  <select class="form-select" aria-label="sortOrder">
-                    <option selected value="0">TODO - All Tags</option>
-                    <option value="1">Tag 1</option>
-                    <option value="2">Tag 2</option>
-                    <option value="3">...</option>
-                  </select>
+                    Tags:
+                    <% selected_tag = nil%>
+                    <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
+                </div>
+                <div>
+                <%= f.submit "Filter Students List"%>
+                <% end %>
                 </div>
               </div>
             </div>
@@ -78,67 +71,6 @@
         </div>
       </div>
     </div>
-      
-    <div class= "col">
-      <div class="row">
-        <table id="students" class="table table-striped table-hover text-center">
-          <thead>
-            <tr>
-              <th colspan="5">
-                <h3>Students in Current View:</h3>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                Picture
-              </th>
-              <th>
-                Name
-              </th>
-              <th>
-                Section - Semester
-              </th>
-              <th>
-                Tags
-              </th>
-              <th>
-                View Student Profile
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @student_records.each do |student| %>
-              <tr>
-                <td>
-                <% if student.image.attached? %>
-                    <%= image_tag student.image.variant(:thumb), class: 'bi bi-person rounded-circle d-block mx-auto', style: 'max-width: 4rem;' %>
-                <% else %>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person rounded-circle" viewBox="0 0 16 16">
-                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                    </svg>
-                <% end %>
-
-                </td>
-                <td>
-                  <%=student.lastname %>, <%=student.firstname %>
-                </td>
-                <td>
-                  (TODO) Section - Semester
-                </td>
-                <td>
-                  <%=student.tags %>
-                </td>
-                <td>
-                  <%= button_to "View profile", student, :method=>:get  %>
-                </td>
-              </tr>
-              
-              
-            <% end %>
-          </tbody>
-      </div>
-    </div>
+    <%= render partial: "students" %>
   </div>
 </div>
-
