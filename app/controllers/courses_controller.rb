@@ -91,7 +91,8 @@ class CoursesController < ApplicationController
         else
             student_entry = @student_records_hash[student.uin]
             student_entry.records.append(student)
-            student_entry.semesterSection.add(course.semester[0] + " - " + course.section[0].to_s)
+            student_entry.semester_section.add(course[0].semester + " - " + course[0].section.to_s)
+            student_entry.course_semester.add(course[0].course_name + " - " + course[0].semester)
         end
     end unless @student_records.nil?
     @student_records = @student_records_hash.values

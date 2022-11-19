@@ -39,7 +39,7 @@
                     <%=student.records[0].lastname %>, <%=student.records[0].firstname %>
                   </td>
                   <td>
-                    <%= student.semesterSection.to_a.join(", ") %>
+                    <%= student.semester_section.to_a.join(", ") %>
                   </td>
                   <td>
                     <%= button_to "View profile", student.records[0], :method=>:get  %>

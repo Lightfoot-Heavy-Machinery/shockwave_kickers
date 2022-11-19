@@ -3,30 +3,30 @@ class StudentsController < ApplicationController
     before_action :set_student, only: %i[ show edit update destroy ]
     # GET /student
     def index
-	@students = Student.where(teacher: current_user.email)
-	@tags = Set[]
-	@emails = Set[]
+        @students = Student.where(teacher: current_user.email)
+        @tags = Set[]
+        @emails = Set[]
 
-	@courses_taken = Hash[]
-	@semesters_taken = Hash[]
-	for student in @students do
-		@tags.add(student.tags)
+        @courses_taken = Hash[]
+        @semesters_taken = Hash[]
+        for student in @students do
+            @tags.add(student.tags)
 
-		# Figure out each student's course/semester they have taken
-		@courses_taken[student.course_id] = Course.find(student.course_id).course_name
-		@semesters_taken[student.course_id] = Course.find(student.course_id).semester
+            # Figure out each student's course/semester they have taken
+            @courses_taken[student.course_id] = Course.find(student.course_id).course_name
+            @semesters_taken[student.course_id] = Course.find(student.course_id).semester
 
-	end
-	@semesters = Set[]
-	@sections = Set[]
-	@course_names = Set[]
+        end
+        @semesters = Set[]
+        @sections = Set[]
+        @course_names = Set[]
         @course_ids = Array[]
-		for record in Course.all do
-			@semesters.add(record.semester)
-			@sections.add(record.section)
-			@course_names.add(record.course_name)
+        for record in Course.all do
+            @semesters.add(record.semester)
+            @sections.add(record.section)
+            @course_names.add(record.course_name)
             @course_ids.append(record.id)
-		end
+        end
 
         if params[:selected_course].nil? == false or params[:selected_semester].nil? == false or params[:selected_tag].nil? == false
             #dropdown menu selections
@@ -49,6 +49,21 @@ class StudentsController < ApplicationController
                 @students = @students.select {|s| s.tags == @selected_tag}
             end
         end
+        @student_records_hash = Hash[]
+        for student in @students do
+            course = Course.where(id: student.course_id)
+            if !@student_records_hash[student.uin]
+                student_entry = StudentEntries.new
+                student_entry.initializeUsingStudentModel(student, course[0])
+                @student_records_hash[student.uin] = student_entry
+            else
+                student_entry = @student_records_hash[student.uin]
+                student_entry.records.append(student)
+                student_entry.semester_section.add(course[0].semester + " - " + course[0].section.to_s)
+                student_entry.course_semester.add(course[0].course_name + " - " + course[0].semester)
+            end
+        end unless @students.nil?
+        @students = @student_records_hash.values
     end
 
     # GET /students/1
