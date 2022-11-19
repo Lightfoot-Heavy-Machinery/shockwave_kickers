@@ -99,7 +99,7 @@ class StudentsController < ApplicationController
 
     # POST /students/
     def create
-        @student = Student.new(student_params)
+        @student = Student.new(student_basic_params)
         respond_to do |format|
             if @student.save
                 format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
@@ -123,12 +123,16 @@ class StudentsController < ApplicationController
                 format.html { render :edit, status: :unprocessable_entity }
                 format.json { render json: @student.errors, status: :unprocessable_entity }
             end
-        elsif @student.update(student_params)
-          format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
-          format.json { render :show, status: :ok, location: @student }
         else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @student.errors, status: :unprocessable_entity }
+            @student_records = Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
+            for student_course in @student_records
+                if !student_course.update(student_basic_params)
+                    format.html { render :edit, status: :unprocessable_entity }
+                    format.json { render json: @student.errors, status: :unprocessable_entity }
+                end
+            end
+            format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
+            format.json { render :show, status: :ok, location: @student }
         end
       end
     end
@@ -157,8 +161,8 @@ class StudentsController < ApplicationController
         end
 
             # Only allow a list of trusted parameters through.
-        def student_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :course_id, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
+        def student_basic_params
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
         end
 
 end
