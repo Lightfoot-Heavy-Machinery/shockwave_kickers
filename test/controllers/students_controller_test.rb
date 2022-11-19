@@ -4,6 +4,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:userOne)
     @student = students(:studentOne)
+    @course = courses(:courseOne)
   end
 
   test "should get index" do
@@ -71,5 +72,35 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     sign_out users(:userOne)
     get new_student_url
     assert_redirected_to '/users/sign_in'
+  end
+
+  test "should successfully render partial with no filters" do
+    get students_url, params: {selected_semester: '', selected_course: '', selected_tag:''}
+    assert_response :success
+  end
+
+  test "should successfully render partial with nil filters" do
+      get students_url, params: {selected_semester: nil, selected_course: nil, selected_tag:nil}
+      assert_response :success
+  end
+
+  test "should successfully render partial with only semester filter" do
+      get students_url, params: {selected_semester: @course.semester, selected_course: '', selected_tag:''}
+      assert_response :success
+  end
+
+  test "should successfully render partial with only course filter" do
+      get students_url, params: {selected_semester: '', selected_course: @course.course_name, selected_tag:''}
+      assert_response :success
+  end
+
+  test "should successfully render partial with only tags filter" do
+      get course_url(@course), params: {selected_semester: '', selected_course: '', selected_tag: @student.tags}
+      assert_response :success
+  end
+
+  test "should successfully render partial with all filters set" do
+      get course_url(@course), params: {selected_semester: @course.semester, selected_course: @course.course_name, selected_tag: @student.tags}
+      assert_response :success
   end
 end
