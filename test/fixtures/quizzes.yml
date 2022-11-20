@@ -1,0 +1,55 @@
+quizOneCourseOneCompleted:
+  id: 1
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  completed: true
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 1
+  targeted: false
+
+quizOneCourseOne:
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  completed: false
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 1
+  targeted: false
+
+quizTwoTargetedCourseOne:
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  completed: false
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 1
+  targeted: true
+
+quizThreeCourseTwo:
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  completed: false
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 2
+  targeted: false
+
+quizFourTargetedCourseTwo:
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  completed: false
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 2
+  targeted: true
