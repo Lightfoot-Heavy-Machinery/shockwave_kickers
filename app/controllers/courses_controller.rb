@@ -6,7 +6,6 @@ class CoursesController < ApplicationController
   def index
     @courses_db_result = Course.where(teacher: current_user.email)
     @courses_comb_hash = Hash[]
-    Rails.logger.info "here"
     @courses_db_result.each do |c|
         if !@courses_comb_hash[c.course_name]
             courseAllSections = CourseEntries.new
