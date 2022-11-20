@@ -1,0 +1,17 @@
+<% @courses.each do |course| %>
+    <tr>
+        <td>
+        <%# <strong>Course name:</strong> %>
+        <%= course.course_name %>
+        </td>
+
+        <td>
+        <%# <strong>Semesters:</strong> %>
+        <%= course.semesters.to_a.join(", ") %>
+        </td>
+
+        <td>
+            <%= button_to "View profile", course.records.to_a[0], :method=>:get  %>
+        </td>
+    </tr>
+<% end %>

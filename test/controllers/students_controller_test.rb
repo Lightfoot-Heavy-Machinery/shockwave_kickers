@@ -3,7 +3,8 @@ require "test_helper"
 class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:userOne)
-    @student = students(:studentOne)
+    @student = students(:studentOneCourseOne)
+    @studentOneCourseTwo = students(:studentOneCourseTwo)
     @course = courses(:courseOne)
   end
 
@@ -102,5 +103,18 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   test "should successfully render partial with all filters set" do
       get students_url, params: {selected_semester: @course.semester, selected_course: @course.course_name, selected_tag: "tag"}
       assert_response :success
+  end
+
+  test "should update grade of student in a course" do
+    patch student_url(@student), params: { student: {final_grade: "A"} }
+    assert_redirected_to student_url(@student)
+  end
+
+  test "should destroy student from all courses" do
+    assert_difference("Student.count", -2) do
+      delete student_url(@student, :type => "all")
+    end
+
+    assert_redirected_to students_url
   end
 end

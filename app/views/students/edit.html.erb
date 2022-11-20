@@ -3,6 +3,66 @@
 
   <%= render "form", course: @student %>
 </div>
+<div class="text-center container">
+    <h1>Edit Student Course History</h1>
+</div>
+
+<div id="studentCourseEditDiv">
+    <table class="table table-striped table-hover text-center">
+        <thead>
+        <tr>
+        <th>
+            Course Name:
+        </th>
+        <th>
+            Semester:
+        </th>
+        <th>
+            Section:
+        </th>
+        <th>
+            Grade:
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @student_course_records.each do |student_course_record| %>
+            <tr>
+                <td>
+                    <%# <strong>Course:</strong> %>
+                    <%= student_course_record.course_record.course_name %>
+                </td>
+                <td>
+                    <%# <strong>Section:</strong> %>
+                    <%= student_course_record.course_record.section %>
+                </td>
+
+                <td>
+                    <%# <strong>Semester:</strong> %>
+                    <%= student_course_record.course_record.semester %>
+                </td>
+                <%= form_with(model: student_course_record.student_record) do |form| %>
+                <td>
+                    <%# <strong>Grade:</strong> %>
+                    <%= form.text_field :final_grade %>
+                </td>
+
+                <td>
+                    <%= form.submit "Update Grade" %>
+                </td>
+                <% end %>
+                <td>
+                    <%= button_to "Delete this course of student", student_path(:id=>student_course_record.student_record.id, :type => "course"), method: :delete %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+    </table>
+</div>
 
 <footer class="hd footer mt-auto py-3 text-center">
   <div class="container">

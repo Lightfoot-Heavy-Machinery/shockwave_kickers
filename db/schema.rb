@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_09_013040) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_18_184713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -83,7 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_09_013040) do
     t.string "email", null: false
     t.string "classification", null: false
     t.string "major", null: false
-    t.string "final_grade"
+    t.string "final_grade", default: ""
     t.text "notes"
     t.text "tags"
     t.datetime "created_at", null: false

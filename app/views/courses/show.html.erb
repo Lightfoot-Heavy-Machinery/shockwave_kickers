@@ -2,7 +2,7 @@
   <div class="row gx-2">
     <div class="col">
       <div class="row p-2 pt-0">
-        <%= button_to "Edit this course", edit_course_path(@course), :method => :get %>
+        <%= button_to "View course history", courses_history_path(@course), :method => :get %>
       </div>
     </div>
     <div class="col">
@@ -71,6 +71,6 @@
         </div>
       </div>
     </div>
-    <%= render partial: "students" %>
+    <%= render partial: "courses/partials/students" %>
   </div>
 </div>
