@@ -72,15 +72,15 @@ class StudentsController < ApplicationController
 
     # GET /students/1/edit
     def edit
-        @all_student_course_enrties= Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
+        @all_student_course_entries= Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
         @student_course_records_hash = Hash[]
-        for student_db_entry in @all_student_course_enrties do
+        for student_db_entry in @all_student_course_entries do
             student_course_entry = StudentCourseEntry.new
             student_course_entry.student_record = student_db_entry
             @student_course_records_hash[student_db_entry.course_id] = student_course_entry
         end
 
-        @all_student_course_ids = @all_student_course_enrties.pluck(:course_id)
+        @all_student_course_ids = @all_student_course_entries.pluck(:course_id)
         @courses = Course.where(id: @all_student_course_ids)
         for course_db_entry in @courses do
             # TODO check for nil
