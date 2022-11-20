@@ -71,7 +71,7 @@
       </div>
       <div class="col">
         <div class="row p-2 pt-0">
-            <%= button_to "Destroy this student", @student, method: :delete %>
+            <%= button_to "Delete this student", student_path(:id=>@student.id, :type => "all"), method: :delete %>
         </div>
       </div>        
     </div>

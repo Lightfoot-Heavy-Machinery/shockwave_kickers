@@ -56,7 +56,7 @@
                 </td>
                 <% end %>
                 <td>
-                    <%= button_to "Delete this course of student", student_course_record.student_record, method: :delete %>
+                    <%= button_to "Delete this course of student", student_path(:id=>student_course_record.student_record.id, :type => "course"), method: :delete %>
                 </td>
             </tr>
         <% end %>
