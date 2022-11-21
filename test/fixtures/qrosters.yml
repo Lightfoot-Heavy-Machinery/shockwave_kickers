@@ -3,3 +3,9 @@ qrosterCourseOne:
   student_id: 1
   attempts: 3
   correct_resp: true
+
+qrosterCourseOneNotCorrectYet:
+  quiz_id: 4
+  student_id: 2
+  attempts: 1
+  correct_resp:
