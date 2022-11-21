@@ -8,14 +8,14 @@ courseOne:
   teacher: test@gmail.com
 
 courseTwo:
-  id: 2
+  id: 3
   course_name: testName1
   section: 100
-  semester: Fall 2019
+  semester: Spring 2021
   teacher: test@gmail.com
 
 courseOneSemesterTwo:
-  id: 3
+  id: 2
   course_name: CSCE 606
   section: 200
   semester: Fall 2020
