@@ -104,4 +104,16 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
       get course_url(@course), params: {selected_semester: @course.semester, selected_section: @course.section, selected_tag: @student.tags}
       assert_response :success
   end
+
+  test "should view course history" do
+    get courses_history_path(@course)
+    assert_response :success
+  end
+
+  test "should say course history not found" do
+    @courseFake = courses(:courseOne)
+    @courseFake.id = 10
+    get courses_history_path(@courseFake)
+    assert_redirected_to courses_url
+  end
 end
