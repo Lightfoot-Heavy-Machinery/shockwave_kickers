@@ -50,6 +50,7 @@ quizThreeCourseTwo:
   targeted: false
 
 quizFourTargetedCourseTwo:
+  id: 5
   correct: 0
   incorrect: 0
   score: 0
@@ -60,3 +61,94 @@ quizFourTargetedCourseTwo:
   teacher: test@gmail.com
   course_id: 2
   targeted: true
+
+quizFiveBadValues:
+  id: 6
+  correct: 'a'
+  incorrect: 'a'
+  score: 'a'
+  longest_streak: 'a'
+  current_streak: 'a'
+  completed: 'a'
+  validate_id: 'a'
+  teacher: -1
+  course_id: 'a'
+  targeted: 'a'
+
+quizSixUnfinished:
+  id: 7
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  current_streak: 0
+  completed: false
+  validate_id: 0
+  teacher: test1@gmail.com
+  course_id: 4
+  targeted: true
+
+quizSeven:
+  id: 8
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  current_streak: 0
+  completed: true
+  validate_id: 0
+  teacher: test2@gmail.com
+  course_id: 6
+  targeted: true
+
+quizEight:
+  id: 9
+  correct: 0
+  incorrect: 0
+  score: 0
+  longest_streak: 0
+  current_streak: 0
+  completed: true
+  validate_id: 0
+  teacher: test3@gmail.com
+  course_id: 7
+  targeted: true
+
+quizNineCourseSeven:
+  id: 10
+  correct: 4
+  incorrect: 1
+  score: 80
+  longest_streak: 3
+  current_streak: 0
+  completed: true
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 9
+  targeted: false
+
+quizTenCourseSeven:
+  id: 11
+  correct: 4
+  incorrect: 1
+  score: 80
+  longest_streak: 3
+  current_streak: 0
+  completed: true
+  validate_id: 0
+  teacher: test@gmail.com
+  course_id: 9
+  targeted: false
+
+quizEleven:
+  id: 12
+  correct: 4
+  incorrect: 1
+  score: 80
+  longest_streak: 3
+  current_streak: 0
+  completed: true
+  validate_id: 0
+  teacher: test5@gmail.com
+  course_id: 10
+  targeted: false

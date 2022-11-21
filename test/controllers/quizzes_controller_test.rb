@@ -10,6 +10,7 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
         @quizCourseTwo = quizzes(:quizThreeCourseTwo)
         @quizCourseTwoTargeted = quizzes(:quizFourTargetedCourseTwo)
         @quizCompleted = quizzes(:quizOneCourseOneCompleted)
+        @quizBad = quizzes(:quizFiveBadValues)
     end
 
     test "should get index" do
@@ -89,5 +90,10 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
     test "view quiz for ongoing quiz with 0 answers" do
         get quiz_url(@quizCourseTwo)
         assert_response :success
+    end
+
+    test "submit quiz with invalid params" do
+        post quizzes_url, params: { quiz: { course_id: @quizBad.course_id, correct: @quizBad.correct, incorrect: @quizBad.incorrect, score: @quizBad.score, longest_streak: @quizBad.longest_streak, completed: @quizBad.completed, validate_id: @quizBad.validate_id, targeted: @quizBad.targeted} }
+        assert_response(422)
     end
 end

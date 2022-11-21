@@ -95,9 +95,8 @@ class HomeController < ApplicationController
 
   def studentInfo
     qID = Quiz.where(teacher:@id).pluck(:id)
-    if qID.nil?
-      return nil
-    elsif qID.length == 0
+    logger.info(qID)
+    if qID.length == 0
       return nil
     end
 
@@ -117,22 +116,10 @@ class HomeController < ApplicationController
       bestInfo = "No data available"
     else
       name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.nil?
-        bestName = "No data available"
-      elsif name[0].nil? && name[1].nil?
+      if name.length == 0
         bestName = "No data available"
       else
-        if name[0].nil?
-          tmp0 = ""
-        else
-          tmp0 = name[0]
-        end
-        if name[1].nil?
-          tmp1 = ""
-        else
-          tmp1 = name[1]
-        end
-        bestName = tmp0 + " " + tmp1
+        bestName = name[0] + " " + name[1]
       end
       bStud = Student.where(id:best.student_id).first
       if bStud.nil?
@@ -153,22 +140,10 @@ class HomeController < ApplicationController
       worstInfo = "No data available"
     else
       name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.nil?
-        worstName = "No data available"
-      elsif name[0].nil? && name[1].nil?
+      if name.length == 0
         worstName = "No data available"
       else
-        if name[0].nil?
-          tmp0 = ""
-        else
-          tmp0 = name[0]
-        end
-        if name[1].nil?
-          tmp1 = ""
-        else
-          tmp1 = name[1]
-        end
-        worstName = tmp0 + " " + tmp1
+        worstName = name[0] + " " + name[1]
       end
       wStud = Student.where(id:worst.student_id).first
       if wStud.nil?
@@ -179,7 +154,7 @@ class HomeController < ApplicationController
 
     
     ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
-    if ids.nil?
+    if ids.length == 0
       hStud = "/"
       lStud = "/"
       highestInfo = "No data available"
@@ -223,22 +198,10 @@ class HomeController < ApplicationController
           hStud = "/"
         else
           name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
-          if name.nil?
-            highestName = "No name available"
-          elsif name[0].nil? && name[1].nil?
+          if name.length == 0
             highestName = "No name available"
           else
-            if name[0].nil?
-              tmp0 = ""
-            else
-              tmp0 = name[0]
-            end
-            if name[1].nil?
-              tmp1 = ""
-            else
-              tmp1 = name[1]
-            end
-            highestName = tmp0 + " " + tmp1
+            highestName = name[0] + " " + name[1]
           end
           highestInfo = "#{highestName} (#{maxCnt})"
         end
@@ -254,22 +217,10 @@ class HomeController < ApplicationController
           lowestInfo = "No data available"
         else
           name = Student.where(id:minID,teacher: @id).pick(:firstname, :lastname)
-          if name.nil?
-            lowestName = "No name available"
-          elsif name[0].nil? && name[1].nil?
+          if name.length < 2
             lowestName = "No name available"
           else
-            if name[0].nil?
-              tmp0 = ""
-            else
-              tmp0 = name[0]
-            end
-            if name[1].nil?
-              tmp1 = ""
-            else
-              tmp1 = name[1]
-            end
-            lowestName = tmp0 + " " + tmp1
+            lowestName = name[0] + " " + name[1]
           end    
           lowestInfo = "#{lowestName} (#{minCnt})"
         end

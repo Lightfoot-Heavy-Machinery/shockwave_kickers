@@ -35,3 +35,27 @@ studentTwoCourseTwo:
   notes: MyText
   teacher: test@gmail.com
   course_id: 2
+
+studentFourNilName:
+  id: 4
+  firstname: ""
+  lastname: ""
+  uin: 2
+  email: MyString
+  classification: MyString
+  major: MyString
+  notes: MyText
+  teacher: test@gmail.com
+  course_id: 6
+
+studentFive:
+  id: 5
+  firstname: MyString
+  lastname: MyString
+  uin: 2
+  email: MyString
+  classification: MyString
+  major: MyString
+  notes: MyText
+  teacher: test@gmail.com
+  course_id: 9
