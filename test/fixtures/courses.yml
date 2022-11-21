@@ -4,19 +4,19 @@ courseOne:
   id: 1
   course_name: CSCE 606
   section: 100
-  semester: MyString
+  semester: Spring 2021
   teacher: test@gmail.com
 
 courseTwo:
   id: 2
   course_name: testName1
   section: 100
-  semester: MyString
+  semester: Fall 2019
   teacher: test@gmail.com
 
 courseOneSemesterTwo:
   id: 3
   course_name: CSCE 606
   section: 200
-  semester: MyString
+  semester: Fall 2020
   teacher: test@gmail.com

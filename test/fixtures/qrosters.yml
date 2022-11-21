@@ -4,8 +4,14 @@ qrosterCourseOne:
   attempts: 3
   correct_resp: true
 
-qrosterCourseOneNotCorrectYet:
+qrosterCourseTwoNotCorrectYet:
   quiz_id: 4
   student_id: 2
+  attempts: 1
+  correct_resp:
+
+qrosterCourseTwo:
+  quiz_id: 4
+  student_id: 3
   attempts: 1
   correct_resp:
