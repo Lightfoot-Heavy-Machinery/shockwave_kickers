@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 studentOneCourseOne:
+  id: 1
   firstname: MyString
   lastname: MyString
   uin: 1
@@ -20,7 +21,7 @@ studentOneCourseTwo:
   major: MyString
   notes: MyText
   teacher: test@gmail.com
-  course_id: 1
+  course_id: 2
 
 studentTwoCourseTwo:
   firstname: MyString

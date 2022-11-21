@@ -1,0 +1,5 @@
+qrosterCourseOne:
+  quiz_id: 1
+  student_id: 1
+  attempts: 3
+  correct_resp: true
