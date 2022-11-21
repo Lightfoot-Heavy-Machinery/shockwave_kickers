@@ -1,9 +1,9 @@
 quizOneCourseOneCompleted:
   id: 1
-  correct: 0
-  incorrect: 0
-  score: 0
-  longest_streak: 0
+  correct: 4
+  incorrect: 1
+  score: 80
+  longest_streak: 3
   completed: true
   validate_id: 0
   teacher: test@gmail.com
@@ -11,17 +11,19 @@ quizOneCourseOneCompleted:
   targeted: false
 
 quizOneCourseOne:
+  id: 2
   correct: 0
   incorrect: 0
   score: 0
   longest_streak: 0
   completed: false
-  validate_id: 0
+  validate_id: 2
   teacher: test@gmail.com
   course_id: 1
   targeted: false
 
 quizTwoTargetedCourseOne:
+  id: 3
   correct: 0
   incorrect: 0
   score: 0
@@ -33,12 +35,13 @@ quizTwoTargetedCourseOne:
   targeted: true
 
 quizThreeCourseTwo:
+  id: 4
   correct: 0
   incorrect: 0
   score: 0
   longest_streak: 0
   completed: false
-  validate_id: 0
+  validate_id: 2
   teacher: test@gmail.com
   course_id: 2
   targeted: false

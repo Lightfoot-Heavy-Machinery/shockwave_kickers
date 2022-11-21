@@ -41,7 +41,7 @@ class QuizzesController < ApplicationController
 
       @correctAnswer = true
     else
-      roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
+      roster = Qroster.where(quiz_id:@quiz.id,student_id:@quiz.validate_id).first
       
       if (roster.correct_resp.nil?)
         @quiz.incorrect = @quiz.incorrect + 1

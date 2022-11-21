@@ -9,6 +9,7 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
         @quizTargeted = quizzes(:quizTwoTargetedCourseOne)
         @quizCourseTwo = quizzes(:quizThreeCourseTwo)
         @quizCourseTwoTargeted = quizzes(:quizFourTargetedCourseTwo)
+        @quizCompleted = quizzes(:quizOneCourseOneCompleted)
     end
 
     test "should get index" do
@@ -67,5 +68,21 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
         assert_equal before_quiz_count + 1, after_quiz_count
         assert_equal before_qroster_count + 2, after_qroster_count
         assert_redirected_to quiz_url(Quiz.last)
+    end
+
+    test "view quiz completed" do
+        get quiz_url(@quizCompleted)
+        assert_response :success
+    end
+
+    test "submit quiz correct answer for ongoing quiz" do
+        get quiz_url(@quizCourseTwo), params: {answer: @quizCourseTwo.validate_id}
+        assert_response :success
+    end
+
+    test "submit quiz incorrect answer for ongoing quiz" do
+        #correct id should be 2
+        get quiz_url(@quizCourseTwo), params: {answer: 3}
+        assert_response :success
     end
 end

@@ -140,7 +140,6 @@ class StudentsController < ApplicationController
     #DELETE student/1
     #Removes student and all it's courses. Or remove course of a student.
     def destroy
-        Rails.logger.info "Received param #{params}"
         if params[:type] == "all"
             @student_records = Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
             for student in @student_records

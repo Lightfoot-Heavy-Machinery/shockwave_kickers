@@ -151,11 +151,7 @@ class CoursesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_course
       @course = Course.find_by(teacher: current_user.email, id: params[:id])
-        if !@course.nil?
-            Rails.logger.info "Received info #{@student_records.inspect}"
-            Rails.logger.info "Received info #{params.inspect}"
-            Rails.logger.info "Received info #{current_user.inspect}"
-        else
+        if @course.nil?
             respond_to do |format|
                 format.html { redirect_to courses_url, notice: "Given course not found." }
                 format.json { head :no_content }
