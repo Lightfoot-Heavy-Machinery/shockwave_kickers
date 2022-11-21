@@ -4,6 +4,7 @@ quizOneCourseOneCompleted:
   incorrect: 1
   score: 80
   longest_streak: 3
+  current_streak: 0
   completed: true
   validate_id: 0
   teacher: test@gmail.com
@@ -16,6 +17,7 @@ quizOneCourseOne:
   incorrect: 0
   score: 0
   longest_streak: 0
+  current_streak: 0
   completed: false
   validate_id: 2
   teacher: test@gmail.com
@@ -28,6 +30,7 @@ quizTwoTargetedCourseOne:
   incorrect: 0
   score: 0
   longest_streak: 0
+  current_streak: 0
   completed: false
   validate_id: 0
   teacher: test@gmail.com
@@ -39,7 +42,7 @@ quizThreeCourseTwo:
   correct: 0
   incorrect: 0
   score: 0
-  longest_streak: 0
+  current_streak: 0
   completed: false
   validate_id: 2
   teacher: test@gmail.com
@@ -51,6 +54,7 @@ quizFourTargetedCourseTwo:
   incorrect: 0
   score: 0
   longest_streak: 0
+  current_streak: 0
   completed: false
   validate_id: 0
   teacher: test@gmail.com

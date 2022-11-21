@@ -12,16 +12,10 @@ class QuizzesController < ApplicationController
     resp = params[:answer]
     @correctAnswer = nil
     
-    if @quiz.validate_id.nil? || resp.nil? || resp.to_i == 0
-      if @quiz.longest_streak.nil?
+    if @quiz.longest_streak.nil?
         @quiz.longest_streak = 0
-      end
-      if @quiz.completed.nil?
-        @quiz.completed = false
-      end
-      if @quiz.current_streak.nil?
-        @quiz.current_streak = 0
-      end
+    end
+    if @quiz.validate_id.nil? || resp.nil? || resp.to_i == 0
       @quiz.save
     elsif resp.to_i == @quiz.validate_id
       roster = Qroster.where(quiz_id:@quiz.id,student_id:resp).first
@@ -132,7 +126,7 @@ class QuizzesController < ApplicationController
         @random_stud = Qroster.where(id:studentSet[0]).first
         break if (@random_stud.correct_resp.nil? || @random_stud.correct_resp == false)
       end
-      
+
       @quiz.validate_id = @random_stud.student_id
       @quiz.save
 

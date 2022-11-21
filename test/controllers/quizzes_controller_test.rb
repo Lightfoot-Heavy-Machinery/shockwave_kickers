@@ -85,4 +85,9 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
         get quiz_url(@quizCourseTwo), params: {answer: 3}
         assert_response :success
     end
+
+    test "view quiz for ongoing quiz with 0 answers" do
+        get quiz_url(@quizCourseTwo)
+        assert_response :success
+    end
 end
