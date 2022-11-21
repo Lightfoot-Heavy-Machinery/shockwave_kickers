@@ -20,3 +20,53 @@ courseOneSemesterTwo:
   section: 200
   semester: Fall 2020
   teacher: test@gmail.com
+
+
+courseThreeSemesterOne:
+  id: 4
+  course_name: testName1
+  section: 100
+  semester: Spring 2021
+  teacher: test1@gmail.com
+
+courseThreeSemesterTwo:
+  id: 5
+  course_name: testName1
+  section: 100
+  semester: Fall 3021
+  teacher: test1@gmail.com
+
+courseFour:
+  id: 6
+  course_name: testName2
+  section: 100
+  semester: Fall 2022
+  teacher: test2@gmail.com
+
+courseFive:
+  id: 7
+  course_name: testName3
+  section: 100
+  semester: Fall 2022
+  teacher: test3@gmail.com
+
+courseSix:
+  id: 8
+  course_name: testName4
+  section: 100
+  semester: Fall 2022
+  teacher: test4@gmail.com
+
+courseSeven:
+  id: 9
+  course_name: testName5
+  section: 100
+  semester: Fall 2022
+  teacher: test@gmail.com
+
+courseEight:
+  id: 10
+  course_name: testName5
+  section: 100
+  semester: Fall 2022
+  teacher: test5@gmail.com

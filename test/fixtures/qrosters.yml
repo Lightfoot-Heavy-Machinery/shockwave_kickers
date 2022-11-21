@@ -15,3 +15,28 @@ qrosterCourseTwo:
   student_id: 3
   attempts: 1
   correct_resp:
+
+
+qrosterBadName:
+  quiz_id: 8
+  student_id: 4
+  attempts: 1
+  correct_resp:
+
+qrosterCourseSevenOne:
+  quiz_id: 10
+  student_id: 5
+  attempts: 1
+  correct_resp: true
+
+qrosterCourseSevenTwo:
+  quiz_id: 11
+  student_id: 5
+  attempts: 1
+  correct_resp: true
+
+qrosterNoID:
+  quiz_id: 12
+  student_id: NULL
+  attempts: 1
+  correct_resp: true
