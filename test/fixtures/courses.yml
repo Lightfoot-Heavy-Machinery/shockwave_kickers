@@ -2,14 +2,21 @@
 
 courseOne:
   id: 1
-  course_name: testName
+  course_name: CSCE 606
   section: 100
   semester: MyString
   teacher: test@gmail.com
 
 courseTwo:
   id: 2
-  course_name: testName
+  course_name: testName1
   section: 100
+  semester: MyString
+  teacher: test@gmail.com
+
+courseOneSemesterTwo:
+  id: 3
+  course_name: CSCE 606
+  section: 200
   semester: MyString
   teacher: test@gmail.com

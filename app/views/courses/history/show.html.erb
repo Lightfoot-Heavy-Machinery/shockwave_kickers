@@ -1,0 +1,59 @@
+<div class="container text-center">
+<h1> <%= @course_records[0].course_name %> History</h1>
+
+  <br>
+
+<div class="container">
+  <div class="row gx-2">
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Show this course profile", @course, :method => :get %>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row p-2 pt-0">
+        <%= button_to "Back to courses", courses_path, :method=>:get  %>
+      </div>
+    </div>       
+  </div>
+</div>
+
+    <table class="table table-striped table-hover text-center">
+        <thead>
+      <tr>
+        <th>
+          Semester:
+        </th>
+        <th>
+          Section:
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <% @course_records.each do |course| %>
+        <tr>
+            <td>
+                <%# <strong>Section:</strong> %>
+                <%= course.section %>
+            </td>
+
+            <td>
+                <%# <strong>Semester:</strong> %>
+                <%= course.semester %>
+            </td>
+            <td>
+                <%= button_to "Edit this course", edit_course_path(course), :method => :get %>
+            </td>
+            <td>
+                <%= button_to "Delete", @course, method: :delete %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>

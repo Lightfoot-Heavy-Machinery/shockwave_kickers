@@ -8,7 +8,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :courses, :students
+  resources :courses
+  namespace :courses do
+    resources :history, only: [:show]
+  end
+
+  resources :students
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

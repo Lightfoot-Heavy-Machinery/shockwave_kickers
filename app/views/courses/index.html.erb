@@ -11,12 +11,6 @@
           Course Name:
         </th>
         <th>
-          Section(s):
-        </th>
-        <th>
-          Professor(s):
-        </th>
-        <th>
           Semester(s):
         </th>
         <th>
@@ -26,10 +20,7 @@
     </thead>
 
     <tbody>
-    
-      <% @courses.each do |course| %>
-          <%= render course %>
-      <% end %>
+        <%= render partial: 'courses/partials/course' %>
     </tbody>
   </table>
 </div>
