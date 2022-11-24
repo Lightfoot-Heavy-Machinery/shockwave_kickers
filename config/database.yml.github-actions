@@ -4,4 +4,4 @@ test:
   database: courses
   pool: 5
   username: <%= ENV["POSTGRES_USER"] %>
-  password: <%= ENV["POSTGRES_PASSWORD"] %
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
