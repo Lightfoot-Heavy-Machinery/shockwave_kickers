@@ -65,7 +65,7 @@ jobs:
         run: heroku git:remote --app shockwave-kickers
         env:
           HEROKU_APP_NAME: shockwave-kickers
-      - name: Deploy to Heroku
-        run: git push heroku master -f
+      # - name: Deploy to Heroku
+      #   run: git push heroku main -f
       - name: Migrate DB if needed
         run: heroku run rails db:migrate
