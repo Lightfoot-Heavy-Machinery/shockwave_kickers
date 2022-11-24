@@ -50,7 +50,7 @@ jobs:
   deployProduction:
     name: cd-pipeline-production
     needs: [build]
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -59,7 +59,6 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: shockwave-kickers
           heroku_email: kvudathu@tamu.edu
-    
       - name: Add Heroku remote
         run: heroku git:remote --app shockwave-kickers
         env:
