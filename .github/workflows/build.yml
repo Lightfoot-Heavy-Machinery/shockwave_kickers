@@ -47,24 +47,22 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
 
-  # deployProduction:
-  #   name: cd-pipeline-production
-  #   needs: [build]
-  #   if: github.ref == 'refs/heads/master'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out repository
-  #       uses: actions/checkout@v2
-  #     - name: Deploy to Heroku
-  #       uses: akhileshns/heroku-deploy@v3.12.12
-  #       with:
-  #         heroku_api_key: 1950d742-c5da-4d23-98ea-d3224b073b8b
-  #         heroku_app_name: plantahobby
-  #         heroku_email: plantahobby@gmail.com
+  deployProduction:
+    name: cd-pipeline-production
+    needs: [build]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: shockwave-kickers
+          heroku_email: kvudathu@tamu.edu
     
-  #     - name: Add Heroku remote
-  #       run: heroku git:remote --app plantahobby
-  #       env:
-  #         HEROKU_APP_NAME: plantahobby
-  #     - name: Push to Heroku
-  #       run: git push heroku prod-v0.4 -f
+      - name: Add Heroku remote
+        run: heroku git:remote --app shockwave-kickers
+        env:
+          HEROKU_APP_NAME: shockwave-kickers
+      - name: Deploy to Heroku
+        run: git push heroku master -f
