@@ -41,7 +41,11 @@ jobs:
           POSTGRES_PASSWORD: postgres
      - name: run-backend-tests
        run: |
-              rake test
+          bundle exec rails test
+       env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
      - id: run-backend-tests
        uses: actions/cache@v2
        with:
