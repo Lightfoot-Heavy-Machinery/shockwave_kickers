@@ -1,0 +1,53 @@
+name: build
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    name: ci-pipeline
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout code
+        uses: actions/checkout@v3
+     - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1.2"
+          bundler-cache: true
+     - name: install dependencies
+       run: |
+              bundle install
+
+     - name: run-backend0-tests
+       run: |
+              rake tests
+     - id: run-backend-tests
+       uses: actions/cache@v2
+       with:
+          ruby-version: "3.1.2"
+          bundler-cache: true}
+
+  # deployProduction:
+  #   name: cd-pipeline-production
+  #   needs: [build]
+  #   if: github.ref == 'refs/heads/master'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v2
+  #     - name: Deploy to Heroku
+  #       uses: akhileshns/heroku-deploy@v3.12.12
+  #       with:
+  #         heroku_api_key: 1950d742-c5da-4d23-98ea-d3224b073b8b
+  #         heroku_app_name: plantahobby
+  #         heroku_email: plantahobby@gmail.com
+    
+  #     - name: Add Heroku remote
+  #       run: heroku git:remote --app plantahobby
+  #       env:
+  #         HEROKU_APP_NAME: plantahobby
+  #     - name: Push to Heroku
+  #       run: git push heroku prod-v0.4 -f
