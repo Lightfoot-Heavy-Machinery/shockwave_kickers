@@ -116,7 +116,9 @@ class HomeController < ApplicationController
       bestInfo = "No data available"
     else
       name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.length == 0
+      if name.nil?
+        bestName = "No data available"
+      elsif name.length == 0
         bestName = "No data available"
       else
         bestName = name[0] + " " + name[1]
@@ -140,7 +142,9 @@ class HomeController < ApplicationController
       worstInfo = "No data available"
     else
       name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.length == 0
+      if name.nil?
+        worstName = "No data available"
+      elsif name.length == 0
         worstName = "No data available"
       else
         worstName = name[0] + " " + name[1]
@@ -154,7 +158,12 @@ class HomeController < ApplicationController
 
     
     ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
-    if ids.length == 0
+    if ids.nil?
+      hStud = "/"
+      lStud = "/"
+      highestInfo = "No data available"
+      lowestInfo = "No data available"
+    elsif ids.length == 0
       hStud = "/"
       lStud = "/"
       highestInfo = "No data available"
@@ -198,7 +207,9 @@ class HomeController < ApplicationController
           hStud = "/"
         else
           name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
-          if name.length == 0
+          if name.nil?
+            highestName = "No name available"
+          elsif name.length == 0
             highestName = "No name available"
           else
             highestName = name[0] + " " + name[1]
