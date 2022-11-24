@@ -46,11 +46,6 @@ jobs:
           RAILS_ENV: test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-     - id: run-backend-tests
-       uses: actions/cache@v2
-       with:
-          ruby-version: "3.1.2"
-          bundler-cache: true
 
   # deployProduction:
   #   name: cd-pipeline-production
