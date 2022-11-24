@@ -57,7 +57,7 @@ jobs:
       - name: Login into Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: 3e686890-2e6b-407f-abb3-fa9f669fab65
+          heroku_api_key: ${{ secrets.HEROKU_API_TOKEN }}
           heroku_app_name: shockwave-kickers
           heroku_email: kvudathu@tamu.edu
       - name: Add Heroku remote
