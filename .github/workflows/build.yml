@@ -23,12 +23,12 @@ jobs:
 
      - name: run-backend0-tests
        run: |
-              rake tests
+              rake test
      - id: run-backend-tests
        uses: actions/cache@v2
        with:
           ruby-version: "3.1.2"
-          bundler-cache: true}
+          bundler-cache: true
 
   # deployProduction:
   #   name: cd-pipeline-production
