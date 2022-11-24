@@ -30,7 +30,7 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
         after_quiz_count = Quiz.count
         after_qroster_count = Qroster.count
 
-        assert_equal before_quiz_count + 2, after_quiz_count
+        assert_equal before_quiz_count + 1, after_quiz_count
         assert_equal before_qroster_count + 1, after_qroster_count
         assert_redirected_to quiz_url(Quiz.last)
     end
