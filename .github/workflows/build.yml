@@ -32,8 +32,8 @@ jobs:
      - name: Setup Database
        run: |
           cp config/database.yml.github-actions config/database.yml
-          rake db:create
-          rake db:migrate
+          rails db:create
+          rails db:load
        env:
           RAILS_ENV: test
           POSTGRES_USER: postgres
