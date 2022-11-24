@@ -53,8 +53,10 @@ jobs:
     # if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Login into Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: shockwave-kickers
@@ -65,3 +67,5 @@ jobs:
           HEROKU_APP_NAME: shockwave-kickers
       - name: Deploy to Heroku
         run: git push heroku master -f
+      - name: Migrate DB if needed
+        run: heroku run rails db:migrate
