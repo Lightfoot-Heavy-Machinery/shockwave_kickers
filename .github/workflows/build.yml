@@ -1,0 +1,68 @@
+name: build
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    name: ci-pipeline
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+     - uses: actions/checkout@v2
+     - uses: ruby/setup-ruby@v1
+       with:
+          ruby-version: "3.1.2"
+          bundler-cache: true
+     - name: Install postgres
+       run: sudo apt-get install libpq-dev
+     - name: install dependencies
+       run: |
+              bundle install
+     - name: Setup Database
+       run: |
+          cp config/database.yml.github-actions config/database.yml
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+       env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+     - name: run-backend-tests
+       run: |
+          bundle exec rails test
+       env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+  deployProduction:
+    name: cd-pipeline-production
+    needs: [build]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Login into Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: shockwave-kickers
+          heroku_email: kvudathu@tamu.edu
+      - name: Add Heroku remote
+        run: heroku git:remote --app shockwave-kickers
+        env:
+          HEROKU_APP_NAME: shockwave-kickers
+      - name: Migrate DB if needed
+        run: heroku run rails db:migrate
