@@ -145,9 +145,13 @@ class StudentsController < ApplicationController
             for student in @student_records
                 student.image.purge
             end
+            @qroster_records = Qroster.where(student_id: @student_records.pluck(:id))
+            @qroster_records.destroy_all
             @student_records.destroy_all
         else
             @student = Student.find(params[:id])
+            @qroster_records = Qroster.where(student_id: @student.id)
+            @qroster_records.destroy_all
             @student.image.purge
             @student.destroy
         end
