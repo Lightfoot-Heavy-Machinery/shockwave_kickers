@@ -38,13 +38,12 @@
         <% @course_records.each do |course| %>
         <tr>
             <td>
-                <%# <strong>Section:</strong> %>
-                <%= course.section %>
-            </td>
-
-            <td>
                 <%# <strong>Semester:</strong> %>
                 <%= course.semester %>
+            </td>
+            <td>
+                <%# <strong>Section:</strong> %>
+                <%= course.section %>
             </td>
             <td>
                 <%= button_to "Edit this course", edit_course_path(course), :method => :get %>
