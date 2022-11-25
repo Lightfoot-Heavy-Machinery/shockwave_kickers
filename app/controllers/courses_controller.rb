@@ -139,10 +139,14 @@ class CoursesController < ApplicationController
   def destroy
     @student_records = Student.where(course_id: params[:id])
     @student_records.destroy_all
-    @course.destroy
+    @quiz_records = Quiz.where(course_id: params[:id])
+    @qroster_records = Qroster.where(quiz_id: @quiz_records.pluck(:id))
+    @qroster_records.destroy_all
+    @quiz_records.destroy_all
+    @course.delete
 
     respond_to do |format|
-      format.html { redirect_to courses_url, notice: "Course was successfully destroyed." }
+      format.html { redirect_to courses_url, notice: "Course and its info were successfully deleted." }
       format.json { head :no_content }
     end
   end
