@@ -100,7 +100,11 @@ class HomeController < ApplicationController
       return nil
     end
 
-    atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
+    qroster_records = Qroster.where(quiz_id:qID,correct_resp:true)
+    atm = 0
+    for qroster in qroster_records do
+        atm += qroster.attempts
+    end
     if atm == 0
       return nil
     end
@@ -129,7 +133,6 @@ class HomeController < ApplicationController
       end
       bestInfo = "#{bestName} (#{best.score.round(2)}%)"
     end
-
 
     worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC").first
     wStud = ""
