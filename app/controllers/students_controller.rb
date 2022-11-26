@@ -105,6 +105,7 @@ class StudentsController < ApplicationController
         @student = Student.new(student_basic_params)
         respond_to do |format|
             if @student.save
+                StudentCourse.new(student_id: @student.id, course_id: params[:course_id])
                 format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
                 format.json { render :show, status: :created, location: @student }
             else
@@ -156,7 +157,6 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_basic_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image, :course_id).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
         end
-
 end

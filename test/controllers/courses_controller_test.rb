@@ -5,7 +5,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:userOne)
     @course = courses(:courseOne)
     @course2 = courses(:courseOneSemesterTwo)
-    @student = students(:studentOneCourseOne)
+    @student = students(:studentOne)
 
   end
 

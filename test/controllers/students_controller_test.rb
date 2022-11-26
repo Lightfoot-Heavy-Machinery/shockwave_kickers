@@ -3,8 +3,9 @@ require "test_helper"
 class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:userOne)
-    @student = students(:studentOneCourseOne)
-    @studentOneCourseTwo = students(:studentOneCourseTwo)
+    @student = students(:studentOne)
+    @studentOneCourseOne = student_courses(:studentOneCourseOne)
+    @studentOneCourseTwo = student_courses(:studentOneCourseTwo)
     @course = courses(:courseOne)
   end
 

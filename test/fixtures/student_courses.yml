@@ -1,0 +1,19 @@
+studentOneCourseOne:
+  student_id: 1
+  course_id: 1
+
+studentOneCourseTwo:
+  student_id: 1
+  course_id: 2
+
+studentTwoCourseTwo:
+  student_id: 2
+  course_id: 2
+
+studentFourNilNameCourse6:
+  student_id: 4
+  course_id: 6
+
+studentFiveCourse9:
+  student_id: 5
+  course_id: 9
