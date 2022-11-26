@@ -110,11 +110,6 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
   end
 
-  test "should update grade of student in a course" do
-    patch student_url(@student), params: { student: {final_grade: "A"} }
-    assert_redirected_to student_url(@student)
-  end
-
   test "should destroy student from all courses" do
     before_student_count = Student.count
     before_student_course_count = StudentCourse.count
