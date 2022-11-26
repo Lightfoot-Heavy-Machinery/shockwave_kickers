@@ -105,7 +105,8 @@ class StudentsController < ApplicationController
         @student = Student.new(student_basic_params)
         respond_to do |format|
             if @student.save
-                StudentCourse.new(student_id: @student.id, course_id: params[:course_id])
+                @studentCourse = StudentCourse.new(student_id: @student.id, course_id: params[:course_id])
+                @studentCourse.save
                 format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
                 format.json { render :show, status: :created, location: @student }
             else
