@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
+  resources :posts
+  get 'posts/index'
   resources :quizzes, only: [:index, :show, :new, :create]
   get 'home/index'
   get 'upload/index'
-  get 'upload', to: 'upload#index'
+  get 'upload', to: 'posts#index'
 
   post 'quizzes/:id', to:'quizzes#show'
 
