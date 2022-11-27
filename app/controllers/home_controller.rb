@@ -133,15 +133,6 @@ class HomeController < ApplicationController
       end
       bestInfo = "#{bestName} (#{best.score.round(2)}%)"
     end
-
-
-    logger.info("QID: #{qID} \n ATM: #{atm}")
-    tmp = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC")
-    tmp.each do |v|
-      logger.info("WE GOT: #{v.student_id} with W=#{v.wscore} and S=#{v.score}")
-    end
-    
-    
     
     worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC")
     currS = -1
@@ -149,6 +140,7 @@ class HomeController < ApplicationController
     worst.each do |qr|
       if currS == -1
         currS = qr.score
+        worstEntry = qr
       elsif qr.score <= currS
         currS = qr.score
         worstEntry = qr
