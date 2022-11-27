@@ -21,6 +21,10 @@ class PostsController < ApplicationController
 
   # POST /posts or /posts.json
   def create
+    require 'zip'
+    require 'csv'
+    require 'json'
+
     @post = Post.new(post_params)
     @post.published_at = Time.zone.now if published?
 
@@ -34,6 +38,36 @@ class PostsController < ApplicationController
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
+    
+    # Extract the zip file
+    Zip::File.open(@post.file.path) do |zip_file|
+      # Handle entries one by one
+      zip_file.each do |entry|
+        # Extract to file/directory/symlink
+        puts "Extracting #{entry.name}"
+        entry.extract("app/resources/#{entry.name}")
+        #if the file is a csv file, make a list of the names of the students in alphabetical order
+        if entry.name.include? ".csv"
+            CSV.foreach("app/resources/#{entry.name}", :headers => true) do |record|
+                @student_names = Array.new
+                @student_names.push(record["FirstName"].strip() + " " + record["LastName"].strip())
+            end
+            #for every png, jpg, or jpeg file in the zip file, add the student name to the file name
+            Dir.glob("app/resources/*.jpeg").each do |file|
+                @student_names.each do |name|
+                    if file.include? name
+                        File.rename(file, file.gsub(name, name.gsub(" ", "_")))
+                    end
+                end
+            end
+        end
+        #if the file is not a csv or image file, delete it
+        if ((!entry.name.include? ".csv") || (!entry.name.include? ".jpeg") || (!entry.name.include? ".jpg") || (!entry.name.include? ".png"))
+          File.delete("app/resources/#{entry.name}")
+        end
+      end
+    end
+
   end
 
   # PATCH/PUT /posts/1 or /posts/1.json
@@ -57,21 +91,6 @@ class PostsController < ApplicationController
       format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }
       format.json { head :no_content }
     end
-  end
-
-  def file_name
-    @post = Post.find(params[:id])
-    send_data @post.file_contents, filename: @post.file_name
-  end
-
-  def file_size
-    @post = Post.find(params[:id])
-    send_data @post.file_contents, filename: @post.file_name, disposition: 'inline'
-  end
-
-  def created_at
-    @post = Post.find(params[:id])
-    send_data @post.file_contents, filename: @post.file_name, disposition: 'inline'
   end
 
   private
