@@ -22,7 +22,7 @@
         <div class="bg-light border rounded-3">
             <form action = <%="/quizzes/"+@quiz.id.to_s %>>
             <% @choices.each do |choice| %>
-                <% name = Student.where(id:choice,teacher: current_user.email, course_id:@quiz.course_id).pick(:firstname, :lastname) %>
+                <% name = Student.where(id:choice,teacher: current_user.email).pick(:firstname, :lastname) %>
                 <% name = name[0] + " " + name[1] %>
                 <br>
                 <input type="radio" name="answer" value=<%= choice %>><%= name%>

@@ -3,8 +3,9 @@ require "test_helper"
 class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:userOne)
-    @student = students(:studentOneCourseOne)
-    @studentOneCourseTwo = students(:studentOneCourseTwo)
+    @student = students(:studentOne)
+    @studentOneCourseOne = student_courses(:studentOneCourseOne)
+    @studentOneCourseTwo = student_courses(:studentOneCourseTwo)
     @course = courses(:courseOne)
   end
 
@@ -19,9 +20,13 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create student" do
-    assert_difference("Student.count") do
-      post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, course_id: @student.course_id} }
-    end
+    before_student_count = Student.count
+    before_student_course_count = StudentCourse.count
+    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, course_id: @studentOneCourseOne.course_id} }
+    after_student_count = Student.count
+    after_student_course_count = StudentCourse.count
+    assert_equal before_student_count + 1, after_student_count
+    assert_equal before_student_course_count + 1, after_student_course_count
 
     assert_redirected_to student_url(Student.last)
   end
@@ -105,16 +110,14 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
   end
 
-  test "should update grade of student in a course" do
-    patch student_url(@student), params: { student: {final_grade: "A"} }
-    assert_redirected_to student_url(@student)
-  end
-
   test "should destroy student from all courses" do
-    assert_difference("Student.count", -2) do
-      delete student_url(@student, :type => "all")
-    end
-
+    before_student_count = Student.count
+    before_student_course_count = StudentCourse.count
+    delete student_url(@student)
+    after_student_count = Student.count
+    after_student_course_count = StudentCourse.count
+    assert_equal before_student_count - 1, after_student_count
+    assert_equal before_student_course_count - 2, after_student_course_count
     assert_redirected_to students_url
   end
 end

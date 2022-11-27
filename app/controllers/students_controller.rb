@@ -11,11 +11,6 @@ class StudentsController < ApplicationController
         @semesters_taken = Hash[]
         for student in @students do
             @tags.add(student.tags)
-
-            # Figure out each student's course/semester they have taken
-            @courses_taken[student.course_id] = Course.find(student.course_id).course_name
-            @semesters_taken[student.course_id] = Course.find(student.course_id).semester
-
         end
         @semesters = Set[]
         @sections = Set[]
@@ -43,24 +38,31 @@ class StudentsController < ApplicationController
             else
                 @target_course_id = @course_ids
             end
+
+            @student_ids = StudentCourse.where(course_id: @target_course_id).pluck(:student_id)
             #create the filtered list of students to display
-            @students = Student.where(course_id: @target_course_id)
+            @students = Student.where(id: @student_ids)
             if @selected_tag != ''
                 @students = @students.select {|s| s.tags == @selected_tag}
             end
+        else
+            @target_course_id = @course_ids
         end
         @student_records_hash = Hash[]
         for student in @students do
-            course = Course.where(id: student.course_id)
-            if !@student_records_hash[student.uin]
-                student_entry = StudentEntries.new
-                student_entry.initializeUsingStudentModel(student, course[0])
-                @student_records_hash[student.uin] = student_entry
-            else
-                student_entry = @student_records_hash[student.uin]
-                student_entry.records.append(student)
-                student_entry.semester_section.add(course[0].semester + " - " + course[0].section.to_s)
-                student_entry.course_semester.add(course[0].course_name + " - " + course[0].semester)
+            @student_courses = StudentCourse.where(student_id: student.id, course_id: @target_course_id)
+            for student_course in @student_courses
+                course = Course.where(id: student_course.course_id)
+                if !@student_records_hash[student.uin]
+                    student_entry = StudentEntries.new
+                    student_entry.initializeUsingStudentModel(student, course[0])
+                    @student_records_hash[student.uin] = student_entry
+                else
+                    student_entry = @student_records_hash[student.uin]
+                    student_entry.records.append(student)
+                    student_entry.semester_section.add(course[0].semester + " - " + course[0].section.to_s)
+                    student_entry.course_semester.add(course[0].course_name + " - " + course[0].semester)
+                end
             end
         end unless @students.nil?
         @students = @student_records_hash.values
@@ -72,12 +74,13 @@ class StudentsController < ApplicationController
 
     # GET /students/1/edit
     def edit
-        @all_student_course_entries= Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
+        @all_student_course_entries= StudentCourse.where(student_id: @student.id)
         @student_course_records_hash = Hash[]
-        for student_db_entry in @all_student_course_entries do
+        Rails.logger.info "Collected all 11 #{@all_student_course_entries.inspect}"
+        for student_course_db_entry in @all_student_course_entries do
             student_course_entry = StudentCourseEntry.new
-            student_course_entry.student_record = student_db_entry
-            @student_course_records_hash[student_db_entry.course_id] = student_course_entry
+            student_course_entry.student_record = student_course_db_entry
+            @student_course_records_hash[student_course_db_entry.course_id] = student_course_entry
         end
 
         @all_student_course_ids = @all_student_course_entries.pluck(:course_id)
@@ -102,6 +105,8 @@ class StudentsController < ApplicationController
         @student = Student.new(student_basic_params)
         respond_to do |format|
             if @student.save
+                @studentCourse = StudentCourse.new(student_id: @student.id, course_id: params[:course_id])
+                @studentCourse.save
                 format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
                 format.json { render :show, status: :created, location: @student }
             else
@@ -115,24 +120,12 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
       respond_to do |format|
-        if !params[:student][:final_grade].nil?
-            if @student.update(final_grade: params[:student][:final_grade])
-                format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
-                format.json { render :show, status: :ok, location: @student }
-            else
-                format.html { render :edit, status: :unprocessable_entity }
-                format.json { render json: @student.errors, status: :unprocessable_entity }
-            end
-        else
-            @student_records = Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
-            for student_course in @student_records
-                if !student_course.update(student_basic_params)
-                    format.html { render :edit, status: :unprocessable_entity }
-                    format.json { render json: @student.errors, status: :unprocessable_entity }
-                end
-            end
+        if @student.update(student_basic_params)
             format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
             format.json { render :show, status: :ok, location: @student }
+        else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @student.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -140,21 +133,14 @@ class StudentsController < ApplicationController
     #DELETE student/1
     #Removes student and all it's courses. Or remove course of a student.
     def destroy
-        if params[:type] == "all"
-            @student_records = Student.where(uin: Student.where(teacher: current_user.email, id: params[:id])[0].uin)
-            for student in @student_records
-                student.image.purge
-            end
-            @qroster_records = Qroster.where(student_id: @student_records.pluck(:id))
-            @qroster_records.destroy_all
-            @student_records.destroy_all
-        else
-            @student = Student.find(params[:id])
-            @qroster_records = Qroster.where(student_id: @student.id)
-            @qroster_records.destroy_all
-            @student.image.purge
-            @student.destroy
-        end
+        @student = Student.find_by(id: params[:id])
+        @student_course_records = StudentCourse.where(student_id: @student.id)
+        @student_course_records.destroy_all
+        @qroster_records = Qroster.where(student_id: @student.id)
+        @qroster_records.destroy_all
+        @student_course_records.destroy_all
+        @student.image.purge
+        @student.destroy
         redirect_to action: "index"
     end
 
@@ -162,10 +148,7 @@ class StudentsController < ApplicationController
         # Use callbacks to share common setup or constraints between actions.
         def set_student
             @student = Student.find_by(teacher: current_user.email, id: params[:id])
-            Rails.logger.info "Received info #{@student.inspect}"
-            if !@student.nil?
-                Rails.logger.info "Received info #{@student.inspect}"
-            else
+            if @student.nil?
                 respond_to do |format|
                     format.html { redirect_to students_url, notice: "Given student not found." }
                     format.json { head :no_content }
@@ -175,7 +158,6 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_basic_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image, :course_id).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
         end
-
 end

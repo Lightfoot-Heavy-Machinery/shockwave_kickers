@@ -68,7 +68,7 @@
             <% if course.nil?%>
             <% else %>
               <p><h4><%= link_to "#{course.course_name + "-" + course.section.to_s + "-" + course.semester}", course, :method => :get %></h4></p>
-              <p><b> # of Students:</b> <%= Student.where(course_id:course.id, teacher:@id).count %> </p>
+              <p><b> # of Students:</b> <%= StudentCourse.where(course_id:course.id).count %> </p>
               <% qCnt = Quiz.where(teacher:@id, course_id:course.id).count %>
               <p><b> # of Quizzes Taken:</b> <%= qCnt %> </p>
               <% if qCnt <= 0 %>
