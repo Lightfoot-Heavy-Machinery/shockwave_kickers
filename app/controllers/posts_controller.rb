@@ -59,6 +59,21 @@ class PostsController < ApplicationController
     end
   end
 
+  def file_name
+    @post = Post.find(params[:id])
+    send_data @post.file_contents, filename: @post.file_name
+  end
+
+  def file_size
+    @post = Post.find(params[:id])
+    send_data @post.file_contents, filename: @post.file_name, disposition: 'inline'
+  end
+
+  def created_at
+    @post = Post.find(params[:id])
+    send_data @post.file_contents, filename: @post.file_name, disposition: 'inline'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
@@ -67,7 +82,7 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :file)
+      params.require(:post).permit(:file)
     end
 
     def published?
