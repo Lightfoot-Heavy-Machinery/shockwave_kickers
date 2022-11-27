@@ -1,7 +1,13 @@
 <%= form_with url: '/posts', method: :get do |form| %>
 
   <div style = "text-align: center">
-    <strong class = "message">Drag and Drop OR Click "Save" to Upload</strong><br><br>
+    <strong class = "message">Drag and Drop OR Click "Save" to Upload</strong>
+    <% if params[:file] %>
+      <p class = "message">File Uploaded</p>
+    <% else %>
+      <p class = "message"></p>
+    <% end %>
+    
     <!--implement dropzone for submitting zip files-->
       <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>
   </div>

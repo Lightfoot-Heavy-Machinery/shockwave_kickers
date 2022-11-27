@@ -22,9 +22,11 @@ class PostsController < ApplicationController
   # POST /posts or /posts.json
   def create
     @post = Post.new(post_params)
+    @post.published_at = Time.zone.now if published?
 
     respond_to do |format|
       if @post.save
+        @post.update(published_at: Time.zone.now) if published?
         format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
         format.json { render :show, status: :created, location: @post }
       else
@@ -66,5 +68,9 @@ class PostsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def post_params
       params.require(:post).permit(:title, :file)
+    end
+
+    def published?
+      @post.published?
     end
 end
