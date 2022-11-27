@@ -69,9 +69,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_26_033238) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "completed", default: false
+    t.string "teacher"
     t.integer "current_streak", default: 0
     t.integer "validate_id"
-    t.string "teacher"
     t.boolean "targeted", default: false
   end
 

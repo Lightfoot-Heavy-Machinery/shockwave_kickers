@@ -134,17 +134,36 @@ class HomeController < ApplicationController
       bestInfo = "#{bestName} (#{best.score.round(2)}%)"
     end
 
-    worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC").first
+
+    logger.info("QID: #{qID} \n ATM: #{atm}")
+    tmp = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC")
+    tmp.each do |v|
+      logger.info("WE GOT: #{v.student_id} with W=#{v.wscore} and S=#{v.score}")
+    end
+    
+    
+    
+    worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC")
+    currS = -1
+    worstEntry = nil
+    worst.each do |qr|
+      if currS == -1
+        currS = qr.score
+      elsif qr.score <= currS
+        currS = qr.score
+        worstEntry = qr
+      end
+    end
     wStud = ""
     worstInfo = ""
-    if worst.nil?
+    if worstEntry.nil?
       wStud = "/"
       worstInfo = "No data available"
-    elsif worst.student_id.nil? || worst.score.nil?
+    elsif worstEntry.student_id.nil? || worstEntry.score.nil?
       wStud = "/"
       worstInfo = "No data available"
     else
-      name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
+      name = Student.where(id:worstEntry.student_id,teacher: @id).pick(:firstname, :lastname)
       if name.nil?
         worstName = "No data available"
       elsif name.length == 0
@@ -152,11 +171,11 @@ class HomeController < ApplicationController
       else
         worstName = name[0] + " " + name[1]
       end
-      wStud = Student.where(id:worst.student_id).first
+      wStud = Student.where(id:worstEntry.student_id).first
       if wStud.nil?
         wStud = "/"
       end
-      worstInfo = "#{worstName} (#{worst.score.round(2)}%)"
+      worstInfo = "#{worstName} (#{worstEntry.score.round(2)}%)"
     end
 
     
