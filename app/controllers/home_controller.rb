@@ -100,11 +100,7 @@ class HomeController < ApplicationController
       return nil
     end
 
-    qroster_records = Qroster.where(quiz_id:qID,correct_resp:true)
-    atm = 0
-    for qroster in qroster_records do
-        atm += qroster.attempts
-    end
+    atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
     if atm == 0
       return nil
     end
