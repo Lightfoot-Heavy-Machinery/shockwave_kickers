@@ -116,7 +116,9 @@ class HomeController < ApplicationController
       bestInfo = "No data available"
     else
       name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.length == 0
+      if name.nil?
+        bestName = "No data available"
+      elsif name.length == 0
         bestName = "No data available"
       else
         bestName = name[0] + " " + name[1]
@@ -127,34 +129,51 @@ class HomeController < ApplicationController
       end
       bestInfo = "#{bestName} (#{best.score.round(2)}%)"
     end
-
-
-    worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC").first
+    
+    worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC")
+    currS = -1
+    worstEntry = nil
+    worst.each do |qr|
+      if currS == -1
+        currS = qr.score
+        worstEntry = qr
+      elsif qr.score <= currS
+        currS = qr.score
+        worstEntry = qr
+      end
+    end
     wStud = ""
     worstInfo = ""
-    if worst.nil?
+    if worstEntry.nil?
       wStud = "/"
       worstInfo = "No data available"
-    elsif worst.student_id.nil? || worst.score.nil?
+    elsif worstEntry.student_id.nil? || worstEntry.score.nil?
       wStud = "/"
       worstInfo = "No data available"
     else
-      name = Student.where(id:worst.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.length == 0
+      name = Student.where(id:worstEntry.student_id,teacher: @id).pick(:firstname, :lastname)
+      if name.nil?
+        worstName = "No data available"
+      elsif name.length == 0
         worstName = "No data available"
       else
         worstName = name[0] + " " + name[1]
       end
-      wStud = Student.where(id:worst.student_id).first
+      wStud = Student.where(id:worstEntry.student_id).first
       if wStud.nil?
         wStud = "/"
       end
-      worstInfo = "#{worstName} (#{worst.score.round(2)}%)"
+      worstInfo = "#{worstName} (#{worstEntry.score.round(2)}%)"
     end
 
     
     ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
-    if ids.length == 0
+    if ids.nil?
+      hStud = "/"
+      lStud = "/"
+      highestInfo = "No data available"
+      lowestInfo = "No data available"
+    elsif ids.length == 0
       hStud = "/"
       lStud = "/"
       highestInfo = "No data available"
@@ -198,7 +217,9 @@ class HomeController < ApplicationController
           hStud = "/"
         else
           name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
-          if name.length == 0
+          if name.nil?
+            highestName = "No name available"
+          elsif name.length == 0
             highestName = "No name available"
           else
             highestName = name[0] + " " + name[1]

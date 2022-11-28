@@ -4,7 +4,7 @@ class QuizzesControllerTest < ActionDispatch::IntegrationTest
     setup do
         sign_in users(:userOne)
         @course = courses(:courseOne)
-        @student = students(:studentOneCourseOne)
+        @student = students(:studentOne)
         @quiz = quizzes(:quizOneCourseOne)
         @quizTargeted = quizzes(:quizTwoTargetedCourseOne)
         @quizCourseTwo = quizzes(:quizThreeCourseTwo)

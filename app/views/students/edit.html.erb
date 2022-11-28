@@ -48,7 +48,7 @@
                 <%= form_with(model: student_course_record.student_record) do |form| %>
                 <td>
                     <%# <strong>Grade:</strong> %>
-                    <%= form.text_field :final_grade %>
+                    <%= form.text_field :final_grade, pattern: '\b[ABCDFQSU]?\b', title: "Letter Grade should be single Letter. Possible grades: A,B,C,D,F,Q,S,U"%>
                 </td>
 
                 <td>
@@ -56,7 +56,7 @@
                 </td>
                 <% end %>
                 <td>
-                    <%= button_to "Delete this course of student", student_path(:id=>student_course_record.student_record.id, :type => "course"), method: :delete %>
+                    <%= button_to "Delete this course of student", student_course_path(:id=>student_course_record.student_record.id), method: :delete %>
                 </td>
             </tr>
         <% end %>
