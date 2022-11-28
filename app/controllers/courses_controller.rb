@@ -5,11 +5,10 @@ class CoursesController < ApplicationController
   # GET /courses or /courses.json
   def index
     @courses_db_result = Course.search(params[:search], current_user.email)
-    puts @courses_db_result
     #@courses_db_result = Course.where(teacher: current_user.email)
     @courses_comb_hash = Hash[]
     @courses_db_result.each do |c|
-        if !@courses_comb_hash[c.Student]
+        if !@courses_comb_hash[c.course_name]
             courseAllSections = CourseEntries.new
             courseAllSections.initializeUsingCourseModel(c)
             @courses_comb_hash[c.course_name] = courseAllSections 
