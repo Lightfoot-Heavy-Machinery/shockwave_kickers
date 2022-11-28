@@ -9,7 +9,7 @@ class CoursesController < ApplicationController
     #@courses_db_result = Course.where(teacher: current_user.email)
     @courses_comb_hash = Hash[]
     @courses_db_result.each do |c|
-        if !@courses_comb_hash[c.course_name]
+        if !@courses_comb_hash[c.Student]
             courseAllSections = CourseEntries.new
             courseAllSections.initializeUsingCourseModel(c)
             @courses_comb_hash[c.course_name] = courseAllSections 
