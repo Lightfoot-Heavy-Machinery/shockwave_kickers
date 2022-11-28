@@ -1,6 +1,6 @@
-<%= form_tag new_course_path, :method => "get" do%>
-  <%= text_field_tag :search, params[:search] %>
-  <%= submit_tag("Search", :name => nil) %>
+<%= form_tag('/courses', method: :get) do %>
+  <%= text_field_tag :search, params[:search], placeholder: "Search by Name" %>
+  <%= submit_tag 'Search', :name => nil %>
 <% end %>
 
 <div id="coursesDiv">
