@@ -3,7 +3,13 @@ class CoursesController < ApplicationController
   before_action :set_course, only: %i[ show edit update destroy ]
 
   def getStats  
-    qID = Quiz.where(teacher:current_user.email, course_id: @target_course_id.pluck(:id)).pluck(:id)
+    if @target_course_id.is_a?(ActiveRecord::Base)
+      qID = Quiz.where(teacher:current_user.email, course_id: @target_course_id.pluck(:id)).pluck(:id)
+    elsif @target_course_id.is_a?(Array)
+      qID = Quiz.where(teacher:current_user.email, course_id: @target_course_id).pluck(:id)
+    else
+      qID = Quiz.where(teacher:current_user.email, course_id: @all_course_ids).pluck(:id)
+    end
     atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
     
     if qID.length == 0 || atm == 0
