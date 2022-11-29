@@ -2,6 +2,110 @@ class CoursesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_course, only: %i[ show edit update destroy ]
 
+  def getStats  
+    qID = Quiz.where(teacher:current_user.email, course_id: @target_course_id.pluck(:id)).pluck(:id)
+    atm = Qroster.where(quiz_id:qID,correct_resp:true).count(:attempts)
+    
+    if qID.length == 0 || atm == 0
+      avg = "No quizzes taken!"
+      bestInfo = "No quizzes taken!"
+      worstInfo = "No quizzes taken!"
+    else
+      avg = 0
+      cnt = 0
+
+      worst = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore ASC")
+      currS = -1
+      worstEntry = nil
+      worst.each do |qr|
+        avg = avg + qr.score
+        cnt = cnt + 1
+
+        if currS == -1
+          currS = qr.score
+          worstEntry = qr
+        elsif qr.score <= currS
+          currS = qr.score
+          worstEntry = qr
+        end
+      end
+      wStud = ""
+      worstInfo = ""
+
+      unquizzed = Set.new
+      @student_ids.each do |v|
+        if worst.where(student_id: v).first.nil?
+          unquizzed.add(v)
+        end
+      end
+      if unquizzed.length > 1
+        worstInfo = "#{unquizzed.length} unquizzed students"
+      elsif unquizzed.length == 1
+        name = Student.where(id:unquizzed.to_a[0],teacher: current_user.email).pick(:firstname, :lastname)
+        if name.nil?
+          worstName = "No data available"
+        elsif name.length == 0
+          worstName = "No data available"
+        else
+          worstName = name[0] + " " + name[1]
+        end
+        worstInfo = "#{worstName} (unquizzed)"
+      else
+        if worstEntry.nil?
+          wStud = "/"
+          worstInfo = "No data available"
+        elsif worstEntry.student_id.nil? || worstEntry.score.nil?
+          wStud = "/"
+          worstInfo = "No data available"
+        else
+          name = Student.where(id:worstEntry.student_id,teacher: current_user.email).pick(:firstname, :lastname)
+          if name.nil?
+            worstName = "No data available"
+          elsif name.length == 0
+            worstName = "No data available"
+          else
+            worstName = name[0] + " " + name[1]
+          end
+          wStud = Student.where(id:worstEntry.student_id).first
+          if wStud.nil?
+            wStud = "/"
+          end
+          worstInfo = "#{worstName} (#{worstEntry.score.round(2)}%)"
+        end
+      end
+
+      avg = ((avg.to_f / cnt.to_f).round(2)).to_s + "%"
+
+      best = worst.order("wscore DESC").first
+      bStud = ""
+      bestInfo = ""
+      if best.nil?
+        bStud = "/"
+        bestInfo = "No data available"
+      elsif best.student_id.nil? || best.score.nil?
+        bStud = "/"
+        bestInfo = "No data available"
+      else
+        name = Student.where(id:best.student_id,teacher: current_user.email).pick(:firstname, :lastname)
+        if name.nil?
+          bestName = "No data available"
+        elsif name.length == 0
+          bestName = "No data available"
+        else
+          bestName = name[0] + " " + name[1]
+        end
+        bStud = Student.where(id:best.student_id).first
+        if bStud.nil?
+          bStud = "/"
+        end
+        bestInfo = "#{bestName} (#{best.score.round(2)}%)"
+      end
+    end
+
+    return [@student_records.size, avg, bestInfo, worstInfo]
+  end
+  helper_method :getStats
+
   # GET /courses or /courses.json
   def index
     @courses_db_result = Course.where(teacher: current_user.email)

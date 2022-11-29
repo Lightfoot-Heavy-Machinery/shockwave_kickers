@@ -95,7 +95,6 @@ class HomeController < ApplicationController
 
   def studentInfo
     qID = Quiz.where(teacher:@id).pluck(:id)
-    logger.info(qID)
     if qID.length == 0
       return nil
     end
