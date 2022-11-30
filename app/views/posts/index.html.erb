@@ -1,28 +1,3 @@
-<p style="color: green"><%= notice %></p>
-
 <div>
   <%= render 'form' %>
 </div>
-
-<!--Put uploaded file name from form in a striped table below-->
-<% if @posts %>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>File Name</th>
-        <th>Students Added</th> <!--Number of lines in csv minus 1-->
-        <th>Time Uploaded</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
-    <!--show the posted files in the table-->
-    <tbody>
-      <% @posts.each do |post| %>
-        <tr>
-          <td><%= post.file_name %></td>
-          <td><%= post.file_size %></td>
-          <td><%= post.created_at %></td>
-        </tr>
-      <% end %>
-  </table>
-<% end %>

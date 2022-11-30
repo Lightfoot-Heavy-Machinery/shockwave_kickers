@@ -1,5 +1,8 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
+
+  #QUESTION ON LINE 101ish
+  #why doesn't it push kunal? (It does not matter where he is in the array)
 
   # GET /posts or /posts.json
   def index
@@ -21,16 +24,10 @@ class PostsController < ApplicationController
 
   # POST /posts or /posts.json
   def create
-    require 'zip'
-    require 'csv'
-    require 'json'
-
     @post = Post.new(post_params)
-    @post.published_at = Time.zone.now if published?
 
     respond_to do |format|
       if @post.save
-        @post.update(published_at: Time.zone.now) if published?
         format.html { redirect_to post_url(@post), notice: "Post was successfully created." }
         format.json { render :show, status: :created, location: @post }
       else
@@ -38,36 +35,6 @@ class PostsController < ApplicationController
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
-    
-    # Extract the zip file
-    Zip::File.open(@post.file.path) do |zip_file|
-      # Handle entries one by one
-      zip_file.each do |entry|
-        # Extract to file/directory/symlink
-        puts "Extracting #{entry.name}"
-        entry.extract("app/resources/#{entry.name}")
-        #if the file is a csv file, make a list of the names of the students in alphabetical order
-        if entry.name.include? ".csv"
-            CSV.foreach("app/resources/#{entry.name}", :headers => true) do |record|
-                @student_names = Array.new
-                @student_names.push(record["FirstName"].strip() + " " + record["LastName"].strip())
-            end
-            #for every png, jpg, or jpeg file in the zip file, add the student name to the file name
-            Dir.glob("app/resources/*.jpeg").each do |file|
-                @student_names.each do |name|
-                    if file.include? name
-                        File.rename(file, file.gsub(name, name.gsub(" ", "_")))
-                    end
-                end
-            end
-        end
-        #if the file is not a csv or image file, delete it
-        if ((!entry.name.include? ".csv") || (!entry.name.include? ".jpeg") || (!entry.name.include? ".jpg") || (!entry.name.include? ".png"))
-          File.delete("app/resources/#{entry.name}")
-        end
-      end
-    end
-
   end
 
   # PATCH/PUT /posts/1 or /posts/1.json
@@ -93,18 +60,103 @@ class PostsController < ApplicationController
     end
   end
 
+  #THIS IS ALL DONE IN UPLOAD_CONTROLLER, I JUST NEED TO COPY AND CALL IT
+  def parse
+    require 'zip'
+    require 'csv'
+    require 'securerandom'
+
+    course_ids = Course.where("course_name like ?", "%#{"CSCE 606"}%").pluck(:id)
+    @students = Student.where(course_id: course_ids)
+    uuid = SecureRandom.uuid
+    images = []
+
+    @students.each do |s|
+        s.image.purge_later
+        s.destroy
+    end
+
+    #when a zip file is uploaded, unzip it
+    Zip::File.open(params[:file]) do |zip_file|
+      #if the zip file contains a csv file, parse it
+
+      zip_file.each do |entry|
+        if ((entry.name.include? ".jpeg") || (entry.name.include? ".jpg") || (entry.name.include? ".png"))
+          images.push(entry.name)
+        elsif (entry.name.include? ".csv")
+          #sort the csv file rows by FirstName and LastName alphabetically
+          csv = CSV.parse(entry.get_input_stream.read, headers: true).sort_by { |row| [row['FirstName'], row['LastName']] }
+
+          #move the last element in the image array to the front
+          images.unshift(images.pop)
+          puts images[0]
+
+          #if the number of rows in the csv file is equal to the number of images in the zip file, then proceed. Otherwise, throw an error
+          #TODO Double-check second conditional? IT IS NOT ENTERING THE IF STATEMENT
+          if (csv.length == images.length)
+            #for each image in the zip file, if the image name contains a number, rename it to firstname_lastname.jpeg in the current row
+            images.each do |image|
+              #get the first name and last name from the current row
+              first_name = csv[images.index(image)]['FirstName']
+              last_name = csv[images.index(image)]['LastName']
+              #ASK KUNAL WHY THIS COMPLAINS
+              #zip_file.rename(image, first_name + "_" + last_name + ".jpeg")
+            end
+
+            #for every row in the sorted csv file, post a new student to the database
+            csv.each do |row|
+              #if row contains FirstName, LastName, and Email, then proceed
+              if ((row['FirstName']) && (row['LastName']) && (row['Email']) && (row['UIN']) && (row['Section']) && (row['Course']) && (row['Semester']) && (row['Classification']) && (row['Major']) && (row['Notes']))
+                puts(row)
+                @course = Course.find_or_create_by(course_name: row["Course"].strip(), teacher: current_user.email, section: row["Section"].strip(), semester: row["Semester"].strip())
+                @student = Student.find_or_create_by(
+                  firstname: row["FirstName"].strip(),
+                  lastname: row["LastName"].strip(),
+                  uin: row["UIN"].strip(),
+                  email: row["Email"].strip(),
+                  classification: row["Classification"].strip(),
+                  major: row["Major"].strip(),
+                  notes: row["Notes"].strip(),  course_id: @course.id,
+                  teacher: current_user.email
+                )
+
+                #if the student already exists, update their information
+                if @student.update(
+                  firstname: row["FirstName"].strip(),
+                  lastname: row["LastName"].strip(),
+                  uin: row["UIN"].strip(),
+                  email: row["Email"].strip(),
+                  classification: row["Classification"].strip(),
+                  major: row["Major"].strip(),
+                  notes: row["Notes"].strip(),
+                  course_id: @course.id,
+                  teacher: current_user.email
+                )
+                end
+              else
+                redirect_to posts_index_path, notice: "CSV column contents are different than expected. Please check the format of your CSV file."
+                break
+              end
+            end
+            redirect_to posts_index_path, notice: "Upload successful!"
+          elsif (csv.length != images.length)
+            redirect_to posts_index_path, notice: "Number of images does not match number of students"
+          else
+            redirect_to posts_index_path, notice: "Upload unsuccessful- unforeseen error"
+          end
+        end
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
-      @post = Post.find(params[:id])
+      @post = Post.find(params[:file])
     end
 
     # Only allow a list of trusted parameters through.
     def post_params
       params.require(:post).permit(:file)
-    end
-
-    def published?
-      @post.published?
     end
 end
