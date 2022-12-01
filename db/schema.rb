@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_27_021408) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_26_033238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -81,15 +81,21 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_021408) do
     t.boolean "targeted", default: false
   end
 
+  create_table "student_courses", force: :cascade do |t|
+    t.integer "student_id"
+    t.integer "course_id"
+    t.string "final_grade", default: ""
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "firstname", null: false
     t.string "lastname", null: false
     t.string "uin", null: false
-    t.integer "course_id", null: false
     t.string "email", null: false
     t.string "classification", null: false
     t.string "major", null: false
-    t.string "final_grade", default: ""
     t.text "notes"
     t.text "tags"
     t.datetime "created_at", null: false
@@ -130,6 +136,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_27_021408) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "courses", "users", column: "teacher", primary_key: "email"
-  add_foreign_key "students", "courses"
+  add_foreign_key "student_courses", "courses"
+  add_foreign_key "student_courses", "students"
   add_foreign_key "students", "users", column: "teacher", primary_key: "email"
 end

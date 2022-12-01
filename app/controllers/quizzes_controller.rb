@@ -86,13 +86,13 @@ class QuizzesController < ApplicationController
 
           xCnt = 15 - cnt
 
-          extra = Student.where(teacher: current_user.email, course_id:@quiz.course_id).where.not(id:topMissed).shuffle.slice(0,xCnt)
+          extra = Student.where(teacher: current_user.email, id: StudentCourse.where(course_id:@quiz.course_id).pluck(:student_id)).where.not(id:topMissed).shuffle.slice(0,xCnt)
           extra.each do |stud|
             Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
           end
         else
-          Student.where(teacher: current_user.email, course_id:@quiz.course_id).each do |stud|
-            Qroster.create(quiz_id:@quiz.id,student_id:stud.id)
+          StudentCourse.where(course_id:@quiz.course_id).each do |student_course|
+            Qroster.create(quiz_id:@quiz.id,student_id:student_course.student_id)
           end
         end
       else
@@ -130,7 +130,7 @@ class QuizzesController < ApplicationController
       @quiz.validate_id = @random_stud.student_id
       @quiz.save
 
-      @stud_obj = Student.where(id:@random_stud.student_id,teacher: current_user.email, course_id:@quiz.course_id).first
+      @stud_obj = Student.where(id:@random_stud.student_id,teacher: current_user.email).first
       @choices = Qroster.where(quiz_id:@quiz.id).where.not(student_id:@random_stud.student_id).pluck(:student_id)
       @choices = @choices.shuffle.slice(0,3)
       @choices.append(@random_stud.student_id)

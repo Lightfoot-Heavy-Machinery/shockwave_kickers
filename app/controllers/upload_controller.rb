@@ -53,8 +53,7 @@ class UploadController < ApplicationController
                   classification: row["Classification"].strip(),
                   major: row["Major"].strip(),
                   notes: row["Notes"].strip(),
-                  teacher: current_user.email,
-                  course_id: @course.id
+                  teacher: current_user.email
               )
               @student.save
             else
@@ -66,10 +65,12 @@ class UploadController < ApplicationController
                   classification: row["Classification"].strip(),
                   major: row["Major"].strip(),
                   notes: row["Notes"].strip(),
-                  teacher: current_user.email,
-                  course_id: @course.id
+                  teacher: current_user.email
               )
             end
+
+            StudentCourse.find_or_create_by(course_id: @course.id, student_id:@student.id)
+    
             tempfile = Tempfile.new(File.basename(image.name))
             tempfile.binmode
             tempfile.write(image.get_input_stream.read)

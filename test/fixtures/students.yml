@@ -1,6 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-studentOneCourseOne:
+studentOne:
   id: 1
   firstname: MyString
   lastname: MyString
@@ -10,22 +10,9 @@ studentOneCourseOne:
   major: MyString
   notes: MyText
   teacher: test@gmail.com
-  course_id: 1
 
-studentOneCourseTwo:
+studentTwo:
   id: 2
-  firstname: MyString
-  lastname: MyString
-  uin: 1
-  email: MyString
-  classification: MyString
-  major: MyString
-  notes: MyText
-  teacher: test@gmail.com
-  course_id: 2
-
-studentTwoCourseTwo:
-  id: 3
   firstname: MyString
   lastname: MyString
   uin: 2
@@ -34,7 +21,6 @@ studentTwoCourseTwo:
   major: MyString
   notes: MyText
   teacher: test@gmail.com
-  course_id: 2
 
 studentFourNilName:
   id: 4
@@ -46,7 +32,6 @@ studentFourNilName:
   major: MyString
   notes: MyText
   teacher: test@gmail.com
-  course_id: 6
 
 studentFive:
   id: 5
@@ -58,4 +43,3 @@ studentFive:
   major: MyString
   notes: MyText
   teacher: test@gmail.com
-  course_id: 9

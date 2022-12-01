@@ -8,12 +8,12 @@ class CoursesController < ApplicationController
     #@courses_db_result = Course.where(teacher: current_user.email)
     @courses_comb_hash = Hash[]
     @courses_db_result.each do |c|
-        if !@courses_comb_hash[c.course_name]
+        if !@courses_comb_hash[c.course_name.strip]
             courseAllSections = CourseEntries.new
             courseAllSections.initializeUsingCourseModel(c)
-            @courses_comb_hash[c.course_name] = courseAllSections 
+            @courses_comb_hash[c.course_name.strip] = courseAllSections
         else
-            course = @courses_comb_hash[c.course_name]
+            course = @courses_comb_hash[c.course_name.strip]
             course.sections.add(c.section)
             course.semesters.add(c.semester)
             course.records.add(c)
@@ -31,7 +31,8 @@ class CoursesController < ApplicationController
       @all_course_ids.append(c.id)
     end
     #get all students currently and previously enrolled in this course
-    @student_records = Student.where(course_id: @all_course_ids, teacher: current_user.email)
+    @student_ids = StudentCourse.where(course_id: @all_course_ids).pluck(:student_id)
+    @student_records = Student.where(id: @student_ids)
     #get all students tags for those currently and previously enrolled in this course
     @tags = Set[]
     for student in @student_records do 
@@ -62,15 +63,18 @@ class CoursesController < ApplicationController
         else
             @target_course_id = Course.where(id: @all_course_ids,semester: @selected_semester, section: @selected_section)
         end
+
+        @student_ids = StudentCourse.where(course_id: @target_course_id.pluck(:id)).pluck(:student_id)
         #create the filtered list of students to display
         if @selected_tag == ''
-            @student_records = Student.where(course_id: @target_course_id, teacher: current_user.email)
+            @student_records = Student.where(id: @student_ids, teacher: current_user.email)
         else
-            @student_records = Student.where(course_id: @target_course_id, tags: @selected_tag, teacher: current_user.email)
+            @student_records = Student.where(id: @student_ids, tags: @selected_tag, teacher: current_user.email)
         end
     #if the user doesnt select any dropdown menu filters, display all students
     else
         #get all the current and previous semesters and sections of this course
+        @target_course_id = @all_course_ids
         @semesters = Set[]
         @sections = Set[]
         for record in Course.all do
@@ -83,16 +87,19 @@ class CoursesController < ApplicationController
 
     @student_records_hash = Hash[]
     for student in @student_records do
-        course = Course.where(id: student.course_id)
-        if !@student_records_hash[student.uin]
-            student_entry = StudentEntries.new
-            student_entry.initializeUsingStudentModel(student, course[0])
-            @student_records_hash[student.uin] = student_entry
-        else
-            student_entry = @student_records_hash[student.uin]
-            student_entry.records.append(student)
-            student_entry.semester_section.add(course[0].semester + " - " + course[0].section.to_s)
-            student_entry.course_semester.add(course[0].course_name + " - " + course[0].semester)
+        student_courses = StudentCourse.where(student_id: student.id, course_id: @target_course_id)
+        for student_course in student_courses do
+            course = Course.find_by(id: student_course.course_id)
+            if !@student_records_hash[student.uin]
+                student_entry = StudentEntries.new
+                student_entry.initializeUsingStudentModel(student, course)
+                @student_records_hash[student.uin] = student_entry
+            else
+                student_entry = @student_records_hash[student.uin]
+                student_entry.records.append(student)
+                student_entry.semester_section.add(course.semester + " - " + course.section.to_s)
+                student_entry.course_semester.add(course.course_name + " - " + course.semester)
+            end
         end
     end unless @student_records.nil?
     @student_records = @student_records_hash.values
@@ -138,7 +145,7 @@ class CoursesController < ApplicationController
 
   # DELETE /courses/1 or /courses/1.json
   def destroy
-    @student_records = Student.where(course_id: params[:id])
+    @student_records = StudentCourse.where(course_id: params[:id])
     @student_records.destroy_all
     @quiz_records = Quiz.where(course_id: params[:id])
     @qroster_records = Qroster.where(quiz_id: @quiz_records.pluck(:id))
