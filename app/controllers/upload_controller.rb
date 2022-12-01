@@ -30,7 +30,6 @@ class UploadController < ApplicationController
       end
   
       images.unshift(images.pop)
-      puts images[0]
   
       #if the number of rows in the csv file is equal to the number of images in the zip file, then proceed. Otherwise, throw an error
       if ((csv.length != 0) && (csv.length == images.length))
