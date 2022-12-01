@@ -7,15 +7,15 @@ class StudentsController < ApplicationController
         
         @emails = Set[]
 
-		@tags = Hash[]
+		@tags = Set[]
         @courses_taken = Hash[]
         @semesters_taken = Hash[]
-        for student in @students do 
-			if StudentsTag.where(student_id: student.id)
-				for tag in StudentsTag.where(student_id: student.id)
-					tag_id = tag.id
+        for student in @students do
+			if StudentsTag.where(student_id: student.id, user_id: current_user.id)
+				for tag_assoc in StudentsTag.where(student_id: student.id, user_id: current_user.id)
+					tag_id = tag_assoc.tag_id
 					  if Tag.where(id: tag_id).length != 0
-						@tags[student.id] = Tag.where(id: tag_id)[0].tag_name
+						@tags.add(Tag.where(id: tag_id)[0].tag_name)
 					  end
 				end
 			end
@@ -51,7 +51,9 @@ class StudentsController < ApplicationController
             #create the filtered list of students to display
             @students = Student.where(id: @student_ids)
             if @selected_tag != ''
-                @students = @students.select {|s| s.tags == @selected_tag}
+				selected_tag_id = Tag.find_by(tag_name: @selected_tag).id
+				all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, user_id: current_user.id)
+                @students = @students.select {|s| all_tag_assocs.any? { |assoc| s.id == assoc.student_id}}
             end
         else
             @target_course_id = @course_ids
