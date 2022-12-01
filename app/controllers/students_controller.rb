@@ -133,8 +133,11 @@ class StudentsController < ApplicationController
 	  tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
 	  # Should only have one tag per name, so 0th index is OK
 	  tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+	  puts("##################################################################")
+	  puts(tag_ids)
+	  puts("##################################################################")
 
-	  if StudentsTag.create(tag_id: tag_ids, student_id: params[:id], user_id: current_user.id)
+	  if StudentsTag.create(tag_id: tag_ids[0], student_id: params[:id], user_id: current_user.id)
 		success = true
 	  end
 
