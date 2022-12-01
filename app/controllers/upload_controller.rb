@@ -1,48 +1,90 @@
 class UploadController < ApplicationController
     before_action :authenticate_user!
     def index
-        require 'csv'
-        require 'json'
-        require 'securerandom'
-
-        image_path_default = "./app/resources/pictures/test.jpeg"
-        image_path = "./app/resources/pictures/"
-        image_ext = ".jpeg"
-
-        course_ids = Course.where("course_name like ?", "%#{"CSCE 606"}%").pluck(:id)
-        @students = Student.where(course_id: course_ids)
-        @students.each do |s|
-            s.image.purge_later
-            s.destroy
+    end
+  
+    #THIS IS ALL DONE IN UPLOAD_CONTROLLER, I JUST NEED TO COPY AND CALL IT
+    def parse
+      require 'zip'
+      require 'csv'
+      require 'securerandom'
+  
+      images = []
+      csv = []
+  
+      #when a zip file is uploaded, unzip it
+      Zip::File.open(params[:file]) do |zip_file|
+        #if the zip file contains a csv file, parse it
+  
+        zip_file.each do |entry|
+          if ((entry.name.include? ".jpeg") || (entry.name.include? ".jpg") || (entry.name.include? ".png"))
+            images.push(entry)
+          elsif (entry.name.include? ".csv")
+            #sort the csv file rows by FirstName and LastName alphabetically
+            csv = CSV.parse(entry.get_input_stream.read, headers: true).sort_by { |row| [row['FirstName'], row['LastName']] }
+            Rails.logger.info "Collected all student courses #{csv.inspect}"
+  
+            #move the last element in the image array to the front
+          end 
         end
-
-        CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
-            uuid = SecureRandom.uuid
-
-            @course = Course.find_or_create_by(course_name: record["Course"].strip(), teacher: current_user.email, section: record["Section"].strip(), semester: record["Semester"].strip())
-            @student = Student.find_or_create_by(
-                        firstname:record["FirstName"].strip(),
-                        lastname:record["LastName"].strip(),
-                        uin: record["UIN"].strip(),
-                        email: record["Email"].strip(),
-                        classification: record["Classification"].strip(),
-                        major: record["Major"].strip(),
-                        notes: record["Notes"].strip(),
-                        course_id: @course.id,
-                        teacher: current_user.email
-                        )
-
-            file_path = image_path + record["FirstName"] + image_ext
-            if File.exist?(file_path)
-                @student.image.attach(io: File.open(file_path, 'rb'), filename: uuid)
+      end
+  
+      images.unshift(images.pop)
+      puts images[0]
+  
+      #if the number of rows in the csv file is equal to the number of images in the zip file, then proceed. Otherwise, throw an error
+      if ((csv.length != 0) && (csv.length == images.length))
+        csv.zip(images).each do |row, image|
+          uuid = SecureRandom.uuid
+  
+          #if row contains all the necessary columns, keep going.
+          if ((row['FirstName']) && (row['LastName']) && (row['Email']) && (row['UIN']) && (row['Section']) && (row['Course']) && (row['Semester']) && (row['Classification']) && (row['Major']) && (row['Notes']))
+            #puts(row)
+            #Rails.logger.info "Collected all student courses #{@student.inspect}"
+            @course = Course.find_or_create_by(course_name: row["Course"].strip(), teacher: current_user.email, section: row["Section"].strip(), semester: row["Semester"].strip())
+            @student = Student.where(uin: row["UIN"].strip(), course_id: row["Course"], teacher: current_user.email).first
+            if !@student
+              Rails.logger.info "here all student courses #{@student.inspect}"
+              @student = Student.new(
+                  firstname:row["FirstName"].strip(),
+                  lastname:row["LastName"].strip(),
+                  uin: row["UIN"].strip(),
+                  email: row["Email"].strip(),
+                  classification: row["Classification"].strip(),
+                  major: row["Major"].strip(),
+                  notes: row["Notes"].strip(),
+                  teacher: current_user.email,
+                  course_id: @course.id
+              )
+              @student.save
             else
-                @student.image.attach(io: File.open(image_path_default, 'rb'), filename: uuid)
+              @student.update(
+                  firstname:row["FirstName"].strip(),
+                  lastname:row["LastName"].strip(),
+                  uin: row["UIN"].strip(),
+                  email: row["Email"].strip(),
+                  classification: row["Classification"].strip(),
+                  major: row["Major"].strip(),
+                  notes: row["Notes"].strip(),
+                  teacher: current_user.email,
+                  course_id: @course.id
+              )
             end
-
-            if !@student.save
-                puts("failed to save student")
-            end
-
+            tempfile = Tempfile.new(File.basename(image.name))
+            tempfile.binmode
+            tempfile.write(image.get_input_stream.read)
+            @student.image.attach(io: File.open(tempfile), filename: uuid)
+            tempfile.close
+          else
+            redirect_to upload_index_path, notice: "CSV column contents are different than expected. Please check the format of your CSV file."
+            break
+          end
         end
+        redirect_to courses_url, notice: "Upload successful!"
+      elsif (csv.length != images.length)
+        redirect_to upload_index_path, notice: "Number of images does not match number of students"
+      else
+        redirect_to upload_index_path, notice: "Upload unsuccessful- unforeseen error"
+      end
     end
 end
