@@ -14,7 +14,9 @@ class StudentsController < ApplicationController
 			if StudentsTag.where(student_id: student.id)
 				for tag in StudentsTag.where(student_id: student.id)
 					tag_id = tag.id
-					@tags[student.id] = Tag.where(id: tag_id).tag_name
+					  if Tag.where(id: tag_id).length != 0
+						@tags[student.id] = Tag.where(id: tag_id)[0].tag_name
+					  end
 				end
 			end
 		end unless @students.nil?
@@ -128,21 +130,21 @@ class StudentsController < ApplicationController
 
 	  current_tags = StudentsTag.where(student_id: params[:id], user_id: current_user.id)
 	  current_tags.delete_all
-	  success = false
+	  tags_success = false
 	  # Remove any empty strings in the returned array
 	  tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
 	  # Should only have one tag per name, so 0th index is OK
 	  tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
-	  puts("##################################################################")
-	  puts(tag_ids)
-	  puts("##################################################################")
 
-	  if StudentsTag.create(tag_id: tag_ids[0], student_id: params[:id], user_id: current_user.id)
-		success = true
+	  tag_ids.each do |element|
+		if !StudentsTag.create(tag_id: element, student_id: params[:id], user_id: current_user.id)
+			raise "Student tags failed to update for some reason."
+		end
 	  end
+	  tags_success = true
 
       respond_to do |format|
-        if @student.update(student_basic_params)
+        if @student.update(student_basic_params) && tags_success
             format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
             format.json { render :show, status: :ok, location: @student }
         else

@@ -44,7 +44,7 @@
       <div class="row">
         <h3>Tags:</h3>
 
-		<% if StudentsTag.where(student_id: @student.id).nil? %>
+		<% if StudentsTag.where(student_id: @student.id).length == 0 %>
 			<p>None</p>
 		<% else %>
 			<% StudentsTag.where(student_id: @student.id).each do |association| %>

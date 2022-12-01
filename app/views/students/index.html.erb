@@ -62,7 +62,13 @@
             <%= student.course_semester.to_a.join(", ") %>
           </td>
           <td>
-            <%= @tags[student.records[0].id] %>
+			<% if StudentsTag.where(student_id: student.records[0].id).length == 0 %>
+				None
+			<% else %>
+				<% StudentsTag.where(student_id: student.records[0].id).each do |association| %>
+					<%= Tag.where(id: association.tag_id)[0].tag_name %>
+				<% end %>
+			<% end %>
           </td>
           <td>
             <%= button_to "Show this student", student.records[0], :method => :get %>
