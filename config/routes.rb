@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   resources :courses
   namespace :courses do
-    resources :history, only: [:show, :index]
+    resources :history, only: [:show]
   end
 
   resources :student_courses
