@@ -6,6 +6,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     @course = courses(:courseOne)
     @course2 = courses(:courseOneSemesterTwo)
     @student = students(:studentOne)
+	@tag = tags(:tagOne)
 
   end
 
@@ -96,12 +97,12 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should successfully render partial with only tags filter" do
-      get course_url(@course), params: {selected_semester: '', selected_section: '', selected_tag: @student.tags}
+      get course_url(@course), params: {selected_semester: '', selected_section: '', selected_tag: @tag.tag_name}
       assert_response :success
   end
 
   test "should successfully render partial with all filters set" do
-      get course_url(@course), params: {selected_semester: @course.semester, selected_section: @course.section, selected_tag: @student.tags}
+      get course_url(@course), params: {selected_semester: @course.semester, selected_section: @course.section, selected_tag: @tag.tag_name}
       assert_response :success
   end
 

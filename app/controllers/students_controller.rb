@@ -11,8 +11,8 @@ class StudentsController < ApplicationController
         @courses_taken = Hash[]
         @semesters_taken = Hash[]
         for student in @students do
-			if StudentsTag.where(student_id: student.id, user_id: current_user.id)
-				for tag_assoc in StudentsTag.where(student_id: student.id, user_id: current_user.id)
+			if StudentsTag.where(student_id: student.id, teacher: current_user.email)
+				for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
 					tag_id = tag_assoc.tag_id
 					  if Tag.where(id: tag_id).length != 0
 						@tags.add(Tag.where(id: tag_id)[0].tag_name)
@@ -51,8 +51,8 @@ class StudentsController < ApplicationController
             #create the filtered list of students to display
             @students = Student.where(id: @student_ids)
             if @selected_tag != ''
-				selected_tag_id = Tag.find_by(tag_name: @selected_tag).id
-				all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, user_id: current_user.id)
+				selected_tag_id = Tag.where(tag_name: @selected_tag, teacher: current_user.email).pluck(:id)
+				all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, teacher: current_user.email)
                 @students = @students.select {|s| all_tag_assocs.any? { |assoc| s.id == assoc.student_id}}
             end
         else
@@ -130,18 +130,24 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
 
-	  current_tags = StudentsTag.where(student_id: params[:id], user_id: current_user.id)
+	  current_tags = StudentsTag.where(student_id: params[:id], teacher: current_user.email)
 	  current_tags.delete_all
 	  tags_success = false
 	  # Remove any empty strings in the returned array
-	  tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
-	  # Should only have one tag per name, so 0th index is OK
-	  tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+	  if !params[:student][:tags].nil?
+		  tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
+		  tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
 
-	  tag_ids.each do |element|
-		if !StudentsTag.create(tag_id: element, student_id: params[:id], user_id: current_user.id)
-			raise "Student tags failed to update for some reason."
-		end
+		  tag_ids.each do |element|
+			if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
+				raise "Student tags failed to update for some reason."
+			end
+		  end
+	  end
+
+	  if !params[:student][:create_tag].nil?
+		new_tag = Tag.create!(tag_name: params[:student][:create_tag], teacher: current_user.email)
+		StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
 	  end
 	  tags_success = true
 
@@ -188,6 +194,6 @@ class StudentsController < ApplicationController
         end
 
 		def tags_param
-			params.require(:student).permit(:tags).with_defaults(teacher: current_user.email)
+			params.require(:student).permit(:tags, :create_tag).with_defaults(teacher: current_user.email)
 		end
 end

@@ -7,6 +7,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     @studentOneCourseOne = student_courses(:studentOneCourseOne)
     @studentOneCourseTwo = student_courses(:studentOneCourseTwo)
     @course = courses(:courseOne)
+	@tag = tags(:tagOne)
   end
 
   test "should get index" do
@@ -101,7 +102,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should successfully render partial with only tags filter" do
-      get students_url, params: {selected_semester: '', selected_course: '', selected_tag: @student.tags}
+      get students_url, params: {selected_semester: '', selected_course: '', selected_tag: @tag.tag_name}
       assert_response :success
   end
 
