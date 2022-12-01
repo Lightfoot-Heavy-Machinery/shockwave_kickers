@@ -33,9 +33,11 @@ class CoursesController < ApplicationController
     @student_ids = StudentCourse.where(course_id: @all_course_ids).pluck(:student_id)
     @student_records = Student.where(id: @student_ids)
     #get all students tags for those currently and previously enrolled in this course
-    @tags = Set[]
+    @tags = Hash[]
     for student in @student_records do 
-        @tags.add(student.tags)
+		if StudentsTag.where(student_id: student.id)
+			@tags[student_id] = students_tags.where(student_id: student.id)
+		end
     end unless @student_records.nil?
     #get all the current and previous semesters and sections of this course
     @semesters = Set[]

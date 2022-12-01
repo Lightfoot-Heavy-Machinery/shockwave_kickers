@@ -43,7 +43,14 @@
       </div>
       <div class="row">
         <h3>Tags:</h3>
-        <p><%= @student.tags %></p>
+        <p>
+
+			<% if @tags.nil? || @tags[params[:id]].nil? %>
+				None
+			<% else %>
+				<%= @tags[params[:id]] %>
+			<% end %>
+		</p>
       </div>
     </div>
 

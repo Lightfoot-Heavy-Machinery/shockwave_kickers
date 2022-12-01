@@ -53,10 +53,11 @@
           <%= form.text_field :notes %>
         </div>
 
-        <div>
+		<div>
           <%= form.label :tags, style: "display: block" %>
-          <%= form.text_field :tags %>
+          <%= form.select :tags, options_for_select(Tag.all.map{ |tag| tag.tag_name }), {}, multiple: true %>
         </div>
+
         <div>
             <%= form.label :image, style: "display: block" %>
             <%= form.file_field :image %>

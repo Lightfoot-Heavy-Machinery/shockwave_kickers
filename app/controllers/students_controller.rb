@@ -4,14 +4,20 @@ class StudentsController < ApplicationController
     # GET /student
     def index
         @students = Student.where(teacher: current_user.email)
-        @tags = Set[]
+        
         @emails = Set[]
 
+		@tags = Hash[]
         @courses_taken = Hash[]
         @semesters_taken = Hash[]
-        for student in @students do
-            @tags.add(student.tags)
-        end
+        for student in @students do 
+			if StudentsTag.where(student_id: student.id)
+				for tag in StudentsTag.where(student_id: student.id)
+					tag_id = tag.id
+					@tags[student.id] = Tag.where(id: tag_id).tag_name
+				end
+			end
+		end unless @students.nil?
         @semesters = Set[]
         @sections = Set[]
         @course_names = Set[]
@@ -119,6 +125,19 @@ class StudentsController < ApplicationController
     # PATCH/PUT /students/1 or /students/1.json
     def update
       @student = Student.find(params[:id])
+
+	  current_tags = StudentsTag.where(student_id: params[:id], user_id: current_user.id)
+	  current_tags.delete_all
+	  success = false
+	  # Remove any empty strings in the returned array
+	  tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
+	  # Should only have one tag per name, so 0th index is OK
+	  tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+
+	  if StudentsTag.create(tag_id: tag_ids, student_id: params[:id], user_id: current_user.id)
+		success = true
+	  end
+
       respond_to do |format|
         if @student.update(student_basic_params)
             format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
@@ -158,6 +177,10 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_basic_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image).with_defaults(teacher: current_user.email)
         end
+
+		def tags_param
+			params.require(:student).permit(:tags).with_defaults(teacher: current_user.email)
+		end
 end
