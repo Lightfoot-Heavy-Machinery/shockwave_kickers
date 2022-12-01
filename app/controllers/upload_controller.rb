@@ -42,7 +42,7 @@ class UploadController < ApplicationController
             #puts(row)
             #Rails.logger.info "Collected all student courses #{@student.inspect}"
             @course = Course.find_or_create_by(course_name: row["Course"].strip(), teacher: current_user.email, section: row["Section"].strip(), semester: row["Semester"].strip())
-            @student = Student.where(uin: row["UIN"].strip(), course_id: row["Course"], teacher: current_user.email).first
+            @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
             if !@student
               Rails.logger.info "here all student courses #{@student.inspect}"
               @student = Student.new(
