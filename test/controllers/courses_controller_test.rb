@@ -27,6 +27,21 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to course_url(Course.last)
   end
 
+  test "should successfully render no entries with all search set" do
+    get courses_url, params: {search: "test"}
+    assert_response :success
+  end
+
+  test "should successfully render partial with all search set" do
+    get courses_url, params: {search: @course.course_name}
+    assert_response :success
+  end
+
+  test "should successfully render all entries empty string" do
+    get courses_url, params: {search: ""}
+    assert_response :success
+  end
+
   test "should show course" do
     get course_url(@course)
     assert_response :success

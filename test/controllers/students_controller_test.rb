@@ -118,6 +118,21 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
   end
 
+  test "should successfully render no entries with all search set" do
+    get students_url, params: {search: "test"}
+    assert_response :success
+  end
+
+  test "should successfully render partial with all search set" do
+    get students_url, params: {search: @student.email}
+    assert_response :success
+  end
+
+  test "should successfully render all entries empty string" do
+    get students_url, params: {search: ""}
+    assert_response :success
+  end
+
   test "should destroy student from all courses" do
     before_student_count = Student.count
     before_student_course_count = StudentCourse.count
