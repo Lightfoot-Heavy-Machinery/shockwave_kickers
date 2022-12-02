@@ -109,6 +109,13 @@ class CoursesController < ApplicationController
         end
     end unless @student_records.nil?
     @student_records = @student_records_hash.values
+    # sort the list of students
+    if params[:sortOrder] == "Alphabetical"
+      @student_records = @student_records.sort_by{ |student| student.records[0].lastname }
+    elsif params[:sortOrder] == "Reverse Alphabetical"
+      @student_records = @student_records.sort_by{ |student| student.records[0].lastname }.reverse
+    end
+
     Rails.logger.info "Collected info for filter #{@student_records.inspect}"
   end
 
