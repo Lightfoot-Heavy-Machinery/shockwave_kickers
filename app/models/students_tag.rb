@@ -1,0 +1,2 @@
+class StudentsTag < ApplicationRecord
+end
