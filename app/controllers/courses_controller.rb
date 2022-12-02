@@ -34,14 +34,14 @@ class CoursesController < ApplicationController
     @student_records = Student.where(id: @student_ids)
     #get all students tags for those currently and previously enrolled in this course
     @tags = Set[]
-    for student_id in @student_ids do
-        for tag_assoc in StudentsTag.where(student_id: student_id, teacher: current_user.email)
+    for student in @students do
+        for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
             tag_id = tag_assoc.tag_id
-              if Tag.where(id: tag_id).length != 0
-                @tags.add(Tag.where(id: tag_id)[0].tag_name)
-              end
+            if (result = Tag.where(id: tag_id)).length != 0
+              @tags.add(result[0].tag_name)
+            end
         end
-    end unless @student_ids.nil?
+    end unless @students.nil?
     #get all the current and previous semesters and sections of this course
     @semesters = Set[]
     @sections = Set[]
