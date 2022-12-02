@@ -48,26 +48,19 @@ class CoursesController < ApplicationController
         worstInfo = "#{unquizzed.length} unquizzed students"
       elsif unquizzed.length == 1
         name = Student.where(id:unquizzed.to_a[0],teacher: current_user.email).pick(:firstname, :lastname)
-        if name.nil?
-          worstName = "No data available"
-        elsif name.length == 0
+        if name.nil? || name.length == 0
           worstName = "No data available"
         else
           worstName = name[0] + " " + name[1]
         end
         worstInfo = "#{worstName} (unquizzed)"
       else
-        if worstEntry.nil?
-          wStud = "/"
-          worstInfo = "No data available"
-        elsif worstEntry.student_id.nil? || worstEntry.score.nil?
+        if worstEntry.nil? || worstEntry.student_id.nil? || worstEntry.score.nil?
           wStud = "/"
           worstInfo = "No data available"
         else
           name = Student.where(id:worstEntry.student_id,teacher: current_user.email).pick(:firstname, :lastname)
-          if name.nil?
-            worstName = "No data available"
-          elsif name.length == 0
+          if name.nil? || name.length == 0
             worstName = "No data available"
           else
             worstName = name[0] + " " + name[1]
@@ -85,17 +78,12 @@ class CoursesController < ApplicationController
       best = worst.order("wscore DESC").first
       bStud = ""
       bestInfo = ""
-      if best.nil?
-        bStud = "/"
-        bestInfo = "No data available"
-      elsif best.student_id.nil? || best.score.nil?
+      if best.nil? || best.student_id.nil? || best.score.nil?
         bStud = "/"
         bestInfo = "No data available"
       else
         name = Student.where(id:best.student_id,teacher: current_user.email).pick(:firstname, :lastname)
-        if name.nil?
-          bestName = "No data available"
-        elsif name.length == 0
+        if name.nil? || name.length == 0
           bestName = "No data available"
         else
           bestName = name[0] + " " + name[1]

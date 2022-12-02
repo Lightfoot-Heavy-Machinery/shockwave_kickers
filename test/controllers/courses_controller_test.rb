@@ -6,6 +6,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     @course = courses(:courseOne)
     @course2 = courses(:courseOneSemesterTwo)
     @student = students(:studentOne)
+    @course3 = courses(:courseTwo)
 
   end
 
@@ -116,4 +117,11 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     get courses_history_path(@courseFake)
     assert_redirected_to courses_url
   end
+
+  test "should get show course no quiz" do
+    get course_url(@course3)
+    assert_response :success
+  end
+
+
 end

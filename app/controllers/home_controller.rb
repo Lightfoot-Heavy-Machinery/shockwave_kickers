@@ -62,7 +62,7 @@ class HomeController < ApplicationController
       springYear = stripYear(recentSpring.semester)
     end
    
-    if recentFall.nil? && recentSpring.nil?
+    if fallYear == 0 && springYear == 0
       return ["Semester", "No quizzes taken!", "No quizzes taken!"]
     end
     
@@ -107,17 +107,12 @@ class HomeController < ApplicationController
     best = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore DESC").first
     bStud = ""
     bestInfo = ""
-    if best.nil?
-      bStud = "/"
-      bestInfo = "No data available"
-    elsif best.student_id.nil? || best.score.nil?
+    if best.nil? || best.student_id.nil? || best.score.nil?
       bStud = "/"
       bestInfo = "No data available"
     else
       name = Student.where(id:best.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.nil?
-        bestName = "No data available"
-      elsif name.length == 0
+      if name.nil? || name.length == 0
         bestName = "No data available"
       else
         bestName = name[0] + " " + name[1]
@@ -133,27 +128,19 @@ class HomeController < ApplicationController
     currS = -1
     worstEntry = nil
     worst.each do |qr|
-      if currS == -1
-        currS = qr.score
-        worstEntry = qr
-      elsif qr.score <= currS
+      if (currS == -1) || (qr.score <= currS)
         currS = qr.score
         worstEntry = qr
       end
     end
     wStud = ""
     worstInfo = ""
-    if worstEntry.nil?
-      wStud = "/"
-      worstInfo = "No data available"
-    elsif worstEntry.student_id.nil? || worstEntry.score.nil?
+    if worstEntry.nil? || worstEntry.student_id.nil? || worstEntry.score.nil?
       wStud = "/"
       worstInfo = "No data available"
     else
       name = Student.where(id:worstEntry.student_id,teacher: @id).pick(:firstname, :lastname)
-      if name.nil?
-        worstName = "No data available"
-      elsif name.length == 0
+      if name.nil? || name.length == 0
         worstName = "No data available"
       else
         worstName = name[0] + " " + name[1]
@@ -167,12 +154,7 @@ class HomeController < ApplicationController
 
     
     ids = Qroster.where(quiz_id:qID,correct_resp:true).select(:student_id).distinct.pluck(:student_id)
-    if ids.nil?
-      hStud = "/"
-      lStud = "/"
-      highestInfo = "No data available"
-      lowestInfo = "No data available"
-    elsif ids.length == 0
+    if ids.nil? || ids.length == 0
       hStud = "/"
       lStud = "/"
       highestInfo = "No data available"
@@ -216,9 +198,7 @@ class HomeController < ApplicationController
           hStud = "/"
         else
           name = Student.where(id:maxID,teacher: @id).pick(:firstname, :lastname)
-          if name.nil?
-            highestName = "No name available"
-          elsif name.length == 0
+          if name.nil? || name.length == 0
             highestName = "No name available"
           else
             highestName = name[0] + " " + name[1]

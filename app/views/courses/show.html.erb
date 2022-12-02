@@ -49,7 +49,7 @@
                     <% selected_tag = nil%>
                     <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
                 </div>
-                <div>
+                <div> <br>
                 <%= f.submit "Filter Students List"%>
                 <% end %>
                 </div>
