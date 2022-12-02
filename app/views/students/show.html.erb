@@ -43,15 +43,15 @@
       </div>
       <div class="row">
         <h3>Tags:</h3>
-
-		<% if StudentsTag.where(student_id: @student.id).length == 0 %>
-			<p>None</p>
-		<% else %>
-			<% StudentsTag.where(student_id: @student.id).each do |association| %>
-				<p><%= Tag.where(id: association.tag_id)[0].tag_name %></p>
-			<% end %>
-		<% end %>
-		
+        <% if StudentsTag.where(student_id: @student.id).length == 0 %>
+                None
+            <% else %>
+                <% tag_display_array = [] %>
+                <% StudentsTag.where(student_id: @student.id).each do |association| %>
+                    <% tag_display_array.append(Tag.where(id: association.tag_id)[0].tag_name) %>
+                <% end %>
+                <p><%= tag_display_array.join(", ") %></p>
+            <% end %>
       </div>
     </div>
 

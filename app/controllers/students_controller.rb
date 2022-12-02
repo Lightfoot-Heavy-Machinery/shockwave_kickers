@@ -7,19 +7,17 @@ class StudentsController < ApplicationController
         
         @emails = Set[]
 
-		@tags = Set[]
+        @tags = Set[]
         @courses_taken = Hash[]
         @semesters_taken = Hash[]
         for student in @students do
-			if StudentsTag.where(student_id: student.id, teacher: current_user.email)
-				for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
-					tag_id = tag_assoc.tag_id
-					  if Tag.where(id: tag_id).length != 0
-						@tags.add(Tag.where(id: tag_id)[0].tag_name)
-					  end
-				end
-			end
-		end unless @students.nil?
+            for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
+                tag_id = tag_assoc.tag_id
+                  if (result = Tag.where(id: tag_id)).length != 0
+                    @tags.add(result[0].tag_name)
+                  end
+            end
+        end unless @students.nil?
         @semesters = Set[]
         @sections = Set[]
         @course_names = Set[]
@@ -51,8 +49,8 @@ class StudentsController < ApplicationController
             #create the filtered list of students to display
             @students = Student.where(id: @student_ids)
             if @selected_tag != ''
-				selected_tag_id = Tag.where(tag_name: @selected_tag, teacher: current_user.email).pluck(:id)
-				all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, teacher: current_user.email)
+                selected_tag_id = Tag.where(tag_name: @selected_tag, teacher: current_user.email).pluck(:id)
+                all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, teacher: current_user.email)
                 @students = @students.select {|s| all_tag_assocs.any? { |assoc| s.id == assoc.student_id}}
             end
         else
@@ -130,26 +128,25 @@ class StudentsController < ApplicationController
     def update
       @student = Student.find(params[:id])
 
-	  current_tags = StudentsTag.where(student_id: params[:id], teacher: current_user.email)
-	  current_tags.delete_all
-	  tags_success = false
-	  # Remove any empty strings in the returned array
-	  if !params[:student][:tags].nil?
-		  tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
-		  tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+      current_tags = StudentsTag.where(student_id: params[:id], teacher: current_user.email)
+      current_tags.delete_all
+      tags_success = true
+      # Remove any empty strings in the returned array
+      if !params[:student][:tags].nil?
+          tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
+          tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
 
-		  tag_ids.each do |element|
-			if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
-				raise "Student tags failed to update for some reason."
-			end
-		  end
-	  end
+          tag_ids.each do |element|
+            if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
+                tags_success = false
+            end
+          end
+      end
 
-	  if !params[:student][:create_tag].nil?
-		new_tag = Tag.create!(tag_name: params[:student][:create_tag], teacher: current_user.email)
-		StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
-	  end
-	  tags_success = true
+      if !params[:student][:create_tag].nil?
+        new_tag = Tag.find_or_create_by!(tag_name: params[:student][:create_tag], teacher: current_user.email)
+        StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
+      end
 
       respond_to do |format|
         if @student.update(student_basic_params) && tags_success
@@ -192,8 +189,4 @@ class StudentsController < ApplicationController
         def student_basic_params
             params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image).with_defaults(teacher: current_user.email)
         end
-
-		def tags_param
-			params.require(:student).permit(:tags, :create_tag).with_defaults(teacher: current_user.email)
-		end
 end
