@@ -34,9 +34,14 @@ class CoursesController < ApplicationController
     @student_records = Student.where(id: @student_ids)
     #get all students tags for those currently and previously enrolled in this course
     @tags = Set[]
-    for student in @student_records do
-        @tags.add(student.tags)
-    end unless @student_records.nil?
+    for student in @students do
+        for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
+            tag_id = tag_assoc.tag_id
+            if (result = Tag.where(id: tag_id)).length != 0
+              @tags.add(result[0].tag_name)
+            end
+        end
+    end unless @students.nil?
     #get all the current and previous semesters and sections of this course
     @semesters = Set[]
     @sections = Set[]
@@ -65,10 +70,12 @@ class CoursesController < ApplicationController
 
         @student_ids = StudentCourse.where(course_id: @target_course_id.pluck(:id)).pluck(:student_id)
         #create the filtered list of students to display
-        if @selected_tag == ''
-            @student_records = Student.where(id: @student_ids, teacher: current_user.email)
+        if @selected_tag != ''
+            selected_tag_id = Tag.find_by(tag_name: @selected_tag).id
+            all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, teacher: current_user.email)
+            @student_records = @student_records.select {|record| all_tag_assocs.any? { |assoc| record.id == assoc.student_id}}
         else
-            @student_records = Student.where(id: @student_ids, tags: @selected_tag, teacher: current_user.email)
+            @student_records = Student.where(id: @student_ids, teacher: current_user.email) 
         end
     #if the user doesnt select any dropdown menu filters, display all students
     else

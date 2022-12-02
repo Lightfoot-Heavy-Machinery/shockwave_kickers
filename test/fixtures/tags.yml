@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+tagOne:
+  id: 1
+  tag_name: TestString
+  teacher: test@gmail.com
+
+tagTwo:
+  id: 2
+  tag_name: TestString2
+  teacher: test@gmail.com
