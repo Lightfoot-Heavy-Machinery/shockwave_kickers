@@ -9,7 +9,7 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
       require 'json'
     end
 
-  test "should parse csv" do
+  test "should call index" do
         get "/upload/index#"
         assert_response :success
     end
@@ -19,6 +19,24 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
         get "/upload/index#"
         assert_redirected_to '/users/sign_in'
   end
+
+  test "should parse file uploaded" do
+    require 'zip'
+    Zip::File.open('./app/resources/test_zip.zip') do |zip_file|
+        post "/upload/index#", params: {file: zip_file}
+        assert_redirected_to courses_url
+    end
+  end
+
+
+  test "should parse file uploaded failed" do
+    require 'zip'
+    Zip::File.open('./app/resources/test_zip_incorrect.zip') do |zip_file|
+        post "/upload/index#", params: {file: zip_file}
+        assert_redirected_to "/upload/index"
+    end
+  end
+
 
   test "should get students" do
     CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
