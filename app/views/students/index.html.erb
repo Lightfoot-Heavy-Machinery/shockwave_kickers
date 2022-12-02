@@ -1,8 +1,3 @@
-<%= form_tag('/students', method: :get) do %>
-  <%= text_field_tag :search, params[:search], placeholder: "Search by Email" %>
-  <%= submit_tag 'Search', :name => nil %>
-<% end %>
-
 <div id="studentsDiv">
   <table class="table table-striped table-hover text-center">
     <thead>
@@ -13,16 +8,20 @@
       </tr>
       <tr>
         <th>
-          Image:
+          Image:<br><br>
         </th>
         <th>
-          Name:
+          Name:<br><br>
         </th>
         <th>
-          Email:
+          Email: <br>
+          <%= form_tag('/students', method: :get) do %>
+            <%= text_field_tag :search, params[:search], placeholder: "Search by Email" %>
+            <%= submit_tag 'Search', :name => nil %>
+          <% end %>
         </th>
         <th>
-          Course(s)/Semester(s):
+          Course(s)/Semester(s): <br>
           <%= form_with(method: "get") do |f| %>
           <% selected_course = nil%>
           <%= f.select("selected_course", @course_names, {:include_blank => true}, {:onchange => "selected_course=this.value;"}) %>
@@ -32,15 +31,17 @@
         </th>
         <th>
           Tags:
-          <% selected_tag = nil%>
+          <% selected_tag = nil%> <br>
           <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
         </th>
-        <div>
-        <%= f.submit "Filter Students List"%>
-        <% end %>
-        </div>
         <th>
-          View Student Profile:
+          View Student Profile: <br><br>
+        </th>
+      </tr>
+      <tr>
+        <th colspan="6">
+          <%= f.submit "Filter Students List"%>
+          <% end %>
         </th>
       </tr>
     </thead>

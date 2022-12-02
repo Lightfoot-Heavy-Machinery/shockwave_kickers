@@ -38,6 +38,12 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
     end
 
+    test "should get home index u7" do
+      sign_in users(:userSeven)
+      get '/home/index'
+      assert_response :success
+    end
+
     test "should redirect home index" do
       sign_in users(:userOne)
       sign_out users(:userOne)

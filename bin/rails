@@ -6,6 +6,7 @@ if ENV['RAILS_ENV'] == 'test'
     require 'simplecov'
     SimpleCov.start 'rails' do
         add_filter(%r{application})
+        add_filter(%r{user})
         # add_filter do |source_file|
         #     source_file.lines.count < 4
         # end
