@@ -1,0 +1,19 @@
+<%= form_with(model: @post) do |form| %>
+  <div>
+    <div style = "text-align: center">
+      <strong class = "message">Drag and Drop OR Click "Browse", then Save</strong><br><br>
+      <!--if the file uploaded, send message-->
+      <% if @post %>
+        <p style="color: green"><%= notice %>File Uploaded</p>
+      <% end %>
+    
+      <!--implement dropzone for submitting zip files-->
+        <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>
+    </div>
+
+    <div style= "text-align: center"><br><br>
+    <!--on submit, send user back to index page-->
+      <%= form.submit "Save", class: "btn btn-secondary" %>
+    </div>
+  </div>
+<% end %>

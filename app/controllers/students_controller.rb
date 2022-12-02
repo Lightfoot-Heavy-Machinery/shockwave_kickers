@@ -3,8 +3,7 @@ class StudentsController < ApplicationController
     before_action :set_student, only: %i[ show edit update destroy ]
     # GET /student
     def index
-        @students = Student.where(teacher: current_user.email)
-        
+        @students = Student.search(params[:search], current_user.email)
         @emails = Set[]
 
         @tags = Set[]
