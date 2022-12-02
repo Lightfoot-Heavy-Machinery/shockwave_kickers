@@ -16,7 +16,7 @@ class StudentsController < ApplicationController
         @sections = Set[]
         @course_names = Set[]
         @course_ids = Array[]
-        for record in Course.all do
+        for record in Course.where(teacher: current_user.email) do
             @semesters.add(record.semester)
             @sections.add(record.section)
             @course_names.add(record.course_name)

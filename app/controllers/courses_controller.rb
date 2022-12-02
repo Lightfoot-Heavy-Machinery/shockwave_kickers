@@ -26,7 +26,7 @@ class CoursesController < ApplicationController
   def show
     #get the course id's for every past and present section of this course
     @all_course_ids = Array[]
-    Course.where(course_name: Course.where(id: params[:id])[0].course_name).each do |c|
+    Course.where(course_name: Course.where(id: params[:id])[0].course_name, teacher: current_user.email).each do |c|
       @all_course_ids.append(c.id)
     end
     #get all students currently and previously enrolled in this course
