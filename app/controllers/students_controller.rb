@@ -112,16 +112,20 @@ class StudentsController < ApplicationController
 
     # POST /students/
     def create
-        @student = Student.new(student_basic_params)
-        respond_to do |format|
-            if @student.save
-                @studentCourse = StudentCourse.new(student_id: @student.id, course_id: params[:course_id])
-                @studentCourse.save
-                format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
-                format.json { render :show, status: :created, location: @student }
-            else
-                format.html { render :new, status: :unprocessable_entity }
-                format.json { render json: @student.errors, status: :unprocessable_entity }
+        if !Student.find_by(uin: params[:student][:uin], teacher: current_user.email)
+            @student = Student.new(student_basic_params)
+            respond_to do |format|
+                if @student.save
+                    format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
+                    format.json { render :show, status: :created, location: @student }
+                else
+                    format.html { render :new, status: :unprocessable_entity }
+                    format.json { render json: @student.errors, status: :unprocessable_entity }
+                end
+            end
+        else
+            respond_to do |format|
+                format.html { redirect_to students_url(@student), notice: "Student with the UIN was already created." }
             end
         end
     end
