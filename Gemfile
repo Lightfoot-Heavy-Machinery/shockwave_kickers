@@ -59,6 +59,10 @@ gem "image_processing", "~> 1.2"
 gem "mini_magick"
 gem 'aws-sdk-s3', require: false
 
+#used for the drag-and-drop file upload feature
+gem 'dropzonejs-rails'
+gem 'rubyzip'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
