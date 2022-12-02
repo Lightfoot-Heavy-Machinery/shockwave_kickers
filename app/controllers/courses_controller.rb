@@ -26,7 +26,7 @@ class CoursesController < ApplicationController
   def show
     #get the course id's for every past and present section of this course
     @all_course_ids = Array[]
-    Course.where(course_name: Course.where(id: params[:id])[0].course_name).each do |c|
+    Course.where(course_name: Course.where(id: params[:id])[0].course_name, teacher: current_user.email).each do |c|
       @all_course_ids.append(c.id)
     end
     #get all students currently and previously enrolled in this course
@@ -34,14 +34,14 @@ class CoursesController < ApplicationController
     @student_records = Student.where(id: @student_ids)
     #get all students tags for those currently and previously enrolled in this course
     @tags = Set[]
-    for student in @students do
+    for student in @student_records do
         for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
             tag_id = tag_assoc.tag_id
             if (result = Tag.where(id: tag_id)).length != 0
               @tags.add(result[0].tag_name)
             end
         end
-    end unless @students.nil?
+    end unless @student_records.nil?
     #get all the current and previous semesters and sections of this course
     @semesters = Set[]
     @sections = Set[]
