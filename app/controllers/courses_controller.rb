@@ -19,7 +19,6 @@ class CoursesController < ApplicationController
         end
     end
     @courses = @courses_comb_hash.values
-    Rails.logger.info "Received info #{@courses.inspect}"
   end
 
   # GET /courses/1 or /courses/1.json

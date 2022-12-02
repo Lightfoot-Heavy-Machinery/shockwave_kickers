@@ -77,10 +77,8 @@ class UploadController < ApplicationController
           end
         end
         redirect_to courses_url, notice: "Upload successful!"
-      elsif (csv.length != images.length)
-        redirect_to upload_index_path, notice: "Number of images does not match number of students"
       else
-        redirect_to upload_index_path, notice: "Upload unsuccessful- unforeseen error"
+        redirect_to upload_index_path, notice: "Number of images does not match number of students"
       end
     end
 end
