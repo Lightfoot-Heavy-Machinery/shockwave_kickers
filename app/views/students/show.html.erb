@@ -39,7 +39,7 @@
     <div class="col my-auto">
       <div class="row">
         <h3>Course History:</h3>
-        <p>TODO - List all courses taken with signed in prof?</p>
+        <p><%=@course_history%></p>
       </div>
       <div class="row">
         <h3>Tags:</h3>
@@ -73,8 +73,7 @@
         <div class="row p-2 pt-0">
             <%= button_to "Delete this student", student_path(:id=>@student.id, :type => "all"), method: :delete %>
         </div>
-      </div>        
+      </div>
     </div>
   </div>
 </footer>
-

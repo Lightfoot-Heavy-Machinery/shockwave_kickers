@@ -70,6 +70,16 @@ class StudentsController < ApplicationController
 
     # GET /students/1
     def show
+      #get this student's course history
+      student_courses = StudentCourse.where(student_id: @student.id)
+      @course_history = Set[]
+      for student_course in student_courses do
+        course = Course.find_by(id: student_course.course_id)
+        #Course history format: CSCE 999 (FALL 2019), ECEN 350 ( SPRING 2020), etc
+        @course_history.add(course.course_name.to_s + " (" + course.semester.to_s + ")")
+      end
+      #convert course history into a string
+      @course_history = @course_history.to_a.join(", ")
     end
 
     # GET /students/1/edit

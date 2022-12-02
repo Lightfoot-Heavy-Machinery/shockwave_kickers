@@ -144,7 +144,7 @@ class CoursesController < ApplicationController
     @student_records = Student.where(id: @student_ids)
     #get all students tags for those currently and previously enrolled in this course
     @tags = Set[]
-    for student in @student_records do 
+    for student in @student_records do
         @tags.add(student.tags)
     end unless @student_records.nil?
     #get all the current and previous semesters and sections of this course
@@ -212,6 +212,13 @@ class CoursesController < ApplicationController
         end
     end unless @student_records.nil?
     @student_records = @student_records_hash.values
+    # sort the list of students
+    if params[:sortOrder] == "Alphabetical"
+      @student_records = @student_records.sort_by{ |student| student.records[0].lastname }
+    elsif params[:sortOrder] == "Reverse Alphabetical"
+      @student_records = @student_records.sort_by{ |student| student.records[0].lastname }.reverse
+    end
+
     Rails.logger.info "Collected info for filter #{@student_records.inspect}"
   end
 

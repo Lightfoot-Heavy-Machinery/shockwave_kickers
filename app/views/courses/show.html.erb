@@ -31,16 +31,11 @@
               <div class="row">
                 <div class="col">
                   Order:
-                  <select class="form-select" aria-label="sortOrder">
-                    <option selected value="0">Alphabetical</option>
-                    <option value="1">Reverse Alphabetical</option>
-                    <option value="2">Chronological</option>
-                    <option value="3">Reverse Chronological</option>
-                  </select>
+                  <%= form_with(method: "get") do |f| %>
+                  <%= f.select("sortOrder", ["Alphabetical", "Reverse Alphabetical"]) %>
                 </div>
                 <div class="col">
                     Semester:
-                    <%= form_with(method: "get") do |f| %>
                     <% selected_semester = nil%>
                     <%= f.select("selected_semester", @semesters, {:include_blank => true}, {:onchange => "selected_semester=this.value;"}) %>
                 </div>
