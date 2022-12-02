@@ -4,7 +4,6 @@ class StudentsController < ApplicationController
     # GET /student
     def index
         @students = Student.search(params[:search], current_user.email)
-        #@students = Student.where(teacher: current_user.email)
         @tags = Set[]
         @emails = Set[]
 
