@@ -1,7 +1,7 @@
 <div class="container text-center">
   <div class="row gx-2 my-3">
       <div class="col">
-        <h1>Howdy Professor!</h1>
+        <h1>Howdy Professor<%= current_user.lastname == "" ? "!" : " #{current_user.lastname}!"%></h1>
       </div>
   </div>
   <div class="row gx-2 mb-3">
