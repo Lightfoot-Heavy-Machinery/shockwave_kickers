@@ -121,8 +121,23 @@ class StudentsController < ApplicationController
     def create
         if !Student.find_by(uin: params[:student][:uin], teacher: current_user.email)
             @student = Student.new(student_basic_params)
+            tags_success = true
+            if !params[:student][:tags].nil?
+                tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
+                tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+      
+                tag_ids.each do |element|
+                  if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
+                      tags_success = false
+                  end
+                end
+            end
+            if !params[:student][:create_tag].nil? && params[:student][:create_tag].strip != ""
+              new_tag = Tag.find_or_create_by!(tag_name: params[:student][:create_tag], teacher: current_user.email)
+              StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
+            end
             respond_to do |format|
-                if @student.save
+                if @student.save && tags_success
                     format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
                     format.json { render :show, status: :created, location: @student }
                 else
@@ -156,7 +171,7 @@ class StudentsController < ApplicationController
           end
       end
 
-      if !params[:student][:create_tag].nil?
+      if !params[:student][:create_tag].nil? && params[:student][:create_tag].strip != ""
         new_tag = Tag.find_or_create_by!(tag_name: params[:student][:create_tag], teacher: current_user.email)
         StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
       end
