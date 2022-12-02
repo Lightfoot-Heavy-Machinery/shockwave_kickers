@@ -15,7 +15,6 @@ class UploadController < ApplicationController
       #when a zip file is uploaded, unzip it
       Zip::File.open(params[:file]) do |zip_file|
         #if the zip file contains a csv file, parse it
-  
         zip_file.each do |entry|
           if ((entry.name.include? ".jpeg") || (entry.name.include? ".jpg") || (entry.name.include? ".png"))
             images.push(entry)
@@ -24,11 +23,12 @@ class UploadController < ApplicationController
             csv = CSV.parse(entry.get_input_stream.read, headers: true).sort_by { |row| [row['FirstName'], row['LastName']] }
             Rails.logger.info "Collected all student courses #{csv.inspect}"
   
-            #move the last element in the image array to the front
+            
           end 
         end
       end
-  
+      
+      #move the last element in the image array to the front (to make sure that the first image belongs to the first student)
       images.unshift(images.pop)
   
       #if the number of rows in the csv file is equal to the number of images in the zip file, then proceed. Otherwise, throw an error
@@ -36,14 +36,10 @@ class UploadController < ApplicationController
         csv.zip(images).each do |row, image|
           uuid = SecureRandom.uuid
   
-          #if row contains all the necessary columns, keep going.
           if ((row['FirstName']) && (row['LastName']) && (row['Email']) && (row['UIN']) && (row['Section']) && (row['Course']) && (row['Semester']) && (row['Classification']) && (row['Major']) && (row['Notes']))
-            #puts(row)
-            #Rails.logger.info "Collected all student courses #{@student.inspect}"
             @course = Course.find_or_create_by(course_name: row["Course"].strip(), teacher: current_user.email, section: row["Section"].strip(), semester: row["Semester"].strip())
             @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
             if !@student
-              Rails.logger.info "here all student courses #{@student.inspect}"
               @student = Student.new(
                   firstname:row["FirstName"].strip(),
                   lastname:row["LastName"].strip(),

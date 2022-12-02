@@ -2,7 +2,6 @@ class Course < ApplicationRecord
     def self.search(search, teacher)
         if search
           search_type = Course.find_by(course_name: search, teacher: teacher)
-          Rails.logger.info "Received: #{search_type.inspect}"
           if search_type
             self.where(id: search_type)
           elsif (search.length == 0)
