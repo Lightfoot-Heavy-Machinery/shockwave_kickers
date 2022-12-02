@@ -7,6 +7,8 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     @studentOneCourseOne = student_courses(:studentOneCourseOne)
     @studentOneCourseTwo = student_courses(:studentOneCourseTwo)
     @course = courses(:courseOne)
+	@tag = tags(:tagOne)
+    @tag2 = tags(:tagTwo)
   end
 
   test "should get index" do
@@ -21,12 +23,37 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create student" do
     before_student_count = Student.count
-    before_student_course_count = StudentCourse.count
-    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, course_id: @studentOneCourseOne.course_id} }
+    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: "123456", email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
+    after_student_count = Student.count
+    assert_equal before_student_count + 1, after_student_count
+
+    assert_redirected_to student_url(Student.last)
+  end
+
+  test "should not create student" do
+    before_student_count = Student.count
+    post students_url, params: { student: { firstname: "dsdsd", lastname: "dsd", uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
     after_student_count = Student.count
     after_student_course_count = StudentCourse.count
+    assert_equal before_student_count, after_student_count
+
+    assert_redirected_to students_url
+  end
+
+  test "should create student with tag" do
+    before_student_count = Student.count
+    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: "123456", email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, tags: [@tag.tag_name, @tag2.tag_name, ""]} }
+    after_student_count = Student.count
     assert_equal before_student_count + 1, after_student_count
-    assert_equal before_student_course_count + 1, after_student_course_count
+
+    assert_redirected_to student_url(Student.last)
+  end
+
+  test "should create student with new tag" do
+    before_student_count = Student.count
+    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: "123456", email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, create_tag: "test"} }
+    after_student_count = Student.count
+    assert_equal before_student_count + 1, after_student_count
 
     assert_redirected_to student_url(Student.last)
   end
@@ -57,6 +84,16 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update student" do
     patch student_url(@student), params: { student: {firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
+    assert_redirected_to student_url(@student)
+  end
+
+  test "should update student with tags" do
+    patch student_url(@student), params: { student: {firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, tags: [@tag.tag_name, @tag2.tag_name, ""]} }
+    assert_redirected_to student_url(@student)
+  end
+
+  test "should update student with new tag" do
+    patch student_url(@student), params: { student: {firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, create_tag: "test"} }
     assert_redirected_to student_url(@student)
   end
 
@@ -101,13 +138,28 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should successfully render partial with only tags filter" do
-      get students_url, params: {selected_semester: '', selected_course: '', selected_tag: @student.tags}
+      get students_url, params: {selected_semester: '', selected_course: '', selected_tag: @tag.tag_name}
       assert_response :success
   end
 
   test "should successfully render partial with all filters set" do
       get students_url, params: {selected_semester: @course.semester, selected_course: @course.course_name, selected_tag: "tag"}
       assert_response :success
+  end
+
+  test "should successfully render no entries with all search set" do
+    get students_url, params: {search: "test"}
+    assert_response :success
+  end
+
+  test "should successfully render partial with all search set" do
+    get students_url, params: {search: @student.email}
+    assert_response :success
+  end
+
+  test "should successfully render all entries empty string" do
+    get students_url, params: {search: ""}
+    assert_response :success
   end
 
   test "should destroy student from all courses" do

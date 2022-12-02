@@ -123,6 +123,8 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    dropzonejs-rails (0.8.5)
+      rails (> 3.1)
     erubi (1.11.0)
     execjs (2.8.1)
     ffi (1.15.5)
@@ -316,6 +318,7 @@ DEPENDENCIES
   capybara
   debug
   devise
+  dropzonejs-rails
   ffi (~> 1.15)
   image_processing (~> 1.2)
   importmap-rails
@@ -327,6 +330,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.4)
   rspec-rails (>= 3.9.0)
+  rubyzip
   selenium-webdriver
   simplecov
   sprockets-rails (>= 2.3.2)

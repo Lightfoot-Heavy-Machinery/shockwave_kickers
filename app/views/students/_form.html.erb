@@ -45,6 +45,11 @@
           <%= form.label :major, style: "display: block" %>
           <%= form.text_field :major, pattern: '(\b[A-Za-z\s]+\b)', title: "([A-Za-z\s]+) For example MCS" %>
         </div>
+
+        <div>
+            <%= form.label :image, style: "display: block" %>
+            <%= form.file_field :image %>
+        </div>
       </div>
 
       <div class="col">
@@ -53,14 +58,22 @@
           <%= form.text_field :notes %>
         </div>
 
+        <% if Tag.where(teacher: current_user.email).length > 0 %>
         <div>
           <%= form.label :tags, style: "display: block" %>
-          <%= form.text_field :tags %>
+          <i>(Hold ctrl to select or unselect tags)</i>
+          <br>
+          <% if StudentsTag.where(student_id: @student.id).length != 0 %>
+            <%= form.select :tags, options_for_select(Tag.where(teacher: current_user.email).map{ |tag| tag.tag_name }, selected: Tag.where(id: StudentsTag.where( student_id: @student.id).map { |record| record.tag_id }, teacher: current_user.email ).map { |tag| tag.tag_name }  ), {}, multiple: true %>
+          <% end %>
         </div>
+        <% end %>
+
         <div>
-            <%= form.label :image, style: "display: block" %>
-            <%= form.file_field :image %>
+          <%= form.label :create_tag, style: "display: block" %>
+          <%= form.text_field :create_tag %>
         </div>
+
       </div>
     </div>
     <br>

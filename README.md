@@ -6,7 +6,7 @@ Shockwave Kickers
 
 * Ruby version: 3.1.2
 * System dependencies
-  Install Yarn, Node, Ruby and Rails, Postgres, imagemagick
+  Install Ruby and Rails, Postgres, imagemagick
 
 To Install Ruby, Rails and Bundler, followed this: https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-macos
 

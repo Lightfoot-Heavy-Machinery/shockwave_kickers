@@ -6,6 +6,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     @course = courses(:courseOne)
     @course2 = courses(:courseOneSemesterTwo)
     @student = students(:studentOne)
+	  @tag = tags(:tagOne)
     @course3 = courses(:courseTwo)
 
   end
@@ -25,6 +26,31 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
       post courses_url, params: { course: { course_name: @course.course_name, section: @course.section, semester: @course.semester} }
     end
     assert_redirected_to course_url(Course.last)
+  end
+
+  test "should successfully render no entries with all search set" do
+    get courses_url, params: {search: "test"}
+    assert_response :success
+  end
+
+  test "should successfully render partial with all search set" do
+    get courses_url, params: {search: @course.course_name}
+    assert_response :success
+  end
+
+  test "should successfully render all entries empty string" do
+    get courses_url, params: {search: ""}
+    assert_response :success
+  end
+
+  test "should successfully render in Alphabetical order" do
+    get course_url(@course), params: {sortOrder: "Alphabetical"}
+    assert_response :success
+  end
+
+  test "should successfully render in Reverse Alphabetical order" do
+    get course_url(@course), params: {sortOrder: "Reverse Alphabetical"}
+    assert_response :success
   end
 
   test "should show course" do
@@ -97,12 +123,12 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should successfully render partial with only tags filter" do
-      get course_url(@course), params: {selected_semester: '', selected_section: '', selected_tag: @student.tags}
+      get course_url(@course), params: {selected_semester: '', selected_section: '', selected_tag: @tag.tag_name}
       assert_response :success
   end
 
   test "should successfully render partial with all filters set" do
-      get course_url(@course), params: {selected_semester: @course.semester, selected_section: @course.section, selected_tag: @student.tags}
+      get course_url(@course), params: {selected_semester: @course.semester, selected_section: @course.section, selected_tag: @tag.tag_name}
       assert_response :success
   end
 

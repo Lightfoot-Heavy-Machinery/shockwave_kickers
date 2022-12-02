@@ -3,20 +3,25 @@ class StudentsController < ApplicationController
     before_action :set_student, only: %i[ show edit update destroy ]
     # GET /student
     def index
-        @students = Student.where(teacher: current_user.email)
-        @tags = Set[]
+        @students = Student.search(params[:search], current_user.email)
         @emails = Set[]
 
+        @tags = Set[]
         @courses_taken = Hash[]
         @semesters_taken = Hash[]
         for student in @students do
-            @tags.add(student.tags)
-        end
+            for tag_assoc in StudentsTag.where(student_id: student.id, teacher: current_user.email)
+                tag_id = tag_assoc.tag_id
+                  if (result = Tag.where(id: tag_id)).length != 0
+                    @tags.add(result[0].tag_name)
+                  end
+            end
+        end unless @students.nil?
         @semesters = Set[]
         @sections = Set[]
         @course_names = Set[]
         @course_ids = Array[]
-        for record in Course.all do
+        for record in Course.where(teacher: current_user.email) do
             @semesters.add(record.semester)
             @sections.add(record.section)
             @course_names.add(record.course_name)
@@ -43,7 +48,9 @@ class StudentsController < ApplicationController
             #create the filtered list of students to display
             @students = Student.where(id: @student_ids)
             if @selected_tag != ''
-                @students = @students.select {|s| s.tags == @selected_tag}
+                selected_tag_id = Tag.where(tag_name: @selected_tag, teacher: current_user.email).pluck(:id)
+                all_tag_assocs = StudentsTag.where(tag_id: selected_tag_id, teacher: current_user.email)
+                @students = @students.select {|s| all_tag_assocs.any? { |assoc| s.id == assoc.student_id}}
             end
         else
             @target_course_id = @course_ids
@@ -86,7 +93,6 @@ class StudentsController < ApplicationController
     def edit
         @all_student_course_entries= StudentCourse.where(student_id: @student.id)
         @student_course_records_hash = Hash[]
-        Rails.logger.info "Collected all 11 #{@all_student_course_entries.inspect}"
         for student_course_db_entry in @all_student_course_entries do
             student_course_entry = StudentCourseEntry.new
             student_course_entry.student_record = student_course_db_entry
@@ -112,16 +118,35 @@ class StudentsController < ApplicationController
 
     # POST /students/
     def create
-        @student = Student.new(student_basic_params)
-        respond_to do |format|
-            if @student.save
-                @studentCourse = StudentCourse.new(student_id: @student.id, course_id: params[:course_id])
-                @studentCourse.save
-                format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
-                format.json { render :show, status: :created, location: @student }
-            else
-                format.html { render :new, status: :unprocessable_entity }
-                format.json { render json: @student.errors, status: :unprocessable_entity }
+        if !Student.find_by(uin: params[:student][:uin], teacher: current_user.email)
+            @student = Student.new(student_basic_params)
+            tags_success = true
+            if !params[:student][:tags].nil?
+                tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
+                tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+      
+                tag_ids.each do |element|
+                  if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
+                      tags_success = false
+                  end
+                end
+            end
+            if !params[:student][:create_tag].nil? && params[:student][:create_tag].strip != ""
+              new_tag = Tag.find_or_create_by!(tag_name: params[:student][:create_tag], teacher: current_user.email)
+              StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
+            end
+            respond_to do |format|
+                if @student.save && tags_success
+                    format.html { redirect_to student_url(@student), notice: "Student was successfully created." }
+                    format.json { render :show, status: :created, location: @student }
+                else
+                    format.html { render :new, status: :unprocessable_entity }
+                    format.json { render json: @student.errors, status: :unprocessable_entity }
+                end
+            end
+        else
+            respond_to do |format|
+                format.html { redirect_to students_url(@student), notice: "Student with the UIN was already created." }
             end
         end
     end
@@ -129,8 +154,28 @@ class StudentsController < ApplicationController
     # PATCH/PUT /students/1 or /students/1.json
     def update
       @student = Student.find(params[:id])
+
+      current_tags = StudentsTag.where(student_id: params[:id], teacher: current_user.email)
+      current_tags.delete_all
+      tags_success = true
+      # Remove any empty strings in the returned array
+      if !params[:student][:tags].nil?
+          tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
+          tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
+          tag_ids.each do |element|
+            if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
+                tags_success = false
+            end
+          end
+      end
+
+      if !params[:student][:create_tag].nil? && params[:student][:create_tag].strip != ""
+        new_tag = Tag.find_or_create_by!(tag_name: params[:student][:create_tag], teacher: current_user.email)
+        StudentsTag.create!(tag_id: new_tag.id, student_id: params[:id], teacher: current_user.email)
+      end
+
       respond_to do |format|
-        if @student.update(student_basic_params)
+        if @student.update(student_basic_params) && tags_success
             format.html { redirect_to student_url(@student), notice: "Student information was successfully updated." }
             format.json { render :show, status: :ok, location: @student }
         else
@@ -168,6 +213,6 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_basic_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :tags, :image).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image).with_defaults(teacher: current_user.email)
         end
 end

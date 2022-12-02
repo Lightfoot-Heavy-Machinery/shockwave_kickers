@@ -91,10 +91,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_072114) do
     t.string "classification", null: false
     t.string "major", null: false
     t.text "notes"
-    t.text "tags"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "teacher", null: false
+  end
+
+  create_table "students_tags", force: :cascade do |t|
+    t.integer "student_id"
+    t.integer "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "teacher"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "tag_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "teacher"
   end
 
   create_table "users", force: :cascade do |t|
@@ -122,4 +136,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_072114) do
   add_foreign_key "student_courses", "courses"
   add_foreign_key "student_courses", "students"
   add_foreign_key "students", "users", column: "teacher", primary_key: "email"
+  add_foreign_key "students_tags", "users", column: "teacher", primary_key: "email"
+  add_foreign_key "tags", "users", column: "teacher", primary_key: "email"
 end
