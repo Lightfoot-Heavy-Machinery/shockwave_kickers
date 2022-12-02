@@ -93,7 +93,6 @@ class StudentsController < ApplicationController
     def edit
         @all_student_course_entries= StudentCourse.where(student_id: @student.id)
         @student_course_records_hash = Hash[]
-        Rails.logger.info "Collected all 11 #{@all_student_course_entries.inspect}"
         for student_course_db_entry in @all_student_course_entries do
             student_course_entry = StudentCourseEntry.new
             student_course_entry.student_record = student_course_db_entry
@@ -163,7 +162,6 @@ class StudentsController < ApplicationController
       if !params[:student][:tags].nil?
           tag_ids = params[:student][:tags].reject! { |tag| tag.empty? }
           tag_ids = tag_ids.map! { |tag_name| Tag.where(tag_name: tag_name)[0].id}
-
           tag_ids.each do |element|
             if !StudentsTag.create(tag_id: element, student_id: params[:id], teacher: current_user.email)
                 tags_success = false

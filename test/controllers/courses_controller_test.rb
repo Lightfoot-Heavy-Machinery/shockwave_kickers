@@ -42,6 +42,16 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should successfully render in Alphabetical order" do
+    get course_url(@course), params: {sortOrder: "Alphabetical"}
+    assert_response :success
+  end
+
+  test "should successfully render in Reverse Alphabetical order" do
+    get course_url(@course), params: {sortOrder: "Reverse Alphabetical"}
+    assert_response :success
+  end
+
   test "should show course" do
     get course_url(@course)
     assert_response :success
