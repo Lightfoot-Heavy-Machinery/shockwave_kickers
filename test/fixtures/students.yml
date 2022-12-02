@@ -26,7 +26,7 @@ studentFourNilName:
   id: 4
   firstname: ""
   lastname: ""
-  uin: 2
+  uin: 3
   email: MyString
   classification: MyString
   major: MyString
@@ -37,7 +37,7 @@ studentFive:
   id: 5
   firstname: MyString
   lastname: MyString
-  uin: 2
+  uin: 1234567
   email: MyString
   classification: MyString
   major: MyString
