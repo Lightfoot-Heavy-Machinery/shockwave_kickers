@@ -21,12 +21,21 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create student" do
     before_student_count = Student.count
-    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes, course_id: @studentOneCourseOne.course_id} }
+    post students_url, params: { student: { firstname: @student.firstname, lastname: @student.lastname, uin: "123456", email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
     after_student_count = Student.count
-    after_student_course_count = StudentCourse.count
     assert_equal before_student_count + 1, after_student_count
 
     assert_redirected_to student_url(Student.last)
+  end
+
+  test "should not create student" do
+    before_student_count = Student.count
+    post students_url, params: { student: { firstname: "dsdsd", lastname: "dsd", uin: @student.uin, email: @student.email, classification: @student.classification, major: @student.major, notes: @student.notes} }
+    after_student_count = Student.count
+    after_student_course_count = StudentCourse.count
+    assert_equal before_student_count, after_student_count
+
+    assert_redirected_to students_url
   end
 
   test "should show student" do
