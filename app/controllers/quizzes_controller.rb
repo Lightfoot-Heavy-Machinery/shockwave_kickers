@@ -132,7 +132,7 @@ class QuizzesController < ApplicationController
 
       @stud_obj = Student.where(id:@random_stud.student_id,teacher: current_user.email).first
       @choices = Qroster.where(quiz_id:@quiz.id).where.not(student_id:@random_stud.student_id).pluck(:student_id)
-      @choices = @choices.shuffle.slice(0,3)
+      @choices = @choices.shuffle.slice(0,7)
       @choices.append(@random_stud.student_id)
       @choices = @choices.shuffle
     end
