@@ -41,7 +41,6 @@ class UploadController < ApplicationController
           uuid = SecureRandom.uuid
   
           if (row["FIRST NAME"].strip() && row["LAST NAME"].strip() && row["UIN"].strip() && row["EMAIL"].strip() && row["CLASSIFICATION"].strip() && row["MAJOR"].strip())
-            Rails.logger.info "Checking conditional"
             @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
             if !@student
               @student = Student.new(
@@ -65,7 +64,6 @@ class UploadController < ApplicationController
                   teacher: current_user.email
               )
             end
-            Rails.logger.info "Checking #{row["FINALGRADE"]}"
             StudentCourse.find_or_create_by(course_id: @course.id, student_id:@student.id, final_grade:row["FINALGRADE"])
     
             Tempfile.open([uuid, ".jpg"]) do |tmp|
