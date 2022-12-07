@@ -9,15 +9,15 @@
 
       <!--make an empty text field for Course Code-->
       <%= form.label :course_temp, "Course Code", class: "message" %><br>
-      <%= form.text_field :course_temp, pattern: '(\b[A-Za-z]{3,4}\b)', placeholder: "CSCE 000", title: "Course Code incorrect" %><br>
+      <%= form.text_field :course_temp, pattern: '\b([A-Z]{4}[\s][0-9]{3})\b', title: "Course Code incorrect" %><br>
 
       <!--make an empty text field for Section number-->
       <%= form.label :section_temp, "Section Number", class: "message"%><br>
-      <%= form.text_field :section_temp, pattern: '(\b[0-9]{3}\b)', placeholder: "000" , title: "Section value incorrect"%><br>
+      <%= form.text_field :section_temp, pattern: '\b([0-9]{3})\b', title: "Section value incorrect"%><br>
 
       <!--make an empty text field for Semester-->
       <%= form.label :semester_temp, "Semester", class: "message" %><br>
-      <%= form.text_field :semester_temp, pattern: '(\bFall.+[0-9]{4}|Spring.+[0-9]{4}\b)', placeholder: "Fall/Spring 0000", title: "Semester values incorrect" %><br>
+      <%= form.text_field :semester_temp, pattern: '\b((Fall|Spring)[\s]20[0-9]{2})\b', title: "Semester values incorrect" %><br>
 
       <!--implement dropzone for submitting zip or p_imageRoster.zip files-->
         <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>

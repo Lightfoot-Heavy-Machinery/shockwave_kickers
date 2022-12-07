@@ -33,15 +33,15 @@ class UploadController < ApplicationController
   
       #if the number of rows in the csv file is equal to the number of images in the zip file, then proceed. Otherwise, throw an error
       if ((csv.length != 0) && (csv.length == images.length))
+        #create course entry
+        @course = Course.find_or_create_by(course_name: params[:course_temp], teacher: current_user.email, section: params[:section_temp], semester: params[:semester_temp])
+        StudentCourse.where(course_id: @course.id).destroy_all
+
         csv.zip(images).each do |row, image|
           uuid = SecureRandom.uuid
-
-          @course_temp = Course.where(params[:course_temp], teacher: current_user.email)
-          @semester_temp = Course.where(params[:semester_temp], teacher: current_user.email)
-          @section_temp = Course.where(params[:section_temp], teacher: current_user.email)
   
-          if (row["FIRST NAME"].strip() && row["LAST NAME"].strip() && row["UIN"].strip() && row["EMAIL"].strip() && row["CLASSCODE"].strip() && row["MAJOR"].strip())
-            @course = Course.find_or_create_by(course_name: @course_temp, teacher: current_user.email, section: @section_temp, semester: @semester_temp)
+          if (row["FIRST NAME"].strip() && row["LAST NAME"].strip() && row["UIN"].strip() && row["EMAIL"].strip() && row["CLASSIFICATION"].strip() && row["MAJOR"].strip())
+            Rails.logger.info "Checking conditional"
             @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
             if !@student
               @student = Student.new(
@@ -49,9 +49,8 @@ class UploadController < ApplicationController
                   lastname:row["LAST NAME"].strip(),
                   uin: row["UIN"].strip(),
                   email: row["EMAIL"].strip(),
-                  classification: row["CLASSCODE"].strip(),
+                  classification: row["CLASSIFICATION"].strip(),
                   major: row["MAJOR"].strip(),
-                  final_grade: row["FINALGRADE"].strip(),
                   teacher: current_user.email
               )
               @student.save
@@ -61,14 +60,13 @@ class UploadController < ApplicationController
                   lastname:row["LAST NAME"].strip(),
                   uin: row["UIN"].strip(),
                   email: row["EMAIL"].strip(),
-                  classification: row["CLASSCODE"].strip(),
+                  classification: row["CLASSIFICATION"].strip(),
                   major: row["MAJOR"].strip(),
-                  final_grade: row["FINALGRADE"].strip(),
                   teacher: current_user.email
               )
             end
-
-            StudentCourse.find_or_create_by(course_id: @course.id, student_id:@student.id)
+            Rails.logger.info "Checking #{row["FINALGRADE"]}"
+            StudentCourse.find_or_create_by(course_id: @course.id, student_id:@student.id, final_grade:row["FINALGRADE"])
     
             tempfile = Tempfile.new(File.basename(image.name))
             tempfile.binmode
