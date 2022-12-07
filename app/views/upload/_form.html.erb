@@ -1,12 +1,24 @@
 <%= form_with(model: @post) do |form| %>
   <div>
     <div style = "text-align: center">
-      <strong class = "message">Drag and Drop OR Click "Browse", then Save</strong><br><br>
+      <strong class = "message">Fill out form, drag and drop, then Save</strong><br><br>
       <!--if the file uploaded, send message-->
       <% if @post %>
         <p style="color: green"><%= notice %>File Uploaded</p>
       <% end %>
-    
+
+      <!--make an empty text field for Course Code-->
+      <%= form.label :course_temp, "Course Code", class: "message" %><br>
+      <%= form.text_field :course_temp, pattern: "(/\D{3,4}.\d{3}/)", placeholder: "CSCE 000" %><br>
+
+      <!--make an empty text field for Section number-->
+      <%= form.label :section_temp, "Section Number", class: "message"%><br>
+      <%= form.text_field :section_temp, pattern: "(/\d{3}/)", placeholder: "000" %><br>
+
+      <!--make an empty text field for Semester-->
+      <%= form.label :semester_temp, "Semester", class: "message" %><br>
+      <%= form.text_field :semester_temp, pattern: "(/Fall.\d{4}|Spring.\d{4}/)", placeholder: "Fall/Spring 0000" %><br>
+
       <!--implement dropzone for submitting zip files-->
         <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>
     </div>
