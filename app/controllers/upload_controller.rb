@@ -68,11 +68,10 @@ class UploadController < ApplicationController
             Rails.logger.info "Checking #{row["FINALGRADE"]}"
             StudentCourse.find_or_create_by(course_id: @course.id, student_id:@student.id, final_grade:row["FINALGRADE"])
     
-            tempfile = Tempfile.new(File.basename(image.name))
-            tempfile.binmode
-            tempfile.write(image.get_input_stream.read)
-            @student.image.attach(io: File.open(tempfile), filename: uuid)
-            tempfile.close
+            Tempfile.open([uuid, ".jpg"]) do |tmp|
+                image.extract(tmp.path) {true}
+                @student.image.attach(io: File.open(tmp), filename: uuid)
+            end
           else
             redirect_to upload_index_path, notice: "CSV column contents are different than expected. Please check the format of your CSV file."
             break
