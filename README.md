@@ -35,7 +35,7 @@ After install prerequisites, follow the following steps for step time users:
 1) export ENV variables:
     ```
         export SENDMAIL_PASSWORD=LOOK_AT_SLACK_CHANNEL
-        export SENDMAIL_USERNAME=shockwavekickers@gmail.com
+        export SENDMAIL_USERNAME=shockwavekickers606@gmail.com
         export MAIL_HOST=gmail.com
     ```
 2) `rails s`
