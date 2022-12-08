@@ -1,17 +1,30 @@
 <%= form_with(model: @post) do |form| %>
   <div>
     <div style = "text-align: center">
-      <strong class = "message">Drag and Drop OR Click "Browse", then Save</strong><br><br>
+      <strong class = "message">Drag and Drop OR Click "Browse", then provide the course code</strong><br><br>
       <!--if the file uploaded, send message-->
       <% if @post %>
         <p style="color: green"><%= notice %>File Uploaded</p>
       <% end %>
-    
+
+      <!--input course code-->
+      <p class = "message"> Course Code: </p>
+      <%= form.text_field :course_temp, pattern: '\b(?\w{3,4})V(?\d{3})\b', placeholder: "CSCE ###" %>
+
+      <!--input section-->
+      <p class = "message"> Section: </p>
+      <%= form.text_field :section_temp, pattern: '\b(?\d{3})\b', placeholder: "###" %>      
+
+      <!--input semester-->
+      <p class = "message"> Semester: </p>
+      <%= form.text_field :semester_temp, pattern: '\b(Fall|Spring)V(?\d{4})\b', placeholder: "Fall/Spring 20XX"%>
+      <br>
+      
       <!--implement dropzone for submitting zip files-->
         <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>
     </div>
 
-    <div style= "text-align: center"><br><br>
+    <div style= "text-align: center">
     <!--on submit, send user back to index page-->
       <%= form.submit "Save", class: "btn btn-secondary" %>
     </div>

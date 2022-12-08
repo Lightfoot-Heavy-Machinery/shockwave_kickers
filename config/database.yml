@@ -6,7 +6,7 @@ development:
   encoding: unicode
   database: courses
   username: postgres
-  password: password
+  password: M00d!nd!g0_
   pool: 5
 
 test:
@@ -14,5 +14,5 @@ test:
   encoding: unicode
   database: courses
   username: postgres
-  password: password
+  password: M00d!nd!g0_
   pool: 5
