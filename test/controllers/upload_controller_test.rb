@@ -22,8 +22,8 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
 
   test "should parse file uploaded" do
     require 'zip'
-    Zip::File.open('./app/resources/test_zip.zip') do |zip_file|
-        post "/upload/index#", params: {file: zip_file}
+    Zip::File.open('./app/resources/ProfRitchey_Template.zip') do |zip_file|
+        post "/upload/index#", params:  {file: zip_file, course_temp: "CSCE 606", section_temp: "001", semester_temp: "Spring 2020"}
         assert_redirected_to courses_url
     end
   end
@@ -31,29 +31,9 @@ class UploadControllerTest < ActionDispatch::IntegrationTest
 
   test "should parse file uploaded failed" do
     require 'zip'
-    Zip::File.open('./app/resources/test_zip_incorrect.zip') do |zip_file|
-        post "/upload/index#", params: {file: zip_file}
+    Zip::File.open('./app/resources/Wrong_Cols.zip') do |zip_file|
+        post "/upload/index#", params: {file: zip_file, course_temp: "CSCE 606", section_temp: "001", semester_temp: "Spring 2020"}
         assert_redirected_to "/upload/index"
     end
   end
-
-
-  test "should get students" do
-    CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
-        assert Student.find_by(firstname:record["FirstName"],
-        lastname:record["LastName"],
-        uin: record["UIN"],
-        email: record["Email"],
-        classification: record["Classification"],
-        major: record["Major"],
-        notes: record["Notes"],
-        teacher: @current_user.email).nil?
-        end
-    end
-
-  test "should get courses" do
-      CSV.foreach('./app/resources/test_data.csv', :headers => true) do |record|
-        assert Course.find_by(course_name: record["Course"], teacher: @current_user.email, section: record["Section"], semester: record["Semester"]).nil?
-        end
-    end
 end

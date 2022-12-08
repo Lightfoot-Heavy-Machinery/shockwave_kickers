@@ -41,7 +41,8 @@ class UploadController < ApplicationController
           uuid = SecureRandom.uuid
   
           #if the columns are not null, then proceed
-          if (row["FIRST NAME"].strip() && row["LAST NAME"].strip() && row["UIN"].strip() && row["EMAIL"].strip() && row["CLASSIFICATION"].strip() && row["MAJOR"].strip())
+          Rails.logger.info "Collected student #{row.inspect}"
+          if (row["FIRST NAME"] && row["LAST NAME"] && row["UIN"] && row["EMAIL"] && row["CLASSIFICATION"] && row["MAJOR"])
             @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
             if !@student
               @student = Student.new(
@@ -73,7 +74,7 @@ class UploadController < ApplicationController
             end
           else
             redirect_to upload_index_path, notice: "CSV column contents are different than expected. Please check the format of your CSV file."
-            break
+            return
           end
         end
         redirect_to courses_url, notice: "Upload successful!"
