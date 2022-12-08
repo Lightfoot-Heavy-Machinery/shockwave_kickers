@@ -8,30 +8,41 @@
         <p style="color: green"><%= notice %>File Uploaded</p>
       <% end %>
 
-      <!--input course code-->
-      <p class = "message"> Course Code: </p>
-      <%= form.text_field :course_temp, pattern: '\b(?\w{3,4})V(?\d{3})\b', placeholder: "CSCE ###" %>
-      <br><br>
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <!--input course code-->
+            <p class = "message"> Course Code: </p>
+            <%= form.text_field :course_temp, pattern: '\b(?\w{3,4})V(?\d{3})\b', placeholder: "CSCE ###" %>
+          </div>
 
-      <!--input section-->
-      <p class = "message"> Section: </p>
-      <%= form.text_field :section_temp, pattern: '\b(?\d{3})\b', placeholder: "###" %>      
-      <br><br>
+          <div class="row">
+            <!--input section-->
+            <p class = "message"> Section: </p>
+            <%= form.text_field :section_temp, pattern: '\b(?\d{3})\b', placeholder: "###" %>      
+          </div>
 
-      <!--input semester-->
-      <p class = "message"> Semester: </p>
-      <%= form.text_field :semester_temp, pattern: '\b(Fall|Spring)V(?\d{4})\b', placeholder: "Fall/Spring 20XX"%>
-      <br><br>
-      
-      <!--implement dropzone for submitting zip files-->
-        <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>
+          <div class="row">
+            <!--input semester-->
+            <p class = "message"> Semester: </p>
+            <%= form.text_field :semester_temp, pattern: '\b(Fall|Spring)V(?\d{4})\b', placeholder: "Fall/Spring 20XX"%>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row"></div>
+          <div class="row" style = "text-align: center">
+            <!--implement dropzone for submitting zip files-->
+            <%= form.file_field :file, accept: '.zip', multiple: false, class: "dropzone" %>
+          </div>
+          <div class="row"></div>
+        </div>
+      </div>
     </div>
 
     <div style= "text-align: center">
-    <br>
-
-    <!--on submit, send user back to index page-->
+      <!--on submit, send user back to index page-->
       <%= form.submit "Save", class: "btn btn-secondary" %>
+      <br>
     </div>
   </div>
 <% end %>
