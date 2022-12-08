@@ -40,6 +40,7 @@ class UploadController < ApplicationController
         csv.zip(images).each do |row, image|
           uuid = SecureRandom.uuid
   
+          #if the columns are not null, then proceed
           if (row["FIRST NAME"].strip() && row["LAST NAME"].strip() && row["UIN"].strip() && row["EMAIL"].strip() && row["CLASSIFICATION"].strip() && row["MAJOR"].strip())
             @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
             if !@student
