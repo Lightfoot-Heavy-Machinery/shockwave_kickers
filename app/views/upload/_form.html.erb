@@ -2,6 +2,7 @@
   <div>
     <div style = "text-align: center">
       <strong class = "message">Drag and Drop OR Click "Browse", then provide the course information</strong><br><br>
+      
       <!--if the file uploaded, send message-->
       <% if @post %>
         <p style="color: green"><%= notice %>File Uploaded</p>
@@ -28,6 +29,7 @@
 
     <div style= "text-align: center">
     <br>
+
     <!--on submit, send user back to index page-->
       <%= form.submit "Save", class: "btn btn-secondary" %>
     </div>
