@@ -1,3 +1,37 @@
-<div>
+<div class="container text-center collapse show collapse-all" id="upForm">
   <%= render 'form' %>
 </div>
+
+<footer class="hd footer mt-auto py-3 mt-2 text-center">
+  <p>
+    <button class="button" type="button" data-bs-toggle="collapse" data-bs-target=".collapse-all" aria-expanded="false" aria-controls="upForm upInst">
+      Show/Hide Upload Instructions
+    </button>
+  </p>
+  <div class="collapse collapse-all" id="upInst">
+    <div class="card card-body" style="color:black;">
+      <div class="row">
+        <div class="col"></div>
+        <div class="col">
+          <div class="row" style="text-align:center">
+            <b >The upload page expects the following inputs:</b>
+          </div>
+          <div class="row" style="text-align:left">
+            <pre style="font-family: Arial, Helvetica, sans-serif">
+            1. A ZIP file containing the following information
+              1a. A singular CSV file containing the students' information from Howdy. No need to change anything
+              1b. A collection of jpgs, jpegs, pngs, or display files that is EQUAL to the number of students in the csv file.
+                  - This should also come from Howdy
+                  - The images can be in a folder or loose in the zip file
+            2. A form with the following information and in the following format:
+              2a. Course Code: ABCD 123 or ABC 123 format
+              2b. Section code: 123 format
+              2c. Semester Code: Fall 1234 or Spring 1234 format
+            </pre>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+  </div>
+</footer>
