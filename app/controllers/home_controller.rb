@@ -50,21 +50,17 @@ class HomeController < ApplicationController
   def getAvgRecent
     recentFall = Course.where(teacher:@id).where("semester like ?", "%#{"Fall"}%").order(semester: :desc).first
     fallYear = 0000
-    logger.info("RFALL1:#{recentFall.nil?}")
     if recentFall.nil?
     else
       fallYear = stripYear(recentFall.semester)
     end
-    logger.info("RFALL2:#{fallYear}")
 
     recentSpring = Course.where(teacher:@id).where("semester like ?", "%#{"Spring"}%").order(semester: :desc).first
     springYear = 0000
-    logger.info("RSPRING1:#{recentSpring.nil?}")
     if recentSpring.nil?
     else
       springYear = stripYear(recentSpring.semester)
     end
-    logger.info("RSPRING2:#{springYear}")
    
     if fallYear == 0 && springYear == 0
       return ["Semester", "No quizzes taken!", "No quizzes taken!"]
@@ -76,7 +72,6 @@ class HomeController < ApplicationController
     else
       semester = recentSpring.semester
     end
-    logger.info("semester: #{semester}")
    
     courses = Course.select(:id).where(teacher:@id).where("semester like ?", "%#{semester}%")
     
