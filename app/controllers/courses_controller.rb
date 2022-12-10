@@ -75,7 +75,7 @@ class CoursesController < ApplicationController
 
       avg = ((avg.to_f / cnt.to_f).round(2)).to_s + "%"
 
-      best = worst.order("wscore DESC").first
+      best = Qroster.where(quiz_id:qID,correct_resp:true).group(:student_id).select(:student_id, "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00) / #{atm}) AS wscore", "(SUM(CAST(1 AS Float) / CAST(attempts as Float)*100.00)/COUNT(attempts)) AS score").order("wscore DESC").first
       bStud = ""
       bestInfo = ""
       if best.nil? || best.student_id.nil? || best.score.nil?
