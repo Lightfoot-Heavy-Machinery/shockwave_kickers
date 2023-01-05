@@ -84,6 +84,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "database_cleaner"
 end
 
 gem "ffi", "~> 1.15"
@@ -92,3 +93,5 @@ gem 'jquery-rails'
 
 gem 'bootstrap-icons'
 gem 'bootstrap-icons-helper'
+
+gem 'cucumber-rails', :require => false
