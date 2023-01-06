@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   post 'quizzes/:id', to:'quizzes#show'
 
-  devise_for :users
+  #devise_for :users
 
   resources :courses
   namespace :courses do
@@ -22,13 +22,19 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
 
-  devise_scope :user do
-    authenticated :user do
-        root 'home#index', as: :authenticated_root
-    end
+  root 'home#index'
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    omniauth_callbacks: 'users/omniauth_callbacks'
+  }
+  # devise_scope :user do
+  #   authenticated :user do
+  #       root 'home#index', as: :authenticated_root
+  #   end
 
-    unauthenticated do
-        root 'devise/sessions#new', as: :unauthenticated_root
-    end
-  end
+  #   unauthenticated do
+  #       root 'devise/sessions#new', as: :unauthenticated_root
+  #   end
+  # end
 end

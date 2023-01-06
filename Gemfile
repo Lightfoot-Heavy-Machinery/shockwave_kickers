@@ -93,5 +93,8 @@ gem 'jquery-rails'
 
 gem 'bootstrap-icons'
 gem 'bootstrap-icons-helper'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem "omniauth-rails_csrf_protection", "~> 1.0"
 
 gem 'cucumber-rails', :require => false
