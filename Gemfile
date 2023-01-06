@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.2"
+ruby "3.1.3"
 
 gem 'psych', '< 4'
 
@@ -84,6 +84,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "database_cleaner"
 end
 
 gem "ffi", "~> 1.15"
@@ -92,3 +93,5 @@ gem 'jquery-rails'
 
 gem 'bootstrap-icons'
 gem 'bootstrap-icons-helper'
+
+gem 'cucumber-rails', :require => false
