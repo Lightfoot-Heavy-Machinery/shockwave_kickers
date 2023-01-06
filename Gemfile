@@ -84,6 +84,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "database_cleaner"
 end
 
 gem "ffi", "~> 1.15"
@@ -95,3 +96,5 @@ gem 'bootstrap-icons-helper'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
+
+gem 'cucumber-rails', :require => false
