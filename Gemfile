@@ -33,7 +33,6 @@ gem "jbuilder"
 
 group :development, :test do
     gem 'rspec-rails', ">= 3.9.0"
-    gem 'simplecov'
 end
 
 # Use Redis adapter to run Action Cable in production
@@ -84,6 +83,10 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'cucumber-rails', require: false
+  gem 'cucumber-rails-training-wheels'
+  gem 'rails-controller-testing'
+  gem 'simplecov', require: false
 end
 
 gem "ffi", "~> 1.15"
