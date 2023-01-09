@@ -208,10 +208,7 @@ GEM
     minitest (5.16.3)
     msgpack (1.6.0)
     multi_test (1.1.0)
-<<<<<<< HEAD
-=======
     multi_xml (0.6.0)
->>>>>>> 79299769ff8fec9c3e4b9ef88b8ea3b2e419c2f2
     net-imap (0.3.1)
       net-protocol
     net-pop (0.1.2)
@@ -401,11 +398,8 @@ DEPENDENCIES
   bootstrap-icons-helper
   capybara
   cucumber-rails
-<<<<<<< HEAD
   cucumber-rails-training-wheels
-=======
   database_cleaner
->>>>>>> 79299769ff8fec9c3e4b9ef88b8ea3b2e419c2f2
   debug
   devise
   dropzonejs-rails
