@@ -87,6 +87,7 @@ group :test do
   gem 'cucumber-rails-training-wheels'
   gem 'rails-controller-testing'
   gem 'simplecov', require: false
+  gem "database_cleaner"
 end
 
 gem "ffi", "~> 1.15"
@@ -95,3 +96,8 @@ gem 'jquery-rails'
 
 gem 'bootstrap-icons'
 gem 'bootstrap-icons-helper'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+
+gem 'cucumber-rails', :require => false
