@@ -14,4 +14,5 @@
 #     User.create!(user)
 # end
 
-User.create(email: 'team_cluck_admin@gmail.com', password: 'team_cluck_12345!')
+User.create(email: 'yourdummycluck@gmail.com', password: 'abc_123!')
+User.where(confirmed_at: nil).update_all(confirmed_at: Time.now)
