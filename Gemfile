@@ -35,6 +35,9 @@ group :development, :test do
     gem 'rspec-rails', ">= 3.9.0"
 end
 
+# html parser https://nokogiri.org/rdoc/index.html
+gem "nokogiri"
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -99,5 +102,3 @@ gem 'bootstrap-icons-helper'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
-
-gem 'cucumber-rails', :require => false
