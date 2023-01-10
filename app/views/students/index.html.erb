@@ -8,12 +8,6 @@
       </tr>
       <tr>
         <th>
-          Image:<br><br>
-        </th>
-        <th>
-          Name:<br><br>
-        </th>
-        <th>
           Email: <br>
           <%= form_tag('/students', method: :get) do %>
             <%= text_field_tag :search, params[:search], placeholder: "Search by Email" %>
@@ -33,9 +27,6 @@
           Tags:
           <% selected_tag = nil%> <br>
           <%= f.select("selected_tag", @tags, {:include_blank => true}, {:onchange => "selected_tag=this.value;"}) %>
-        </th>
-        <th>
-          View Student Profile: <br><br>
         </th>
       </tr>
       <tr>
@@ -60,23 +51,6 @@
           </td>
           <td>
             <%= student.records[0].lastname %>, <%= student.records[0].firstname %>
-          </td>
-          <td>
-            <%= student.records[0].email %>
-          </td>
-          <td>
-            <%= student.course_semester.to_a.join(", ") %>
-          </td>
-          <td>
-            <% if StudentsTag.where(student_id: student.records[0].id).length == 0 %>
-                None
-            <% else %>
-                <% tag_display_array = [] %>
-                <% StudentsTag.where(student_id: student.records[0].id).each do |association| %>
-                    <% tag_display_array.append(Tag.where(id: association.tag_id)[0].tag_name) %>
-                <% end %>
-                <%= tag_display_array.join(", ") %>
-            <% end %>
           </td>
           <td>
             <%= button_to "Show this student", student.records[0], :method => :get %>
