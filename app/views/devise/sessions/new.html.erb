@@ -23,7 +23,18 @@
   <%= button_to "Logout", destroy_user_session_path, data: {turbo: "false"}, method: :delete %>
   <% end %>
 
-
+  <div class="row">
+    <%- if devise_mapping.omniauthable? %>
+      <%- resource_class.omniauth_providers.each do |provider| %>
+        <%= form_for "Login", 
+          url: omniauth_authorize_path(resource_name, provider),
+          method: :post,
+          data: {turbo: "false"} do |f| %>
+            <%= f.submit "Login with Google", type: "image", src: url_for("../../../assets/images/btn_google_signin_light_normal_web.png") %>
+        <% end %>
+      <% end %>  
+    <% end %>
+  </div>
   <br>
 
   <% if devise_mapping.rememberable? %>
