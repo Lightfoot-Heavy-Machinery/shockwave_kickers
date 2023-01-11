@@ -53,3 +53,8 @@ end
 for student in Student.all do 
     StudentCourse.create(course_id: Course.all.sample.id, student_id: student.id)
 end
+
+
+User.create(email: 'yourdummycluck@gmail.com', password: 'abc_123!')
+User.where(confirmed_at: nil).update_all(confirmed_at: Time.now)
+
