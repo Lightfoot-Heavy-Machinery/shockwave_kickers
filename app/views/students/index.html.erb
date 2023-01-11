@@ -40,9 +40,9 @@
   </table>
 </div>
 
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap justify-content-center">
     <% @students.each do |student| %>
-    <div>
+    <div class="text-center m-2">
         <% if student.records[0].image.attached? %>
             <%= image_tag student.records[0].image.variant(:thumb), class: 'bi bi-person square d-block mx-auto', style: 'max-width: 12rem;' %>
         <% else %>
