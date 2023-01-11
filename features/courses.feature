@@ -1,5 +1,4 @@
-Feature: Filter courses according to their defining traits, such as their course number, a recurring student, or a certain semester, 
-and sort courses in terms of their relevance.
+Feature: Filter courses according to their defining traits, such as their course number, a recurring student, or a certain semester.
 
 As a professor,
 So I can more quickly recollect previous courses I’ve taught
@@ -32,4 +31,30 @@ Scenario: All courses viewable
     And I should see "CSCE 411" offered in "Fall 2022"
     And I should see "CSCE 412" offered in "Spring 2023"
 
+Scenario: Filter courses by name
+    Given students are enrolled in their respective courses
+    When I sign in
+    And I go to the courses page
+    And I search "CSCE 411" in "Search by Name" search
+    Then I should see "CSCE 411" offered in "Spring 2023"
+    And I should see "CSCE 411" offered in "Fall 2022"
+    And I should not see "CSCE 412" offered in "Spring 2023"
+
+Scenario: Filter courses by student
+    Given students are enrolled in their respective courses
+    When I sign in
+    And I go to the courses page
+    And I search "Zebulun Oliphant" in "Student" search
+    Then I should not see "CSCE 411" offered in "Spring 2023"
+    And I should see "CSCE 411" offered in "Fall 2022"
+    And I should see "CSCE 412" offered in "Spring 2023"
+
+Scenario: Filter courses by semester
+    Given students are enrolled in their respective courses
+    When I sign in
+    And I go to the courses page
+    And I search "Spring 2023" in "Semester" search
+    Then I should see "CSCE 411" offered in "Spring 2023"
+    And I should not see "CSCE 411" offered in "Fall 2022"
+    And I should see "CSCE 412" offered in "Spring 2023"
     
