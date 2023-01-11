@@ -40,9 +40,12 @@ Then('I should see {string} offered in {string}') do |course_name, semester|
     expect(hasCourse).to eq(true)
 end
 
-When('I search {string} in {string} search') do |query, search|
+When('I fill in {string} with {string}') do |search, query|
     fill_in(search, with: query)
-    click_button("Search")
+end
+
+When('I click {string}') do |button|
+    click_button(button)
 end
 
 Then('I should not see {string} offered in {string}') do |course_name, semester|
