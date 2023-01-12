@@ -11,8 +11,14 @@ gem "rails", "~> 7.0.4"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails", ">= 2.3.2"
 
-# Use postgres as the database for Active Record
-gem "pg"
+# Use postgres as the database for production, use sqlite3 for development and test
+group :production do
+  gem "pg"
+end
+group :development, :test do
+  gem 'sqlite3'
+end
+
 
 gem 'devise'
 
@@ -86,11 +92,11 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
-  gem 'cucumber-rails', require: false
   gem 'cucumber-rails-training-wheels'
   gem 'rails-controller-testing'
   gem 'simplecov', require: false
   gem "database_cleaner"
+  gem 'cucumber-rails', :require => false
 end
 
 gem "ffi", "~> 1.15"
@@ -102,3 +108,4 @@ gem 'bootstrap-icons-helper'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
+
