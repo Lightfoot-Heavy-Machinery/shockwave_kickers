@@ -41,11 +41,21 @@ Scenario: Filter courses by name
     And I should see "CSCE 411" offered in "Fall 2022"
     And I should not see "CSCE 412" offered in "Spring 2023"
 
-Scenario: Filter courses by student
+Scenario: Filter courses by student (first and last)
     Given students are enrolled in their respective courses
     When I sign in
     And I go to the courses page
     And I fill in "Search by Student" with "Zebulun Oliphant"
+    And I click "Search Student"
+    Then I should not see "CSCE 411" offered in "Spring 2023"
+    And I should see "CSCE 411" offered in "Fall 2022"
+    And I should see "CSCE 412" offered in "Spring 2023"
+
+Scenario: Filter courses by student (just first name)
+    Given students are enrolled in their respective courses
+    When I sign in
+    And I go to the courses page
+    And I fill in "Search by Student" with "Zebulun"
     And I click "Search Student"
     Then I should not see "CSCE 411" offered in "Spring 2023"
     And I should see "CSCE 411" offered in "Fall 2022"
