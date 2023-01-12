@@ -90,7 +90,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_093208) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "teacher", null: false
   end
 
   create_table "students_tags", force: :cascade do |t|
@@ -133,10 +132,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_12_093208) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "courses", "users", column: "teacher", primary_key: "username"
-  add_foreign_key "student_courses", "courses"
-  add_foreign_key "student_courses", "students"
-  add_foreign_key "students", "users", column: "teacher", primary_key: "email"
   add_foreign_key "students_tags", "users", column: "teacher", primary_key: "email"
   add_foreign_key "tags", "users", column: "teacher", primary_key: "email"
 end
