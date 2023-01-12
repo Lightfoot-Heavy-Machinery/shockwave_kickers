@@ -12,15 +12,23 @@
         <th>
           Course Name: <br>
           <%= form_tag('/courses', method: :get) do %>
-            <%= text_field_tag :search, params[:search], placeholder: "Search by Name" %>
-            <%= submit_tag 'Search', :name => nil %>
+            <%= text_field_tag :search_course, params[:search_course], placeholder: "Search by Name" %>
+            <%= submit_tag 'Search Name', :name => nil %>
           <% end %>
         </th>
         <th>
-          Semester(s): <br><br>
+          Semester(s): <br>
+          <%= form_tag('/courses', method: :get) do %>
+            <%= text_field_tag :search_semester, params[:search_semester], placeholder: "Search by Semester" %>
+            <%= submit_tag 'Search Semester', :name => nil %>
+          <% end %>
         </th>
         <th>
-          View Course Profile: <br><br>
+          View Course Profile: <br>
+          <%= form_tag('/courses', method: :get) do %>
+            <%= text_field_tag :search_student, params[:search_student], placeholder: "Search by Student" %>
+            <%= submit_tag 'Search Student', :name => nil %>
+          <% end %>
         </th>
       </tr>
     </thead>
