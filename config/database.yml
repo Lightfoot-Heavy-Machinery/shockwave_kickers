@@ -3,7 +3,7 @@ production:
   # host: https://murmuring-lowlands-90648.herokuapp.com/
 
 development:
-  adapter: sqlite3
+  adapter: postgresql
   encoding: unicode
   database: courses
   username: postgres
@@ -12,7 +12,7 @@ development:
   pool: 5
 
 test:
-  adapter: sqlite3
+  adapter: postgresql
   encoding: unicode
   database: courses
   username: postgres
