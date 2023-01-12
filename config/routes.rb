@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :teachers
   post 'upload/index', to: 'upload#parse'
   get 'upload/index', to: 'upload#index'
 

@@ -406,6 +406,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   mini_magick
+  nokogiri
   omniauth
   omniauth-google-oauth2
   omniauth-rails_csrf_protection (~> 1.0)
