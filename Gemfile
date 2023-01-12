@@ -97,7 +97,6 @@ group :test do
   gem 'simplecov', require: false
   gem "database_cleaner"
   gem 'cucumber-rails', :require => false
-  gem 'rspec-rails', ">= 3.9.0"
 end
 
 gem "ffi", "~> 1.15"
@@ -109,7 +108,4 @@ gem 'bootstrap-icons-helper'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem "omniauth-rails_csrf_protection", "~> 1.0"
-<<<<<<< HEAD
-=======
 
->>>>>>> 77a786dd4d88b00d9794d9561f0d0b5eb98f092b
