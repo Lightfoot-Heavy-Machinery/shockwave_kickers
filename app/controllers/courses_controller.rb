@@ -101,8 +101,15 @@ class CoursesController < ApplicationController
   helper_method :getStats
 
   # GET /courses or /courses.json
-  def index
-    @courses_db_result = Course.search(params[:search], current_user.email)
+  def index 
+    #finds which, if any, searches were requested by looking at URL
+    if request.fullpath.include?("search_course")
+      @courses_db_result = Course.search_course(params[:search_course], current_user.email)
+    elsif request.fullpath.include?("search_student")
+      @courses_db_result = Course.search_student(params[:search_student], current_user.email) 
+    else
+      @courses_db_result = Course.search_semester(params[:search_semester], current_user.email) 
+    end  
     @courses_comb_hash = Hash[]
     @courses_db_result.each do |c|
         if !@courses_comb_hash[c.course_name.strip]

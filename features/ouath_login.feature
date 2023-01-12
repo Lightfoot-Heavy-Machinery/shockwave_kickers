@@ -30,5 +30,5 @@ Scenario: an authorized user logs in incorrectly
 Scenario: an unauthorized user tries to log in
   Given an unrecognized user with an unauthorized email
   When the oauth button is pressed
-  The the ouath login is shown
+  Then the ouath login is shown
   Then the user is prompted to sign up
