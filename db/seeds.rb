@@ -25,7 +25,7 @@ semesters = ["Fall 2022", "Spring 2023", "Fall 2023", "Spring 2024"]
 
 i = 0
 while i < 20 do
-    Course.create(course_name: course_names.sample, section: sections.sample, semester: semesters.sample, )
+    Course.create(course_name: course_names.sample, section: sections.sample, semester: semesters.sample)
     i = i + 1
 end
 
@@ -45,7 +45,7 @@ for uin in uins do
         uin: uin,
         email: email,
         classification: classifications.sample,
-        major: majors.sample,
+        major: majors.sample
     )
 end
 

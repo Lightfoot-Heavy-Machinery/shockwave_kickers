@@ -6,6 +6,9 @@
   <% @teachers.each do |teacher| %>
     <%= render teacher %>
     <p>
+      <%= teacher.email %>
+    </p>
+    <p>
       <%= link_to "Show this teacher", teacher %>
     </p>
   <% end %>
