@@ -4,8 +4,7 @@
 
 Team members: Ethan Novicio, Neha Manual, Harshitha Dhulipala, Caleb Oliphant
 
-User sign up is down
-Website can be accessed with:
+User sign up is down, website can be accessed with:
 
 email: team_cluck_admin@gmail.com
 
