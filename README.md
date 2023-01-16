@@ -1,8 +1,13 @@
 # README
 
-**Shockwave Kickers**
+**Team Cluck**
 
-Team members: Colton Simpson, Jacob Kelly, Kunal Vudathu, Rahul Shah, Stuart Nelson
+Team members: Ethan Novicio, Neha Manual, Harshitha Dhulipala, Caleb Oliphant
+
+User sign up is down
+Website can be accessed with:
+email: team_cluck_admin@gmail.com
+password: team_cluck_12345!
 
 **User Documentation**
 https://docs.google.com/document/d/1ATG78_72BFUqlMq_9StImvI8vVKKumL87lb0Caz3JoQ/edit?usp=sharing
@@ -12,4 +17,4 @@ This document should include startup guide for both heroku and local setup (wind
 Doc version also exists under documentation folder.
 
 **Deployed App**
-https://shockwave-kickers.herokuapp.com/
+https://student-knowledge-system.herokuapp.com/users/sign_in
