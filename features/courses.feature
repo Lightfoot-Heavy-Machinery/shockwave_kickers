@@ -6,8 +6,11 @@ I want to be able to filter and sort my courses.
 
 Background: database
 
-Given the following courses exist:
+Given the following users exist:
+| email                         | confirmed_at               |
+| team_cluck_admin@gmail.com    | 2023-01-19 12:12:07.544080 |
 
+Given the following courses exist:
 | course_name | teacher                       | section | semester         |
 | CSCE 411    | team_cluck_admin@gmail.com    | 501     | Spring 2023      | 
 | CSCE 411    | team_cluck_admin@gmail.com    | 501     | Fall 2022        | 
