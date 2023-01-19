@@ -1,3 +1,9 @@
+Given(/the following users exist/) do |users_table|
+    users_table.hashes.each do |user|
+        User.create user
+    end
+end
+
 Given(/the following courses exist/) do |courses_table|
     courses_table.hashes.each do |course|
         Course.create course
