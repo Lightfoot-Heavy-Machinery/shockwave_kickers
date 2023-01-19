@@ -6,9 +6,29 @@ Team members: Ethan Novicio, Neha Manual, Harshitha Dhulipala, Caleb Oliphant
 
 If user sign up is down, website can be accessed with:
 
-email: team_cluck_admin@gmail.com
+email: yourdummycluck@gmail.com
 
-password: team_cluck_12345!
+password: abc_123!
+
+
+**Testing**
+```
+git clone <repo> project
+cd project
+bundle
+rake db:migrate
+- This may not work if database.yml has the wrong password
+- It can be fixed by inputting the right password in the database.yml file
+rake db:seed
+rake db:test:prepare
+rake spec
+rake cucumber
+
+to run locally:
+bundle exec rake assets:precompile
+rails s
+```
+
 
 
 **Deployed App**
