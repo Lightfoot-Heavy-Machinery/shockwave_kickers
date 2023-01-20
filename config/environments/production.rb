@@ -75,7 +75,8 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_url_options = { host: ENV['MAIL_HOST'] }
+  config.action_mailer.default_url_options = { host: 'clucknamestofaces.herokuapp.com' }
+  #config.action_mailer.default_url_options = { host: ENV['MAIL_HOST'] } #legacy
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     user_name:      ENV['SENDMAIL_USERNAME'],
