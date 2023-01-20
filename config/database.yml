@@ -1,13 +1,13 @@
 production:
   url: <%= ENV['DATABASE_URL'] %>
-  # host: https://murmuring-lowlands-90648.herokuapp.com/
+  # host: student-knowledge-system.herokuapp.com
 
 development:
-  adapter: postgresql
+  adapter: postgresql # should be sqlite3, but get foreign key error, will fix in next iteration
   encoding: unicode
   database: courses
   username: postgres
-  password: 1234
+  password: 12345
   host: localhost
   pool: 5
 
@@ -16,6 +16,6 @@ test:
   encoding: unicode
   database: courses
   username: postgres
-  password: 1234
+  password: 12345
   host: localhost
   pool: 5
