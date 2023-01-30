@@ -202,6 +202,23 @@ class StudentsController < ApplicationController
     #GET students/1/quiz
     def quiz 
         @student = Student.find_by(id: params[:id])
+
+        resp = params[:answer]
+        @correctAnswer = nil
+        
+        @choices = Student.where(teacher: current_user.email).shuffle.slice(0,7)
+        @choices.append(@student.id)
+        @choices = @choices.shuffle
+        
+        if resp.nil?
+            @correctAnswer = nil
+        elsif resp.to_i == @student.id 
+            @correctAnswer = true
+        else
+            @correctAnswer = false
+        end
+
+
     end
 
     private
@@ -218,6 +235,6 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_basic_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image, :last_practice_at, :curr_practice_interval).with_defaults(teacher: current_user.email)
         end
 end

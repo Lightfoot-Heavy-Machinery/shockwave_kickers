@@ -238,8 +238,13 @@ class HomeController < ApplicationController
   helper_method :getNumDue
 
   def getDueStudentQuiz()
-    student = @dueStudents.sample
-    return quiz_students_path(student)
+    path = ""
+    if @dueStudents.length > 0
+      student = @dueStudents.sample
+      return quiz_students_path(student)
+    else
+      return "/"
+    end
   end
   helper_method :getDueStudentQuiz
 end
