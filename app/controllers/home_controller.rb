@@ -230,4 +230,10 @@ class HomeController < ApplicationController
     return [bStud, bestInfo, wStud, worstInfo, hStud, highestInfo, lStud, lowestInfo]
   end
   helper_method :studentInfo
+
+  def getNumDue()
+    return Student.getDue(@id).length
+  end
+  helper_method :getNumDue
+
 end
