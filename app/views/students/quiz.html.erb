@@ -1,12 +1,12 @@
 <div class="container text-center">
-<h1> Take Quiz </h1>
+<h1> Take Quiz for <%= @student.firstname%> <%= @student.lastname%> </h1>
 
 <div class="container text-center">
 <% if @correctAnswer.nil?%>
 <% elsif @correctAnswer == true%>
 <p style="color: green">Correct Answer!</p>
 <% else %>
-<p style="color: red">Incorrect Answer!</p>
+<p style="color: red">Incorrect Answer. The correct answer was <%= @student.firstname%> <%= @student.lastname%> </p>
 <% end %>
 </div>
 <div class="row gx-5">
@@ -22,20 +22,26 @@
         </div>
       </div>
       <div class="col">
-        <div class="bg-light border rounded-3">
-            <form action = <%="/students/"+@student.id.to_s + "/quiz" %>>
-            <% @choices.each do |choice| %>
-                <% name = Student.where(id:choice,teacher: current_user.email).pick(:firstname, :lastname) %>
-                <% name = name[0] + " " + name[1] %>
-                <br>
-                <input type="radio" name="answer" value=<%= choice %>><%= name%>
-                <br>
-            <% end %>
-                <br>
-                <input type="submit"/>
-                </form>
-        </div>
+        <% if @correctAnswer.nil?%>
+          <div class="bg-light border rounded-3">
+              <form action = <%="/students/"+@student.id.to_s + "/quiz" %>>
+              <% @choices.each do |choice| %>
+                  <% name = Student.where(id:choice,teacher: current_user.email).pick(:firstname, :lastname) %>
+                  <% name = name[0] + " " + name[1] %>
+                  <br>
+                  <input type="radio" name="answer" value=<%= choice %>><%= name%>
+                  <br>
+              <% end %>
+                  <br>
+                  <input type="submit"/>
+                  </form>
+          </div>
+        <% end %>
       </div>
     </div>
-
+  <% if !@correctAnswer.nil?%>
+  <div class="container">
+  <%= button_to "Next Student", getDueStudentQuiz() , :method=>:get  %>
+  </div>
+  <% end %>
 </div>
