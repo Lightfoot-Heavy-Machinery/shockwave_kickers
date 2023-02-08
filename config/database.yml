@@ -3,19 +3,19 @@ production:
   # host: https://murmuring-lowlands-90648.herokuapp.com/
 
 development:
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
   database: courses
   username: postgres
-  password: 1234
+  password: 12345
   host: localhost
   pool: 5
 
 test:
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
   database: courses
   username: postgres
-  password: 1234
+  password: 12345
   host: localhost
   pool: 5
