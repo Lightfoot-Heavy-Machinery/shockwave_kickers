@@ -32,39 +32,6 @@
               <p><b>Courses:</b> <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
               <p><b>Students:</b> <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
             </div>
-            <div class="col">
-              <p><h4>Key Students:</h4></p>
-              <% studentBWHL = studentInfo() %>
-              <div class="row">
-                <% if studentBWHL.nil? %>
-                  <div class="col">
-                    <p><b>Most Remembered:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                    <p><b>Least Remembered:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                  </div>
-                  <div class="col">
-                    <p><b>Highest Recent Streak:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                    <p><b>Lowest Recent Streak:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                  </div>
-                <% else %>
-                  <div class="col">
-                    <p><b>Most Remembered:</b></p>
-                    <p><%= link_to "#{studentBWHL[1]}", studentBWHL[0], :method=>:get  %></p>
-                    <p><b>Least Remembered:</b></p>
-                    <p><%= link_to "#{studentBWHL[3]}", studentBWHL[2], :method=>:get  %></p>
-                  </div>
-                  <div class="col">
-                    <p><b>Highest Recent Streak:</b></p>
-                    <p><%= link_to "#{studentBWHL[5]}", studentBWHL[4], :method=>:get  %></p>
-                    <p><b>Lowest Recent Streak:</b></p>
-                    <p><%= link_to "#{studentBWHL[7]}", studentBWHL[6], :method=>:get  %></p>
-                  </div>
-                <% end %>
-              </div>
-            </div>
           </div>
           
         </div>

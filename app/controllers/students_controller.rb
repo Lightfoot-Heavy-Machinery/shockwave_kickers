@@ -191,8 +191,6 @@ class StudentsController < ApplicationController
         @student = Student.find_by(id: params[:id])
         @student_course_records = StudentCourse.where(student_id: @student.id)
         @student_course_records.destroy_all
-        @qroster_records = Qroster.where(student_id: @student.id)
-        @qroster_records.destroy_all
         @student_course_records.destroy_all
         @student.image.purge
         @student.destroy
