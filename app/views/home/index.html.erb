@@ -9,26 +9,11 @@
       <div  class="bg-light border p-2 mr-5 col-sm rounded-3">
         <h2 class="display-5 mt-4">Welcome Back!</h2>
         <br>
-        <h5>Your next quiz is due in 3 hours</h5>
+        <p><b>Students due for you to practice:</b> <%= getNumDue() %></p>
         <br>
+        <a href= <%= getDueStudentQuiz() %> >Practice now!</a>
       </div>
-      <div class="bg-light border p-2 mr-5 col-sm rounded-3">
-        <br>
 
-        <% recentCourses = Course.where(teacher:@id).order(updated_at: :desc).limit(3)%>
-        <% recentCourses.each do |course| %>
-          <p><h4><%= link_to "#{course.course_name + "-" + course.section.to_s + "-" + course.semester}", course, :method => :get %></h4></p>
-          <% qCnt = Quiz.where(teacher:@id, course_id:course.id).count %>
-          <% if qCnt <= 0 %>
-                <p><b> Average Quiz Score: </b>No quizzes taken!</p>
-                <p><b> Highest Quiz Score: </b>No quizzes taken!</p>
-              <% else %>
-                <p><b> Average Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).average(:score) %>%</p>
-                <p><b> Highest Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).maximum(:score) %>%</p>
-              <% end %>
-
-        <% end %>
-      </div>
     </div>
   </div>
   <div class="container mt-3">
@@ -47,48 +32,6 @@
               <p><b>Courses:</b> <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
               <p><b>Students:</b> <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
             </div>
-            <div class="col">
-              <p><h4>Quiz Averages:</h4></p>
-              <% recentSem = getAvgRecent() %>
-              <p><b><%= recentSem[0] %> Scores:</b> <%= recentSem[1] %></p>
-              <p><b><%= recentSem[0] %> Best Streak:</b> <%= recentSem[2] %></p>
-              <% tot =  getAvgTotal() %>
-              <p><b>All Time Scores:</b> <%= tot[0] %></p>
-              <p><b>All Time Best Streak:</b> <%= tot[1] %></p>
-            </div>
-            <div class="col">
-              <p><h4>Key Students:</h4></p>
-              <% studentBWHL = studentInfo() %>
-              <div class="row">
-                <% if studentBWHL.nil? %>
-                  <div class="col">
-                    <p><b>Most Remembered:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                    <p><b>Least Remembered:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                  </div>
-                  <div class="col">
-                    <p><b>Highest Recent Streak:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                    <p><b>Lowest Recent Streak:</b></p>
-                    <p><%= link_to "No data available", "/", :method=>:get  %></p>
-                  </div>
-                <% else %>
-                  <div class="col">
-                    <p><b>Most Remembered:</b></p>
-                    <p><%= link_to "#{studentBWHL[1]}", studentBWHL[0], :method=>:get  %></p>
-                    <p><b>Least Remembered:</b></p>
-                    <p><%= link_to "#{studentBWHL[3]}", studentBWHL[2], :method=>:get  %></p>
-                  </div>
-                  <div class="col">
-                    <p><b>Highest Recent Streak:</b></p>
-                    <p><%= link_to "#{studentBWHL[5]}", studentBWHL[4], :method=>:get  %></p>
-                    <p><b>Lowest Recent Streak:</b></p>
-                    <p><%= link_to "#{studentBWHL[7]}", studentBWHL[6], :method=>:get  %></p>
-                  </div>
-                <% end %>
-              </div>
-            </div>
           </div>
           
         </div>
@@ -105,22 +48,6 @@
     <% recentCourses.each do |course| %>
       <div class="col">
         <div class="bg-light border rounded-3">
-          <div class="row p-2 pt-0">
-            <% if course.nil?%>
-            <% else %>
-              <p><h4><%= link_to "#{course.course_name + "-" + course.section.to_s + "-" + course.semester}", course, :method => :get %></h4></p>
-              <p><b> # of Students:</b> <%= StudentCourse.where(course_id:course.id).count %> </p>
-              <% qCnt = Quiz.where(teacher:@id, course_id:course.id).count %>
-              <p><b> # of Quizzes Taken:</b> <%= qCnt %> </p>
-              <% if qCnt <= 0 %>
-                <p><b> Average Quiz Score: </b>No quizzes taken!</p>
-                <p><b> Highest Quiz Score: </b>No quizzes taken!</p>
-              <% else %>
-                <p><b> Average Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).average(:score) %>%</p>
-                <p><b> Highest Quiz Score: </b><%= Quiz.where(teacher:@id, course_id:course.id).maximum(:score) %>%</p>
-              <% end %>
-            <% end %>
-          </div>
         </div>
       
     <% end %>

@@ -1,6 +1,6 @@
 production:
   url: <%= ENV['DATABASE_URL'] %>
-  # host: https://murmuring-lowlands-90648.herokuapp.com/
+  # host: student-knowledge-system.herokuapp.com
 
 development:
   adapter: sqlite3

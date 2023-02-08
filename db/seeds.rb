@@ -46,7 +46,10 @@ for uin in uins do
         email: email,
         classification: classifications.sample,
         major: majors.sample,
-        teacher: 'team_cluck_admin@gmail.com'
+        teacher: 'team_cluck_admin@gmail.com',
+        last_practice_at: Time.now,
+        curr_practice_interval: 120
+
     )
 end
 

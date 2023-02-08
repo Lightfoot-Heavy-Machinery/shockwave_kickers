@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_02_072114) do
+ActiveRecord::Schema[7.0].define(version: 202301251058031) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -48,30 +48,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_072114) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "qrosters", force: :cascade do |t|
-    t.integer "quiz_id"
-    t.integer "student_id"
-    t.boolean "correct_resp"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "attempts", default: 1
-  end
-
-  create_table "quizzes", force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "correct"
-    t.integer "incorrect"
-    t.float "score"
-    t.integer "longest_streak"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "completed", default: false
-    t.string "teacher"
-    t.integer "current_streak", default: 0
-    t.integer "validate_id"
-    t.boolean "targeted", default: false
-  end
-
   create_table "student_courses", force: :cascade do |t|
     t.integer "student_id"
     t.integer "course_id"
@@ -91,6 +67,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_072114) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "teacher", null: false
+    t.datetime "last_practice_at"
+    t.string "curr_practice_interval"
   end
 
   create_table "students_tags", force: :cascade do |t|

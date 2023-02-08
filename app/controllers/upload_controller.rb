@@ -63,7 +63,9 @@ class UploadController < ApplicationController
                   email: row["EMAIL"].strip(),
                   classification: row["CLASSIFICATION"].strip(),
                   major: row["MAJOR"].strip(),
-                  teacher: current_user.email
+                  teacher: current_user.email,
+                  last_practice_at: Time.now - 121.minutes,
+                  curr_practice_interval: 120
               )
               @student.save
             else
