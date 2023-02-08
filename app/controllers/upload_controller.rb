@@ -54,7 +54,7 @@ class UploadController < ApplicationController
           #if the columns are not null, then proceed
           Rails.logger.info "Collected student #{row.inspect}"
           if (row["FIRST NAME"] && row["LAST NAME"] && row["UIN"] && row["EMAIL"] && row["CLASSIFICATION"] && row["MAJOR"])
-            @student = Student.where(uin: row["UIN"].strip(), teacher: current_user.email).first
+            @student = Student.where(uin: row["UIN"].strip()).first
             if !@student
               @student = Student.new(
                   firstname:row["FIRST NAME"].strip(),

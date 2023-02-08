@@ -30,7 +30,6 @@
               <p><b>Years:</b> <%= getYears() %></p>
               <p><b>Semesters:</b> <%= Course.where(teacher:@id).distinct.count(:semester)%></p>
               <p><b>Courses:</b> <%= Course.where(teacher:@id).distinct.count(:course_name)%></p>
-              <p><b>Students:</b> <%= Student.where(teacher:@id).distinct.count(:uin)%></p>
             </div>
           </div>
           
