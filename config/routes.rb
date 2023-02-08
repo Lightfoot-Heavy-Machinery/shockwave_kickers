@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :student_courses
 
   resources :students
+  get 'students/:id/quiz', to: 'students#quiz', as: 'quiz_students'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

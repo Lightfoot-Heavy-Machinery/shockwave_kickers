@@ -191,13 +191,55 @@ class StudentsController < ApplicationController
         @student = Student.find_by(id: params[:id])
         @student_course_records = StudentCourse.where(student_id: @student.id)
         @student_course_records.destroy_all
-        @qroster_records = Qroster.where(student_id: @student.id)
-        @qroster_records.destroy_all
         @student_course_records.destroy_all
         @student.image.purge
         @student.destroy
         redirect_to action: "index"
     end
+
+    #GET students/1/quiz
+    def quiz 
+        @student = Student.find_by(id: params[:id])
+        @id = current_user.email
+        @dueStudents = Student.getDue(@id)
+
+        resp = params[:answer]
+        @correctAnswer = nil
+        
+        @choices = Student.where(teacher: current_user.email).shuffle.slice(0,7)
+        @choices.append(@student.id)
+        @choices = @choices.shuffle
+        
+        if resp.nil?
+            @correctAnswer = nil
+        elsif resp.to_i == @student.id 
+            @correctAnswer = true
+            oldInterval = @student.curr_practice_interval.to_i
+            @student.update(curr_practice_interval: (oldInterval * 2).to_s, last_practice_at: Time.now)
+            
+        else
+            @correctAnswer = false
+            oldInterval = @student.curr_practice_interval.to_i
+            if oldInterval > 15
+                @student.update(curr_practice_interval: (oldInterval / 2).to_s, last_practice_at: Time.now)
+            else
+                @student.update( last_practice_at: Time.now)
+            end
+        end
+
+
+    end
+
+    def getDueStudentQuiz()
+        path = ""
+        if @dueStudents.length > 0
+          student = @dueStudents.sample
+          return quiz_students_path(student)
+        else
+          return "/"
+        end
+      end
+      helper_method :getDueStudentQuiz
 
     private
         # Use callbacks to share common setup or constraints between actions.
@@ -213,6 +255,6 @@ class StudentsController < ApplicationController
 
             # Only allow a list of trusted parameters through.
         def student_basic_params
-            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image).with_defaults(teacher: current_user.email)
+            params.require(:student).permit(:firstname,:lastname, :uin, :email, :classification, :major, :notes, :image, :last_practice_at, :curr_practice_interval).with_defaults(teacher: current_user.email)
         end
 end

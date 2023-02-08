@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_11_023806) do
+ActiveRecord::Schema[7.0].define(version: 202301251058031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,30 +51,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_11_023806) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "qrosters", force: :cascade do |t|
-    t.integer "quiz_id"
-    t.integer "student_id"
-    t.boolean "correct_resp"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "attempts", default: 1
-  end
-
-  create_table "quizzes", force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "correct"
-    t.integer "incorrect"
-    t.float "score"
-    t.integer "longest_streak"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "completed", default: false
-    t.string "teacher"
-    t.integer "current_streak", default: 0
-    t.integer "validate_id"
-    t.boolean "targeted", default: false
-  end
-
   create_table "student_courses", force: :cascade do |t|
     t.integer "student_id"
     t.integer "course_id"
@@ -94,6 +70,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_11_023806) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "teacher", null: false
+    t.datetime "last_practice_at"
+    t.string "curr_practice_interval"
   end
 
   create_table "students_tags", force: :cascade do |t|
@@ -114,6 +92,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_11_023806) do
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.string "full_name"
+    t.string "uid"
+    t.string "avatar_url"
+    t.string "provider"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -125,8 +107,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_11_023806) do
     t.datetime "updated_at", null: false
     t.string "firstname", default: ""
     t.string "lastname", default: ""
-    t.string "provider", default: ""
-    t.string "uid", default: ""
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

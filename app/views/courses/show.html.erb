@@ -56,16 +56,6 @@
               </div>
             </div>
       </div>
-      <div class="row p-5">
-        <div class="px-5 py-2 bg-light border rounded-3">
-          <h4>Current View Statistics:</h4>
-            <% statDat = getStats()%>
-            <p> Number of Students: <%= statDat[0] %> </p>
-            <p> Average Memorization Score: <%= statDat[1] %> </p>
-            <p> Best Memorization: <%= statDat[2] %> </p>
-            <p> Worst Memorization: <%= statDat[3] %> </p>
-        </div>
-      </div>
     </div>
     <%= render partial: "courses/partials/students" %>
   </div>
