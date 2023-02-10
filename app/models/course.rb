@@ -1,5 +1,4 @@
 class Course < ApplicationRecord
-    belongs_to :user
     def self.search_course(search, teacher)
         if search
           search_type = Course.where(course_name: search, teacher: teacher).all
