@@ -11,4 +11,4 @@ Scenario: Upload correctly
     When I upload a zip file
     And I input form information
     When I click save
-    Then I should see the students uploaded
+    Then I should see the upload was successful
