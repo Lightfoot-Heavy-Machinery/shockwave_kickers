@@ -45,3 +45,16 @@ Scenario: Show a student
     And I go to the students page
     When I click show this student
     Then I should see "Profile"
+
+Scenario: Edit a student
+    When I sign in
+    And I go to the students page
+    When I click show this student
+    And I click "Edit this student"
+    Then I should see "Editing Student"
+    When I fill in "firstname" with "EditTest"
+    And I click "Update Student"
+    Then I should see "EditTest"
+    And I should see "Student information was successfully updated."
+
+Scenario: Delete a student
