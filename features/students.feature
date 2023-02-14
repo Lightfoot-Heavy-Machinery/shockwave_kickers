@@ -45,3 +45,27 @@ Scenario: Show a student
     And I go to the students page
     When I click show this student
     Then I should see "Profile"
+
+Scenario: Edit a student
+    When I sign in
+    And I go to the students page
+    When I click show this student
+    And I click "Edit this student"
+    Then I should see "Editing Student"
+    When I fill in student "firstname" with "EditTest"
+    And I click "Update Student"
+    Then I should see "EditTest"
+    And I should see "Student information was successfully updated."
+
+Scenario: Add and Delete a student
+    When I sign in
+    And I go to the students page
+    When I click "New student"
+    When I fill in student "firstname" with "New"
+    When I fill in student "lastname" with "Student"
+    When I fill in student "email" with "newstudent@email.com"
+    And I click "Create Student"
+    Then I should see "Student was successfully created"
+    And I should see "New Student's Profile"
+    And I click "Delete this student"
+    Then I should see "New student"
