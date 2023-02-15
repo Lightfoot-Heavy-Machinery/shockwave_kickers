@@ -19,7 +19,7 @@ require 'rails_helper'
 # end
 
 RSpec.describe StudentsController, type: :controller do
-  describe "#index" do
+  describe "#controller" do
     before do
       @user = User.create(email:'team_cluck_admin@gmail.com', password:'password', confirmed_at:Time.now)
       sign_in @user
@@ -46,6 +46,30 @@ RSpec.describe StudentsController, type: :controller do
         get :show, params: { id: @student.id }
         expect(response).to have_http_status(:redirect)
     end
+
+    it "creates a new student" do
+      expect {
+        post :create, params: { student: {
+          firstname: 'John', 
+          lastname: 'Doe', 
+          uin: '123456789', 
+          email: 'johndoe@example.com', 
+          classification: 'U1', 
+          major: 'CPSC',
+          teacher: 'team_cluck_admin@gmail.com'
+        } }
+      }.to change(Student, :count).by(1)
+    end
+
+    # it "updates successfully" do
+    #     get :show, params: { id: @student.id }
+    #     expect(response).to have_http_status(:redirect)
+    # end
+
+    # it "deletes successfully" do
+    #     get :show, params: { id: @student.id }
+    #     expect(response).to have_http_status(:redirect)
+    # end
 
 
   end
