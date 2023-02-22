@@ -3,7 +3,6 @@ class UploadController < ApplicationController
     def index
     end
   
-    #THIS IS ALL DONE IN UPLOAD_CONTROLLER, I JUST NEED TO COPY AND CALL IT
     def parse
       require 'zip'
       require 'csv'
@@ -15,22 +14,34 @@ class UploadController < ApplicationController
       #when a zip file is uploaded, unzip it
       Zip::File.open(params[:file]) do |zip_file|
         #if the zip file contains a csv file, parse it
+        
+        images_paths = []
         zip_file.each do |entry|
-          if ((entry.name.include? ".jpeg") || (entry.name.include? ".jpg") || (entry.name.include? ".png"))
-            images.push(entry)
+
+          if (entry.name.include? ".htm")
+            #parse html doc for correct order of pictures, csv and images zip is mismatched but the html gets the order correct
+            html_doc = Nokogiri::HTML(entry.get_input_stream.read)
+            images_paths = html_doc.search('img/@src').map{ |s| s.text.strip }
+            
+
           elsif (entry.name.include? ".csv")
-            #sort the csv file rows by FIRST NAME and LAST NAME alphabetically
-            csv = CSV.parse(entry.get_input_stream.read, headers: true).sort_by { |row| [row['FIRST NAME'], row['LAST NAME']] }
+            #parse
+            csv = CSV.parse(entry.get_input_stream.read, headers: true) 
             Rails.logger.info "Collected all student courses #{csv.inspect}"
             #if the csv file contains empty rows, remove the offensive row
             csv.delete_if {|row| row.to_hash.values.all?(&:nil?)}
           end 
+
         end
+
+        images_paths.each do |path|
+          images.push(zip_file.find_entry(path))
+        end
+
+
+
       end
       
-      #move the last element in the image array to the front (to make sure that the first image belongs to the first student)
-      images.unshift(images.pop)
-  
       #if the number of rows in the csv file is equal to the number of images in the zip file, then proceed. Otherwise, throw an error
       if ((csv.length != 0) && (csv.length == images.length))
         #create course entry
@@ -52,7 +63,9 @@ class UploadController < ApplicationController
                   email: row["EMAIL"].strip(),
                   classification: row["CLASSIFICATION"].strip(),
                   major: row["MAJOR"].strip(),
-                  teacher: current_user.email
+                  teacher: current_user.email,
+                  last_practice_at: Time.now - 121.minutes,
+                  curr_practice_interval: 120
               )
               @student.save
             else

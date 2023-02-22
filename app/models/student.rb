@@ -18,4 +18,17 @@ class Student < ApplicationRecord
           @students = Student.where(teacher: teacher)
         end
       end
+      
+    #get the number of students due for quizzing
+    def self.getDue(teacher)
+      students = Student.where(teacher: teacher)
+      dueStudents = []
+      for student in students do
+        if (student.last_practice_at + student.curr_practice_interval.to_i.minutes) < Time.now
+          dueStudents = dueStudents + [student]
+        end
+      end
+      return dueStudents
+    end
+
 end
